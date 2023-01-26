@@ -9,6 +9,7 @@ import { useInsertBlogTagMutation } from 'pages/admin/blog/tag/index.generated'
 import { z } from 'zod'
 import { useForm, zodResolver } from '@mantine/form'
 import { AdminTableBody } from 'pages/admin/blog/tag/TableBody'
+import { SubmitBtn } from 'pages/admin/components/button/SubmitBtn'
 
 gql`
   mutation insertBlogTag($name: String!, $slug: String!) {
@@ -75,24 +76,15 @@ function AdminBlogTagIndex() {
               withAsterisk
               {...form.getInputProps('blogTagSlug')}
             />
-            <Group mt={60}>
-              <Button
-                type='submit'
-                className='bg-admin-base text-common-black leading-none font-normal'
-              >
-                {ADMIN_BLOG_TAG_INDEX.INPUT.SUBMIT}
-              </Button>
-            </Group>
+            <SubmitBtn label={ADMIN_BLOG_TAG_INDEX.INPUT.SUBMIT} />
           </form>
         </Grid.Col>
         <Grid.Col span={7} ml='auto'>
           <AdminTableWrap>
-            <AdminTableHeader>
-              <th></th>
-              <th>{ADMIN_BLOG_TAG_INDEX.TABLE.NAME}</th>
-              <th>{ADMIN_BLOG_TAG_INDEX.TABLE.SLUG}</th>
-              <th></th>
-            </AdminTableHeader>
+            <AdminTableHeader
+              col1={ADMIN_BLOG_TAG_INDEX.TABLE.NAME}
+              col2={ADMIN_BLOG_TAG_INDEX.TABLE.SLUG}
+            />
             <AdminTableBody />
           </AdminTableWrap>
         </Grid.Col>

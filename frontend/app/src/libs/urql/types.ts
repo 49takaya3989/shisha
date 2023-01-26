@@ -163,6 +163,8 @@ export type Blog_Blog_Tags_Bool_Exp = {
 
 /** unique or primary key constraints on table "blog_blog_tags" */
 export enum Blog_Blog_Tags_Constraint {
+  /** unique or primary key constraint on columns "blog_id", "blog_tag_id" */
+  BlogBlogTagsBlogIdBlogTagIdKey = 'blog_blog_tags_blog_id_blog_tag_id_key',
   /** unique or primary key constraint on columns "id" */
   BlogBlogTagsPkey = 'blog_blog_tags_pkey'
 }
@@ -647,20 +649,20 @@ export type Blog_Tags_Variance_Fields = {
 export type Blogs = {
   __typename?: 'blogs';
   /** An array relationship */
-  blog_tags: Array<Blog_Blog_Tags>;
+  blog_blog_tags: Array<Blog_Blog_Tags>;
   /** An aggregate relationship */
-  blog_tags_aggregate: Blog_Blog_Tags_Aggregate;
-  contents: Scalars['String'];
+  blog_blog_tags_aggregate: Blog_Blog_Tags_Aggregate;
+  contents?: Maybe<Scalars['String']>;
   created_at: Scalars['timestamptz'];
   id: Scalars['Int'];
-  name: Scalars['String'];
   slug?: Maybe<Scalars['String']>;
+  title: Scalars['String'];
   udpated_at: Scalars['timestamptz'];
 };
 
 
 /** ブログの投稿テーブル */
-export type BlogsBlog_TagsArgs = {
+export type BlogsBlog_Blog_TagsArgs = {
   distinct_on?: InputMaybe<Array<Blog_Blog_Tags_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
@@ -670,7 +672,7 @@ export type BlogsBlog_TagsArgs = {
 
 
 /** ブログの投稿テーブル */
-export type BlogsBlog_Tags_AggregateArgs = {
+export type BlogsBlog_Blog_Tags_AggregateArgs = {
   distinct_on?: InputMaybe<Array<Blog_Blog_Tags_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
@@ -719,13 +721,13 @@ export type Blogs_Bool_Exp = {
   _and?: InputMaybe<Array<Blogs_Bool_Exp>>;
   _not?: InputMaybe<Blogs_Bool_Exp>;
   _or?: InputMaybe<Array<Blogs_Bool_Exp>>;
-  blog_tags?: InputMaybe<Blog_Blog_Tags_Bool_Exp>;
-  blog_tags_aggregate?: InputMaybe<Blog_Blog_Tags_Aggregate_Bool_Exp>;
+  blog_blog_tags?: InputMaybe<Blog_Blog_Tags_Bool_Exp>;
+  blog_blog_tags_aggregate?: InputMaybe<Blog_Blog_Tags_Aggregate_Bool_Exp>;
   contents?: InputMaybe<String_Comparison_Exp>;
   created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
   id?: InputMaybe<Int_Comparison_Exp>;
-  name?: InputMaybe<String_Comparison_Exp>;
   slug?: InputMaybe<String_Comparison_Exp>;
+  title?: InputMaybe<String_Comparison_Exp>;
   udpated_at?: InputMaybe<Timestamptz_Comparison_Exp>;
 };
 
@@ -742,12 +744,12 @@ export type Blogs_Inc_Input = {
 
 /** input type for inserting data into table "blogs" */
 export type Blogs_Insert_Input = {
-  blog_tags?: InputMaybe<Blog_Blog_Tags_Arr_Rel_Insert_Input>;
+  blog_blog_tags?: InputMaybe<Blog_Blog_Tags_Arr_Rel_Insert_Input>;
   contents?: InputMaybe<Scalars['String']>;
   created_at?: InputMaybe<Scalars['timestamptz']>;
   id?: InputMaybe<Scalars['Int']>;
-  name?: InputMaybe<Scalars['String']>;
   slug?: InputMaybe<Scalars['String']>;
+  title?: InputMaybe<Scalars['String']>;
   udpated_at?: InputMaybe<Scalars['timestamptz']>;
 };
 
@@ -757,8 +759,8 @@ export type Blogs_Max_Fields = {
   contents?: Maybe<Scalars['String']>;
   created_at?: Maybe<Scalars['timestamptz']>;
   id?: Maybe<Scalars['Int']>;
-  name?: Maybe<Scalars['String']>;
   slug?: Maybe<Scalars['String']>;
+  title?: Maybe<Scalars['String']>;
   udpated_at?: Maybe<Scalars['timestamptz']>;
 };
 
@@ -768,8 +770,8 @@ export type Blogs_Min_Fields = {
   contents?: Maybe<Scalars['String']>;
   created_at?: Maybe<Scalars['timestamptz']>;
   id?: Maybe<Scalars['Int']>;
-  name?: Maybe<Scalars['String']>;
   slug?: Maybe<Scalars['String']>;
+  title?: Maybe<Scalars['String']>;
   udpated_at?: Maybe<Scalars['timestamptz']>;
 };
 
@@ -798,12 +800,12 @@ export type Blogs_On_Conflict = {
 
 /** Ordering options when selecting data from "blogs". */
 export type Blogs_Order_By = {
-  blog_tags_aggregate?: InputMaybe<Blog_Blog_Tags_Aggregate_Order_By>;
+  blog_blog_tags_aggregate?: InputMaybe<Blog_Blog_Tags_Aggregate_Order_By>;
   contents?: InputMaybe<Order_By>;
   created_at?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
-  name?: InputMaybe<Order_By>;
   slug?: InputMaybe<Order_By>;
+  title?: InputMaybe<Order_By>;
   udpated_at?: InputMaybe<Order_By>;
 };
 
@@ -821,9 +823,9 @@ export enum Blogs_Select_Column {
   /** column name */
   Id = 'id',
   /** column name */
-  Name = 'name',
-  /** column name */
   Slug = 'slug',
+  /** column name */
+  Title = 'title',
   /** column name */
   UdpatedAt = 'udpated_at'
 }
@@ -833,8 +835,8 @@ export type Blogs_Set_Input = {
   contents?: InputMaybe<Scalars['String']>;
   created_at?: InputMaybe<Scalars['timestamptz']>;
   id?: InputMaybe<Scalars['Int']>;
-  name?: InputMaybe<Scalars['String']>;
   slug?: InputMaybe<Scalars['String']>;
+  title?: InputMaybe<Scalars['String']>;
   udpated_at?: InputMaybe<Scalars['timestamptz']>;
 };
 
@@ -869,8 +871,8 @@ export type Blogs_Stream_Cursor_Value_Input = {
   contents?: InputMaybe<Scalars['String']>;
   created_at?: InputMaybe<Scalars['timestamptz']>;
   id?: InputMaybe<Scalars['Int']>;
-  name?: InputMaybe<Scalars['String']>;
   slug?: InputMaybe<Scalars['String']>;
+  title?: InputMaybe<Scalars['String']>;
   udpated_at?: InputMaybe<Scalars['timestamptz']>;
 };
 
@@ -889,9 +891,9 @@ export enum Blogs_Update_Column {
   /** column name */
   Id = 'id',
   /** column name */
-  Name = 'name',
-  /** column name */
   Slug = 'slug',
+  /** column name */
+  Title = 'title',
   /** column name */
   UdpatedAt = 'udpated_at'
 }
@@ -1139,9 +1141,9 @@ export enum Order_By {
 
 export type Query_Root = {
   __typename?: 'query_root';
-  /** fetch data from the table: "blog_blog_tags" */
+  /** An array relationship */
   blog_blog_tags: Array<Blog_Blog_Tags>;
-  /** fetch aggregated fields from the table: "blog_blog_tags" */
+  /** An aggregate relationship */
   blog_blog_tags_aggregate: Blog_Blog_Tags_Aggregate;
   /** fetch data from the table: "blog_blog_tags" using primary key columns */
   blog_blog_tags_by_pk?: Maybe<Blog_Blog_Tags>;
@@ -1230,9 +1232,9 @@ export type Query_RootBlogs_By_PkArgs = {
 
 export type Subscription_Root = {
   __typename?: 'subscription_root';
-  /** fetch data from the table: "blog_blog_tags" */
+  /** An array relationship */
   blog_blog_tags: Array<Blog_Blog_Tags>;
-  /** fetch aggregated fields from the table: "blog_blog_tags" */
+  /** An aggregate relationship */
   blog_blog_tags_aggregate: Blog_Blog_Tags_Aggregate;
   /** fetch data from the table: "blog_blog_tags" using primary key columns */
   blog_blog_tags_by_pk?: Maybe<Blog_Blog_Tags>;
