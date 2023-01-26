@@ -42,7 +42,57 @@ export const ADMIN_BLOG_ARCHIVE = {
   TABLE: {
     ID: 'ID',
     UPDATE_DATE: '更新日',
+    TITLE: 'タイトル',
+    TAG: 'タグ',
+    CONTENTS: 'コンテンツ',
+    THUMBNAIL: 'サムネイル',
   },
+}
+
+export const ADMIN_BLOG_CREATE = {
+  HEADING: 'ブログ記事作成',
+  BACK: '一覧へ戻る',
+  INPUT: {
+    TITLE_LABEL: 'タイトル',
+    TITLE_PLACEHOLDER: 'タイトル',
+    SLUG_LABEL: 'スラッグ',
+    SLUG_PLACEHOLDER: 'slug',
+    TAG_LABEL: 'タグ',
+    TAG_PLACEHOLDER: 'タグ',
+    TAG_SEARCH_NOTHING: '見つかりません',
+    CONTENTS_LABEL: 'コンテンツ',
+    CONTENTS_PLACEHOLDER: 'コンテンツ',
+    THUMBNAIL_LABEL: 'サムネイル',
+    THUMBNAIL_PLACEHOLDER: 'サムネイル',
+    ERROR: {
+      TITLE: 'タイトルを入力してください',
+      CONTENTS: 'コンテンツを入力してください',
+    }
+  },
+  SUBMIT: '保存する',
+}
+
+export const ADMIN_BLOG_EDIT = {
+  HEADING: 'ブログ記事編集',
+  BACK: '一覧へ戻る',
+  INPUT: {
+    TITLE_LABEL: 'タイトル',
+    TITLE_PLACEHOLDER: 'タイトル',
+    SLUG_LABEL: 'スラッグ',
+    SLUG_PLACEHOLDER: 'slug',
+    TAG_LABEL: 'タグ',
+    TAG_PLACEHOLDER: 'タグ',
+    TAG_SEARCH_NOTHING: '見つかりません',
+    CONTENTS_LABEL: 'コンテンツ',
+    CONTENTS_PLACEHOLDER: 'コンテンツ',
+    THUMBNAIL_LABEL: 'サムネイル',
+    THUMBNAIL_PLACEHOLDER: 'サムネイル',
+    ERROR: {
+      TITLE: 'タイトルを入力してください',
+      CONTENTS: 'コンテンツを入力してください',
+    }
+  },
+  SUBMIT: '保存する',
 }
 
 export const ADMIN_BLOG_TAG_INDEX = {
