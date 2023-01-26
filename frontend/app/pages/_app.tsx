@@ -6,10 +6,10 @@ import { MantineProvider } from '@mantine/core'
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <Provider value={gqlClient}>
       <MantineProvider withGlobalStyles withNormalizeCSS>
-        <Component {...pageProps} />
+        <Provider value={gqlClient}>
+            <Component {...pageProps} />
+        </Provider>
       </MantineProvider>
-    </Provider>
   )
 }

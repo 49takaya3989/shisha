@@ -4,6 +4,7 @@ import {
 } from 'pages/admin/blog/tag/TableBody.generated'
 import { AdminTableDeleteBtn } from 'pages/admin/components/button/AdminTableDeleteBtn'
 import { AdminTableEditBtn } from 'pages/admin/components/button/AdminTableEditBtn'
+import { AdminTableBodyTr } from 'pages/admin/components/table/AdminTableBodyTr'
 
 import { gql } from 'urql'
 
@@ -44,10 +45,7 @@ export const AdminTableBody = () => {
     <tbody>
       {data
         ? data.blog_tags.map((tag) => (
-            <tr
-              key={tag.id}
-              className='border-t border-solid border-common-black border-opacity-30'
-            >
+            <AdminTableBodyTr key={tag.id}>
               <td className='flex justify-center items-center'>
                 <AdminTableEditBtn href={`./tag/edit/${tag.id}`} />
               </td>
@@ -56,7 +54,7 @@ export const AdminTableBody = () => {
               <td className='flex justify-center items-center'>
                 <AdminTableDeleteBtn id={tag.id} click={deleteBlogTagsByPk} />
               </td>
-            </tr>
+            </AdminTableBodyTr>
           ))
         : ''}
     </tbody>
