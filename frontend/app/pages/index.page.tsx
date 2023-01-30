@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import { ArticleItem } from 'pages/components/ArticleItem'
+import { Article } from 'pages/components/Article'
 import { UserLayout } from 'pages/layout/Layout'
 
 export default function Home() {
@@ -11,16 +11,7 @@ export default function Home() {
       </Head>
 
       <UserLayout>
-        <ul className='flex flex-wrap gap-12'>
-          <ArticleItem />
-          <ArticleItem />
-          <ArticleItem />
-          <ArticleItem />
-          <ArticleItem />
-          <ArticleItem />
-          <ArticleItem />
-          <ArticleItem />
-        </ul>
+        <Article />
       </UserLayout>
     </div>
   )
