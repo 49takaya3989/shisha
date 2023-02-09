@@ -656,6 +656,7 @@ export type Blogs = {
   created_at: Scalars['timestamptz'];
   id: Scalars['Int'];
   slug?: Maybe<Scalars['String']>;
+  thumbnail?: Maybe<Scalars['String']>;
   title: Scalars['String'];
   udpated_at: Scalars['timestamptz'];
 };
@@ -727,6 +728,7 @@ export type Blogs_Bool_Exp = {
   created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
   id?: InputMaybe<Int_Comparison_Exp>;
   slug?: InputMaybe<String_Comparison_Exp>;
+  thumbnail?: InputMaybe<String_Comparison_Exp>;
   title?: InputMaybe<String_Comparison_Exp>;
   udpated_at?: InputMaybe<Timestamptz_Comparison_Exp>;
 };
@@ -749,6 +751,7 @@ export type Blogs_Insert_Input = {
   created_at?: InputMaybe<Scalars['timestamptz']>;
   id?: InputMaybe<Scalars['Int']>;
   slug?: InputMaybe<Scalars['String']>;
+  thumbnail?: InputMaybe<Scalars['String']>;
   title?: InputMaybe<Scalars['String']>;
   udpated_at?: InputMaybe<Scalars['timestamptz']>;
 };
@@ -760,6 +763,7 @@ export type Blogs_Max_Fields = {
   created_at?: Maybe<Scalars['timestamptz']>;
   id?: Maybe<Scalars['Int']>;
   slug?: Maybe<Scalars['String']>;
+  thumbnail?: Maybe<Scalars['String']>;
   title?: Maybe<Scalars['String']>;
   udpated_at?: Maybe<Scalars['timestamptz']>;
 };
@@ -771,6 +775,7 @@ export type Blogs_Min_Fields = {
   created_at?: Maybe<Scalars['timestamptz']>;
   id?: Maybe<Scalars['Int']>;
   slug?: Maybe<Scalars['String']>;
+  thumbnail?: Maybe<Scalars['String']>;
   title?: Maybe<Scalars['String']>;
   udpated_at?: Maybe<Scalars['timestamptz']>;
 };
@@ -805,6 +810,7 @@ export type Blogs_Order_By = {
   created_at?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   slug?: InputMaybe<Order_By>;
+  thumbnail?: InputMaybe<Order_By>;
   title?: InputMaybe<Order_By>;
   udpated_at?: InputMaybe<Order_By>;
 };
@@ -825,6 +831,8 @@ export enum Blogs_Select_Column {
   /** column name */
   Slug = 'slug',
   /** column name */
+  Thumbnail = 'thumbnail',
+  /** column name */
   Title = 'title',
   /** column name */
   UdpatedAt = 'udpated_at'
@@ -836,6 +844,7 @@ export type Blogs_Set_Input = {
   created_at?: InputMaybe<Scalars['timestamptz']>;
   id?: InputMaybe<Scalars['Int']>;
   slug?: InputMaybe<Scalars['String']>;
+  thumbnail?: InputMaybe<Scalars['String']>;
   title?: InputMaybe<Scalars['String']>;
   udpated_at?: InputMaybe<Scalars['timestamptz']>;
 };
@@ -872,6 +881,7 @@ export type Blogs_Stream_Cursor_Value_Input = {
   created_at?: InputMaybe<Scalars['timestamptz']>;
   id?: InputMaybe<Scalars['Int']>;
   slug?: InputMaybe<Scalars['String']>;
+  thumbnail?: InputMaybe<Scalars['String']>;
   title?: InputMaybe<Scalars['String']>;
   udpated_at?: InputMaybe<Scalars['timestamptz']>;
 };
@@ -892,6 +902,8 @@ export enum Blogs_Update_Column {
   Id = 'id',
   /** column name */
   Slug = 'slug',
+  /** column name */
+  Thumbnail = 'thumbnail',
   /** column name */
   Title = 'title',
   /** column name */

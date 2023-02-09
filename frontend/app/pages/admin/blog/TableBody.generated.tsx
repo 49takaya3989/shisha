@@ -6,9 +6,9 @@ export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 export type GetBlogsQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type GetBlogsQuery = { __typename?: 'query_root', blogs: Array<{ __typename?: 'blogs', id: number, title: string, contents?: string | null, udpated_at: any, blog_blog_tags: Array<{ __typename?: 'blog_blog_tags', blog_tag: { __typename?: 'blog_tags', id: number, name: string } }> }> };
+export type GetBlogsQuery = { __typename?: 'query_root', blogs: Array<{ __typename?: 'blogs', id: number, title: string, contents?: string | null, thumbnail?: string | null, udpated_at: any, blog_blog_tags: Array<{ __typename?: 'blog_blog_tags', blog_tag: { __typename?: 'blog_tags', id: number, name: string } }> }> };
 
-export type GetBlogsFragmentFragment = { __typename?: 'blogs', id: number, title: string, contents?: string | null, udpated_at: any, blog_blog_tags: Array<{ __typename?: 'blog_blog_tags', blog_tag: { __typename?: 'blog_tags', id: number, name: string } }> };
+export type GetBlogsFragmentFragment = { __typename?: 'blogs', id: number, title: string, contents?: string | null, thumbnail?: string | null, udpated_at: any, blog_blog_tags: Array<{ __typename?: 'blog_blog_tags', blog_tag: { __typename?: 'blog_tags', id: number, name: string } }> };
 
 export type DeleteBlogsByPkMutationVariables = Types.Exact<{
   id: Types.Scalars['Int'];
@@ -22,6 +22,7 @@ export const GetBlogsFragmentFragmentDoc = gql`
   id
   title
   contents
+  thumbnail
   blog_blog_tags {
     blog_tag {
       id

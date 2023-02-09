@@ -1,3 +1,4 @@
+import { Group, Image } from '@mantine/core'
 import dayjs from 'dayjs'
 import {
   useDeleteBlogsByPkMutation,
@@ -19,6 +20,7 @@ gql`
     id
     title
     contents
+    thumbnail
     blog_blog_tags {
       blog_tag {
         id
@@ -50,6 +52,8 @@ export const AdminBlogTableBody = () => {
     })
   }
 
+  console.log(data)
+
   return (
     <tbody>
       {data
@@ -73,8 +77,12 @@ export const AdminBlogTableBody = () => {
                   )
                 )}
               </td>
-              <td width={150}>{blog.contents}</td>
-              <td width={200}></td>
+              <td width={150}>
+                <div dangerouslySetInnerHTML={{__html: blog.contents!}}></div>
+              </td>
+              <td width={200}>
+                {blog.thumbnail ? <Image src={blog.thumbnail} /> : ''}
+              </td>
               <td width={100} className='justify-center align-middle'>
                 <AdminTableDeleteBtn id={blog.id} click={deleteBlogByPk} />
               </td>

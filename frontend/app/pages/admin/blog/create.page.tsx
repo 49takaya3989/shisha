@@ -1,4 +1,15 @@
-import { Button, Group, MultiSelect, TextInput } from '@mantine/core'
+import {
+  Button,
+  Group,
+  Image,
+  List,
+  Modal,
+  MultiSelect,
+  SimpleGrid,
+  Tabs,
+  Text,
+  TextInput,
+} from '@mantine/core'
 import { useForm, zodResolver } from '@mantine/form'
 import { ROUTE } from 'helper/constant/route'
 import { ADMIN_BLOG_CREATE } from 'helper/constant/text'
@@ -18,16 +29,27 @@ import Underline from '@tiptap/extension-underline'
 import TextAlign from '@tiptap/extension-text-align'
 import Superscript from '@tiptap/extension-superscript'
 import SubScript from '@tiptap/extension-subscript'
-import Image from '@tiptap/extension-image'
+import EditorImage from '@tiptap/extension-image'
 import Placeholder from '@tiptap/extension-placeholder'
 import CharacterCount from '@tiptap/extension-character-count'
 import { tagType } from 'pages/admin/blog/type'
-import { useInsertBlogMutation } from 'pages/admin/blog/create.generated'
+import { useInsertBlogMutation } from 'pages/admin/blog/create.page.generated'
 import {
   Blog_Blog_Tags_Insert_Input,
   Blog_Tags_Constraint,
   Blog_Tags_Update_Column,
 } from 'src/libs/urql/types'
+
+import { Upload } from '@aws-sdk/lib-storage'
+import { ListObjectsCommand } from '@aws-sdk/client-s3'
+import { useState } from 'react'
+import { Dropzone, IMAGE_MIME_TYPE, FileWithPath } from '@mantine/dropzone'
+import {
+  bucketParams,
+  BUCKET_NAME,
+  s3Client,
+  S3_BASE_REQUEST_URL,
+} from 'utils/imageUpload'
 
 gql`
   query getBlogTagForBlogCreate {
@@ -46,6 +68,7 @@ gql`
     $slug: String!
     $blog_blog_tags: blog_blog_tags_arr_rel_insert_input
     $contents: String!
+    $thumbnail: String!
   ) {
     insert_blogs_one(
       object: {
@@ -53,6 +76,7 @@ gql`
         slug: $slug
         blog_blog_tags: $blog_blog_tags
         contents: $contents
+        thumbnail: $thumbnail
       }
     ) {
       id
@@ -66,6 +90,7 @@ gql`
         }
       }
       contents
+      thumbnail
       created_at
       udpated_at
     }
@@ -75,6 +100,13 @@ gql`
 const content = ''
 
 const AdminBlogCreate = () => {
+  const [files, setFiles] = useState<FileWithPath[]>([])
+  const [imageS3, setImageS3] = useState<string[]>([''])
+  const [preSelectedModalImage, setPreSelectedModalImage] = useState('')
+  const [selectedThum, setSelectedThum] = useState('')
+  const [opened, setOpened] = useState(false)
+  const [isThumbnailSelected, setIsThumbnailSelected] = useState(false)
+  const [isRichEditorSelected, setIsRichEditorSelected] = useState(false)
   const [res, executeMutation] = useInsertBlogMutation()
   const [result] = useGetBlogTagsQuery()
   const { data } = result
@@ -89,21 +121,12 @@ const AdminBlogCreate = () => {
       SubScript,
       Highlight,
       CharacterCount,
-      Image.configure({ inline: true }),
+      EditorImage.configure({ inline: true }),
       TextAlign.configure({ types: ['heading', 'paragraph'] }),
       Placeholder.configure({ placeholder: 'コンテンツを入力してください。' }),
     ],
     content,
   })
-
-  // リッチテキストに画像を挿入するための関数
-  const addImage = () => {
-    const url = window.prompt('URL')
-
-    if (url) {
-      editor!.chain().focus().setImage({ src: url }).run()
-    }
-  }
 
   // create tag array
   const tagData: tagType[] = []
@@ -139,6 +162,117 @@ const AdminBlogCreate = () => {
     },
   })
 
+  const previews = files.map((file, index) => {
+    const imageUrl = URL.createObjectURL(file)
+    return (
+      <Image
+        key={index}
+        src={imageUrl}
+        imageProps={{ onLoad: () => URL.revokeObjectURL(imageUrl) }}
+      />
+    )
+  })
+
+  // S3へ画像のアップロード
+  const imageUploadToAWS = async () => {
+    try {
+      const parallelUploads3 = new Upload({
+        client: s3Client,
+        params: {
+          Bucket: BUCKET_NAME,
+          Key: files[0].name,
+          Body: files[0],
+        },
+        leavePartsOnError: false,
+      })
+
+      parallelUploads3.on('httpUploadProgress', (progress) => {
+        console.log(progress)
+      })
+
+      await parallelUploads3.done()
+      // await setIsLoading(false);
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  // S3から画像の取得
+  const imageGet = () => {
+    // Create the parameters for the bucket
+    s3Client
+      .send(new ListObjectsCommand(bucketParams))
+      .then((res) => {
+        res.Contents!.map((content) => {
+          setImageS3((prevImageNames): string[] => {
+            if (prevImageNames[0] === '') return [content.Key!]
+            return [...prevImageNames, content.Key!]
+          })
+        })
+      })
+      .catch((err) => {
+        console.log('Error', err)
+      })
+  }
+
+  // サムネイルの設定
+  const preSelectImage = (e: React.MouseEvent<HTMLElement>) => {
+    const $markRemoveBorder = document.querySelector<HTMLElement>(
+      '.markRemoveBorder.border'
+    )
+    $markRemoveBorder?.classList.remove('border')
+
+    // チェックの印をつけるためのコード
+    e.currentTarget.parentElement!.parentElement!.parentElement!.classList.add(
+      'border'
+    )
+
+    // 選択肢ているurlを取得するためのコード
+    const preSelectImageSrc =
+      e.currentTarget.children[0].children[0].children[0].getAttribute('src')
+    setPreSelectedModalImage(() => {
+      return preSelectImageSrc!
+    })
+  }
+
+  // サムネイルの設定
+  const selectThum = () => {
+    setSelectedThum(() => {
+      return preSelectedModalImage
+    })
+    setOpened(false)
+    setIsThumbnailSelected(false)
+  }
+
+  // リッチテキストに選択した画像を挿入する
+  const insertRichEditorImgHandler = () => {
+    setOpened(false)
+    setIsRichEditorSelected(false)
+    if (preSelectedModalImage) {
+      editor!.chain().focus().setImage({ src: preSelectedModalImage }).run()
+    }
+  }
+
+  // リッチテキストに挿入するための画像を選択するモーダルの表示
+  const insertRichTextImageHandler = () => {
+    setOpened(true)
+    setIsRichEditorSelected(true)
+  }
+
+  // サムネイルのための画像を選択するモーダルの表示
+  const thumSelectModalHandler = () => {
+    setOpened(true)
+    setIsThumbnailSelected(true)
+  }
+
+  // 画像選択モーダルの非表示
+  const modalCloseHandler = () => {
+    setOpened(false)
+    setIsRichEditorSelected(false)
+    setIsThumbnailSelected(false)
+  }
+
+  // 入力データの保存
   const submit = () => {
     executeMutation({
       title: form.values.blogTitle,
@@ -156,6 +290,7 @@ const AdminBlogCreate = () => {
           }
         }) as Blog_Blog_Tags_Insert_Input[],
       },
+      thumbnail: selectedThum,
       contents: editor!.view.dom.innerHTML,
     }).then((result) => {
       result.error ? console.log(result) : router.push(ROUTE.ADMIN_BLOG_ARCHIVE)
@@ -234,7 +369,7 @@ const AdminBlogCreate = () => {
               </RichTextEditor.ControlsGroup>
               <Button
                 className='bg-common-black bg-opacity-10 text-common-black'
-                onClick={addImage}
+                onClick={insertRichTextImageHandler}
               >
                 Image
               </Button>
@@ -246,6 +381,121 @@ const AdminBlogCreate = () => {
         <p className='text-right'>
           {editor?.storage.characterCount.characters()}文字
         </p>
+
+        <Text>{ADMIN_BLOG_CREATE.INPUT.THUMBNAIL_LABEL}</Text>
+        <Group display='block'>
+          <Button
+            className='bg-admin-base text-common-black leading-none font-normal'
+            onClick={thumSelectModalHandler}
+          >
+            ファイルを選択
+          </Button>
+          {selectedThum !== '' ? (
+            <Group mt={16} display='block' w={400}>
+              <Image src={selectedThum} />
+            </Group>
+          ) : (
+            ''
+          )}
+        </Group>
+        <Modal
+          opened={opened}
+          onClose={modalCloseHandler}
+          size='70%'
+          overflow='inside'
+          title='サムネイル'
+        >
+          <Tabs variant='outline' defaultValue='select'>
+            <Tabs.List>
+              <Tabs.Tab value='select'>選択</Tabs.Tab>
+              <Tabs.Tab value='upload'>アップロード</Tabs.Tab>
+            </Tabs.List>
+
+            <Tabs.Panel value='select' pt='xs'>
+              <List display='flex' className='gap-5'>
+                {imageS3[0] !== ''
+                  ? imageS3.map((src, index) => (
+                      <List.Item
+                        key={index}
+                        w={200}
+                        h={200}
+                        display='flex'
+                        className='items-center justify-center overflow-hidden markRemoveBorder'
+                      >
+                        <Image
+                          src={`${S3_BASE_REQUEST_URL}${src}`}
+                          onClick={preSelectImage}
+                        />
+                      </List.Item>
+                    ))
+                  : ''}
+              </List>
+              <Group mt={60}>
+                <Button
+                  onClick={imageGet}
+                  w={150}
+                  className='bg-admin-cancel text-common-black leading-none font-normal'
+                >
+                  取得
+                </Button>
+                {isThumbnailSelected ? (
+                  <Button
+                    onClick={selectThum}
+                    w={150}
+                    className='bg-admin-base text-common-black leading-none font-normal'
+                  >
+                    選択
+                  </Button>
+                ) : (
+                  ''
+                )}
+                {isRichEditorSelected ? (
+                  <Button
+                    onClick={insertRichEditorImgHandler}
+                    w={150}
+                    className='bg-admin-base text-common-black leading-none font-normal'
+                  >
+                    選択
+                  </Button>
+                ) : (
+                  ''
+                )}
+              </Group>
+            </Tabs.Panel>
+
+            <Tabs.Panel value='upload' pt='xs'>
+              <Dropzone
+                accept={IMAGE_MIME_TYPE}
+                onDrop={setFiles}
+                className={`flex items-center justify-center ${
+                  previews.length > 0 ? 'h-[200px]' : 'h-[calc(100vh_-_200px)]'
+                }`}
+              >
+                <Text align='center'>Drop images here</Text>
+              </Dropzone>
+
+              <SimpleGrid
+                cols={4}
+                breakpoints={[{ maxWidth: 'sm', cols: 1 }]}
+                mt={previews.length > 0 ? 'xl' : 0}
+              >
+                {previews}
+              </SimpleGrid>
+              {previews.length > 0 ? (
+                <Button
+                  onClick={imageUploadToAWS}
+                  mt={60}
+                  loaderPosition='right'
+                  className='bg-admin-base text-common-black leading-none font-normal'
+                >
+                  画像アップロード
+                </Button>
+              ) : (
+                ''
+              )}
+            </Tabs.Panel>
+          </Tabs>
+        </Modal>
 
         <Group mt={60}>
           <Button
