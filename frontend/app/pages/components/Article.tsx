@@ -33,7 +33,11 @@ export const Article = () => {
     <ul className='flex flex-wrap gap-12'>
       {data
         ? data.blogs.map((blog) => (
-            <Link href={`./blog/${blog.slug}`}>
+            <Link
+              key={blog.id}
+              href={`./blog/${blog.slug}`}
+              className='transition duration-300 ease-in hover:opacity-80'
+            >
               <Card
                 key={blog.id}
                 className='lg:w-[300px]'
@@ -59,12 +63,17 @@ export const Article = () => {
                     />
                   )}
                 </Card.Section>
-                <Group position='apart' mt='md' mb='xs'>
+                <Group
+                  position='apart'
+                  mt='md'
+                  mb='xs'
+                  className='h-[50px] line-clamp-2'
+                >
                   <Text weight={500} className='w-full break-words'>
                     {blog.title}
                   </Text>
                 </Group>
-                <Group display='flex'>
+                <Group display='flex' className='h-5 overflow-hidden'>
                   {blog.blog_blog_tags.map((blog_blog_tag) => (
                     <Badge
                       key={blog_blog_tag.blog_tag.id}
@@ -75,7 +84,6 @@ export const Article = () => {
                     </Badge>
                   ))}
                 </Group>
-                {/* <div dangerouslySetInnerHTML={{__html: blog.contents!}} className='mt-4'></div> */}
               </Card>
             </Link>
           ))

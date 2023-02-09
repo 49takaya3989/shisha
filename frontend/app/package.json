@@ -66,6 +66,7 @@
     "@graphql-codegen/near-operation-file-preset": "^2.5.0",
     "@graphql-codegen/typescript-operations": "^2.5.12",
     "@graphql-codegen/typescript-urql": "^3.7.3",
+    "@tailwindcss/line-clamp": "^0.4.2",
     "autoprefixer": "^10.4.13",
     "postcss": "^8.4.21",
     "sass": "^1.57.1",
