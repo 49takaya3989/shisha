@@ -1,8 +1,19 @@
-import { Button, Group, MultiSelect, TextInput } from '@mantine/core'
+import {
+  Button,
+  Group,
+  Image,
+  List,
+  Modal,
+  MultiSelect,
+  SimpleGrid,
+  Tabs,
+  Text,
+  TextInput,
+} from '@mantine/core'
 import { useForm, zodResolver } from '@mantine/form'
 import { RichTextEditor } from '@mantine/tiptap'
 import Highlight from '@tiptap/extension-highlight'
-import Image from '@tiptap/extension-image'
+import EditorImage from '@tiptap/extension-image'
 import Link from '@tiptap/extension-link'
 import Subscript from '@tiptap/extension-subscript'
 import Superscript from '@tiptap/extension-superscript'
@@ -15,16 +26,10 @@ import StarterKit from '@tiptap/starter-kit'
 import { ROUTE } from 'helper/constant/route'
 import { ADMIN_BLOG_EDIT } from 'helper/constant/text'
 import { useRouter } from 'next/router'
-import {
-  useDeleteBlogBlogTagsMutation,
-  useGetBlogsByPkQuery,
-  useGetBlogTagForBlogEditQuery,
-  useInsertBlogBlogTagsMutation,
-  useUpdateBlogsByPkMutation,
-} from 'pages/admin/blog/edit/[id].generated'
+
 import AdminContentsHeader from 'pages/admin/components/ContentsHeader'
 import AdminLayout from 'pages/admin/layout/Layout'
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { gql } from 'urql'
 import { z } from 'zod'
 import { tagType } from 'pages/admin/blog/type'
@@ -32,6 +37,22 @@ import {
   Blog_Blog_Tags_Constraint,
   Blog_Blog_Tags_Update_Column,
 } from 'src/libs/urql/types'
+import {
+  useDeleteBlogBlogTagsMutation,
+  useGetBlogsByPkQuery,
+  useGetBlogTagForBlogEditQuery,
+  useInsertBlogBlogTagsMutation,
+  useUpdateBlogsByPkMutation,
+} from 'pages/admin/blog/edit/[id].page.generated'
+import { Dropzone, FileWithPath, IMAGE_MIME_TYPE } from '@mantine/dropzone'
+import {
+  bucketParams,
+  BUCKET_NAME,
+  s3Client,
+  S3_BASE_REQUEST_URL,
+} from 'utils/imageUpload'
+import { Upload } from '@aws-sdk/lib-storage'
+import { ListObjectsCommand } from '@aws-sdk/client-s3'
 
 gql`
   query getBlogTagForBlogEdit {
@@ -51,6 +72,7 @@ gql`
       title
       slug
       contents
+      thumbnail
       blog_blog_tags {
         blog_tag {
           id
@@ -104,12 +126,15 @@ gql`
   }
 `
 
+// *** <mutation example> ***
+//
 // mutation update_blogs_by_pk(
 //   $pk_columns: blogs_pk_columns_input = {id: 44},
 //   $_set: blogs_set_input = {
 //     slug: "udpateしudpateしました",
 //     title: "udpateしudpateしました",
 //     contents: "udpateしましたudpateしました"
+//     thumbnail: "udpateしましたudpateしました"
 //   }
 // ) {
 //   update_blogs_by_pk(pk_columns: $pk_columns, _set: $_set) {
@@ -160,10 +185,19 @@ gql`
 //     }
 //   }
 // }
+//
+// *** < end mutation example> ***
 
 const AdminBlogEdit = () => {
   const router = useRouter()
   const editId = router.query.id
+  const [files, setFiles] = useState<FileWithPath[]>([])
+  const [opened, setOpened] = useState(false)
+  const [imageS3, setImageS3] = useState<string[]>([''])
+  const [preSelectedModalImage, setPreSelectedModalImage] = useState('')
+  const [selectedThum, setSelectedThum] = useState('')
+  const [isThumbnailSelected, setIsThumbnailSelected] = useState(false)
+  const [isRichEditorSelected, setIsRichEditorSelected] = useState(false)
   const [updateBlogsByPkRes, updateBlogsByPkExecuteMutation] =
     useUpdateBlogsByPkMutation()
   const [insertBlogBlogTagsRes, insertBlogBlogTagsExecuteMutation] =
@@ -179,22 +213,6 @@ const AdminBlogEdit = () => {
   const content = ''
   let incrementTags: string[] = []
   let decrementTags: string[] = []
-
-  const editor = useEditor({
-    extensions: [
-      StarterKit,
-      Underline,
-      Link,
-      Superscript,
-      Subscript,
-      Highlight,
-      CharacterCount,
-      Image.configure({ inline: true }),
-      TextAlign.configure({ types: ['heading', 'paragraph'] }),
-      Placeholder.configure({ placeholder: 'コンテンツを入力してください。' }),
-    ],
-    content,
-  })
 
   // formのvalidation schemaの定義
   const validateSchema = z.object({
@@ -219,11 +237,6 @@ const AdminBlogEdit = () => {
     },
   })
 
-  const blogHasTagArr: string[] = []
-  dataBlogByPk?.blogs_by_pk?.blog_blog_tags.map((blog_blog_tag) => {
-    blogHasTagArr.push(String(blog_blog_tag.blog_tag.id))
-  })
-
   useEffect(() => {
     decrementTags = blogHasTagArr.filter(
       (el) => form.values.blogTag.indexOf(el) === -1
@@ -233,8 +246,23 @@ const AdminBlogEdit = () => {
         (el) => blogHasTagArr.indexOf(el) == -1
       )
     }
-    console.log(incrementTags)
   }, [form.values.blogTag])
+
+  const editor = useEditor({
+    extensions: [
+      StarterKit,
+      Underline,
+      Link,
+      Superscript,
+      Subscript,
+      Highlight,
+      CharacterCount,
+      EditorImage.configure({ inline: true }),
+      TextAlign.configure({ types: ['heading', 'paragraph'] }),
+      Placeholder.configure({ placeholder: 'コンテンツを入力してください。' }),
+    ],
+    content,
+  })
 
   useMemo(() => {
     form.setValues({
@@ -247,16 +275,15 @@ const AdminBlogEdit = () => {
       ),
     })
     if (editor) editor.commands.setContent(dataBlogByPk?.blogs_by_pk?.contents!)
+    setSelectedThum(dataBlogByPk?.blogs_by_pk?.thumbnail!)
   }, [dataBlogByPk])
 
-  // リッチテキストに画像を挿入するための関数
-  const addImage = () => {
-    const url = window.prompt('URL')
+  // 保存されているタグの配列作成
+  const blogHasTagArr: string[] = []
+  dataBlogByPk?.blogs_by_pk?.blog_blog_tags.map((blog_blog_tag) => {
+    blogHasTagArr.push(String(blog_blog_tag.blog_tag.id))
+  })
 
-    if (url) {
-      editor!.chain().focus().setImage({ src: url }).run()
-    }
-  }
 
   // create tag array
   const tagData: tagType[] = []
@@ -269,6 +296,118 @@ const AdminBlogEdit = () => {
     })
   }
 
+  // マークダウンで挿入する画像DOMの作成
+  const previews = files.map((file, index) => {
+    const imageUrl = URL.createObjectURL(file)
+    return (
+      <Image
+        key={index}
+        src={imageUrl}
+        imageProps={{ onLoad: () => URL.revokeObjectURL(imageUrl) }}
+      />
+    )
+  })
+
+  // S3へ画像のアップロード
+  const imageUploadToAWS = async () => {
+    try {
+      const parallelUploads3 = new Upload({
+        client: s3Client,
+        params: {
+          Bucket: BUCKET_NAME,
+          Key: files[0].name,
+          Body: files[0],
+        },
+        leavePartsOnError: false,
+      })
+
+      parallelUploads3.on('httpUploadProgress', (progress) => {
+        console.log(progress)
+      })
+
+      await parallelUploads3.done()
+      // await setIsLoading(false);
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  // S3から画像の取得
+  const imageGet = () => {
+    // Create the parameters for the bucket
+    s3Client
+      .send(new ListObjectsCommand(bucketParams))
+      .then((res) => {
+        res.Contents!.map((content) => {
+          setImageS3((prevImageNames): string[] => {
+            if (prevImageNames[0] === '') return [content.Key!]
+            return [...prevImageNames, content.Key!]
+          })
+        })
+      })
+      .catch((err) => {
+        console.log('Error', err)
+      })
+  }
+
+  // サムネイルの設定
+  const preSelectImage = (e: React.MouseEvent<HTMLElement>) => {
+    const $markRemoveBorder = document.querySelector<HTMLElement>(
+      '.markRemoveBorder.border'
+    )
+    $markRemoveBorder?.classList.remove('border')
+
+    // チェックの印をつけるためのコード
+    e.currentTarget.parentElement!.parentElement!.parentElement!.classList.add(
+      'border'
+    )
+
+    // 選択肢ているurlを取得するためのコード
+    const preSelectImageSrc =
+      e.currentTarget.children[0].children[0].children[0].getAttribute('src')
+    setPreSelectedModalImage(() => {
+      return preSelectImageSrc!
+    })
+  }
+
+  // サムネイルの設定
+  const selectThum = () => {
+    setSelectedThum(() => {
+      return preSelectedModalImage
+    })
+    setOpened(false)
+    setIsThumbnailSelected(false)
+  }
+
+  // リッチテキストに選択した画像を挿入する
+  const insertRichEditorImgHandler = () => {
+    setOpened(false)
+    setIsRichEditorSelected(false)
+    if (preSelectedModalImage) {
+      editor!.chain().focus().setImage({ src: preSelectedModalImage }).run()
+    }
+  }
+
+  // リッチテキストに挿入するための画像を選択するモーダルの表示
+  const insertRichTextImageHandler = () => {
+    setOpened(true)
+    setIsRichEditorSelected(true)
+  }
+
+  // サムネイルのための画像を選択するモーダルの表示
+  const thumSelectModalHandler = () => {
+    setOpened(true)
+    setIsThumbnailSelected(true)
+  }
+
+  // 画像選択モーダルの非表示
+  const modalCloseHandler = () => {
+    setOpened(false)
+    setIsRichEditorSelected(false)
+    setIsThumbnailSelected(false)
+  }
+
+  // 入力データの保存
   const submit = async () => {
     await updateBlogsByPkExecuteMutation({
       pk_columns: { id: Number(editId) },
@@ -276,6 +415,7 @@ const AdminBlogEdit = () => {
         title: form.values.blogTitle,
         slug: form.values.blogSlug,
         contents: editor!.view.dom.innerHTML,
+        thumbnail: selectedThum
       },
     }).then((result) => {
       if (result.error) {
@@ -301,13 +441,15 @@ const AdminBlogEdit = () => {
             console.log(result)
           } else if (decrementTags) {
             let booleanArr: string[] = []
-            decrementTags.map(deleteTag => {
+            decrementTags.map((deleteTag) => {
               deleteBlogBlogTagsExecuteMutation({
                 where: {
                   blog_id: { _eq: Number(editId) },
-                  _and: [{
-                    blog_tag_id: { _eq: Number(deleteTag) },
-                  }],
+                  _and: [
+                    {
+                      blog_tag_id: { _eq: Number(deleteTag) },
+                    },
+                  ],
                 },
               }).then((result) => {
                 if (result.error) {
@@ -317,7 +459,8 @@ const AdminBlogEdit = () => {
                 } else booleanArr.push('true')
               })
             })
-            if(booleanArr.indexOf('false') == -1) router.push(ROUTE.ADMIN_BLOG_ARCHIVE)
+            if (booleanArr.indexOf('false') == -1)
+              router.push(ROUTE.ADMIN_BLOG_ARCHIVE)
           } else {
             router.push(ROUTE.ADMIN_BLOG_ARCHIVE)
           }
@@ -325,13 +468,15 @@ const AdminBlogEdit = () => {
       } else if (decrementTags) {
         // 新規紐付けのタグがない且つ紐付けのタグ削除があるver
         let booleanArr: string[] = []
-        decrementTags.map(deleteTag => {
+        decrementTags.map((deleteTag) => {
           deleteBlogBlogTagsExecuteMutation({
             where: {
               blog_id: { _eq: Number(editId) },
-              _and: [{
-                blog_tag_id: { _eq: Number(deleteTag) },
-              }],
+              _and: [
+                {
+                  blog_tag_id: { _eq: Number(deleteTag) },
+                },
+              ],
             },
           }).then((result) => {
             if (result.error) {
@@ -341,7 +486,8 @@ const AdminBlogEdit = () => {
             } else booleanArr.push('true')
           })
         })
-        if(booleanArr.indexOf('false') == -1) router.push(ROUTE.ADMIN_BLOG_ARCHIVE)
+        if (booleanArr.indexOf('false') == -1)
+          router.push(ROUTE.ADMIN_BLOG_ARCHIVE)
       } else {
         router.push(ROUTE.ADMIN_BLOG_ARCHIVE)
       }
@@ -421,7 +567,7 @@ const AdminBlogEdit = () => {
               </RichTextEditor.ControlsGroup>
               <Button
                 className='bg-common-black bg-opacity-10 text-common-black'
-                onClick={addImage}
+                onClick={insertRichTextImageHandler}
               >
                 Image
               </Button>
@@ -433,6 +579,133 @@ const AdminBlogEdit = () => {
         <p className='text-right'>
           {editor?.storage.characterCount.characters()}文字
         </p>
+
+        <Text>{ADMIN_BLOG_EDIT.INPUT.THUMBNAIL_LABEL}</Text>
+        <Group display='block'>
+          <Group>
+            {selectedThum ? (
+              <Button
+                className='bg-admin-cancel text-common-black leading-none font-normal'
+                onClick={() => setSelectedThum('')}
+              >
+                クリア
+              </Button>
+            ) : (
+              ''
+            )}
+            <Button
+              className='bg-admin-base text-common-black leading-none font-normal'
+              onClick={thumSelectModalHandler}
+            >
+              ファイルを選択
+            </Button>
+          </Group>
+          {selectedThum !== '' ? (
+            <Group mt={16} display='block' w={400}>
+              <Image src={selectedThum} />
+            </Group>
+          ) : (
+            ''
+          )}
+        </Group>
+        <Modal
+          opened={opened}
+          onClose={modalCloseHandler}
+          size='70%'
+          overflow='inside'
+          title='サムネイル'
+        >
+          <Tabs variant='outline' defaultValue='select'>
+            <Tabs.List>
+              <Tabs.Tab value='select'>選択</Tabs.Tab>
+              <Tabs.Tab value='upload'>アップロード</Tabs.Tab>
+            </Tabs.List>
+
+            <Tabs.Panel value='select' pt='xs'>
+              <List display='flex' className='gap-5'>
+                {imageS3[0] !== ''
+                  ? imageS3.map((src, index) => (
+                      <List.Item
+                        key={index}
+                        w={200}
+                        h={200}
+                        display='flex'
+                        className='items-center justify-center overflow-hidden markRemoveBorder'
+                      >
+                        <Image
+                          src={`${S3_BASE_REQUEST_URL}${src}`}
+                          onClick={preSelectImage}
+                        />
+                      </List.Item>
+                    ))
+                  : ''}
+              </List>
+              <Group mt={60}>
+                <Button
+                  onClick={imageGet}
+                  w={150}
+                  className='bg-admin-cancel text-common-black leading-none font-normal'
+                >
+                  取得
+                </Button>
+                {isThumbnailSelected ? (
+                  <Button
+                    onClick={selectThum}
+                    w={150}
+                    className='bg-admin-base text-common-black leading-none font-normal'
+                  >
+                    選択
+                  </Button>
+                ) : (
+                  ''
+                )}
+                {isRichEditorSelected ? (
+                  <Button
+                    onClick={insertRichEditorImgHandler}
+                    w={150}
+                    className='bg-admin-base text-common-black leading-none font-normal'
+                  >
+                    選択
+                  </Button>
+                ) : (
+                  ''
+                )}
+              </Group>
+            </Tabs.Panel>
+
+            <Tabs.Panel value='upload' pt='xs'>
+              <Dropzone
+                accept={IMAGE_MIME_TYPE}
+                onDrop={setFiles}
+                className={`flex items-center justify-center ${
+                  previews.length > 0 ? 'h-[200px]' : 'h-[calc(100vh_-_200px)]'
+                }`}
+              >
+                <Text align='center'>Drop images here</Text>
+              </Dropzone>
+
+              <SimpleGrid
+                cols={4}
+                breakpoints={[{ maxWidth: 'sm', cols: 1 }]}
+                mt={previews.length > 0 ? 'xl' : 0}
+              >
+                {previews}
+              </SimpleGrid>
+              {previews.length > 0 ? (
+                <Button
+                  onClick={imageUploadToAWS}
+                  mt={60}
+                  loaderPosition='right'
+                  className='bg-admin-base text-common-black leading-none font-normal'
+                >
+                  画像アップロード
+                </Button>
+              ) : (
+                ''
+              )}
+            </Tabs.Panel>
+          </Tabs>
+        </Modal>
 
         <Group mt={60}>
           <Button

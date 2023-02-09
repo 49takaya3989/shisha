@@ -15,10 +15,11 @@ export type InsertBlogMutationVariables = Types.Exact<{
   slug: Types.Scalars['String'];
   blog_blog_tags?: Types.InputMaybe<Types.Blog_Blog_Tags_Arr_Rel_Insert_Input>;
   contents: Types.Scalars['String'];
+  thumbnail: Types.Scalars['String'];
 }>;
 
 
-export type InsertBlogMutation = { __typename?: 'mutation_root', insert_blogs_one?: { __typename?: 'blogs', id: number, title: string, slug?: string | null, contents?: string | null, created_at: any, udpated_at: any, blog_blog_tags: Array<{ __typename?: 'blog_blog_tags', blog_tag: { __typename?: 'blog_tags', id: number, name: string, slug: string } }> } | null };
+export type InsertBlogMutation = { __typename?: 'mutation_root', insert_blogs_one?: { __typename?: 'blogs', id: number, title: string, slug: string, contents?: string | null, thumbnail?: string | null, created_at: any, udpated_at: any, blog_blog_tags: Array<{ __typename?: 'blog_blog_tags', blog_tag: { __typename?: 'blog_tags', id: number, name: string, slug: string } }> } | null };
 
 export const GetBlogTagForBlogCreateFragmentFragmentDoc = gql`
     fragment getBlogTagForBlogCreateFragment on blog_tags {
@@ -38,9 +39,9 @@ export function useGetBlogTagForBlogCreateQuery(options?: Omit<Urql.UseQueryArgs
   return Urql.useQuery<GetBlogTagForBlogCreateQuery, GetBlogTagForBlogCreateQueryVariables>({ query: GetBlogTagForBlogCreateDocument, ...options });
 };
 export const InsertBlogDocument = gql`
-    mutation insertBlog($title: String!, $slug: String!, $blog_blog_tags: blog_blog_tags_arr_rel_insert_input, $contents: String!) {
+    mutation insertBlog($title: String!, $slug: String!, $blog_blog_tags: blog_blog_tags_arr_rel_insert_input, $contents: String!, $thumbnail: String!) {
   insert_blogs_one(
-    object: {title: $title, slug: $slug, blog_blog_tags: $blog_blog_tags, contents: $contents}
+    object: {title: $title, slug: $slug, blog_blog_tags: $blog_blog_tags, contents: $contents, thumbnail: $thumbnail}
   ) {
     id
     title
@@ -53,6 +54,7 @@ export const InsertBlogDocument = gql`
       }
     }
     contents
+    thumbnail
     created_at
     udpated_at
   }
