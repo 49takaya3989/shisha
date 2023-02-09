@@ -655,7 +655,7 @@ export type Blogs = {
   contents?: Maybe<Scalars['String']>;
   created_at: Scalars['timestamptz'];
   id: Scalars['Int'];
-  slug?: Maybe<Scalars['String']>;
+  slug: Scalars['String'];
   thumbnail?: Maybe<Scalars['String']>;
   title: Scalars['String'];
   udpated_at: Scalars['timestamptz'];
@@ -736,7 +736,9 @@ export type Blogs_Bool_Exp = {
 /** unique or primary key constraints on table "blogs" */
 export enum Blogs_Constraint {
   /** unique or primary key constraint on columns "id" */
-  BlogPkey = 'blog_pkey'
+  BlogPkey = 'blog_pkey',
+  /** unique or primary key constraint on columns "slug" */
+  BlogsSlugKey = 'blogs_slug_key'
 }
 
 /** input type for incrementing numeric columns in table "blogs" */

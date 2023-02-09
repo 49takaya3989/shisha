@@ -15,7 +15,7 @@ export type GetBlogsByPkQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetBlogsByPkQuery = { __typename?: 'query_root', blogs_by_pk?: { __typename?: 'blogs', id: number, title: string, slug?: string | null, contents?: string | null, thumbnail?: string | null, blog_blog_tags: Array<{ __typename?: 'blog_blog_tags', blog_tag: { __typename?: 'blog_tags', id: number, name: string, slug: string } }> } | null };
+export type GetBlogsByPkQuery = { __typename?: 'query_root', blogs_by_pk?: { __typename?: 'blogs', id: number, title: string, slug: string, contents?: string | null, thumbnail?: string | null, blog_blog_tags: Array<{ __typename?: 'blog_blog_tags', blog_tag: { __typename?: 'blog_tags', id: number, name: string, slug: string } }> } | null };
 
 export type UpdateBlogsByPkMutationVariables = Types.Exact<{
   pk_columns: Types.Blogs_Pk_Columns_Input;
@@ -23,7 +23,7 @@ export type UpdateBlogsByPkMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateBlogsByPkMutation = { __typename?: 'mutation_root', update_blogs_by_pk?: { __typename?: 'blogs', id: number, slug?: string | null, title: string, contents?: string | null, blog_blog_tags: Array<{ __typename?: 'blog_blog_tags', blog_tag: { __typename?: 'blog_tags', id: number, name: string, slug: string } }> } | null };
+export type UpdateBlogsByPkMutation = { __typename?: 'mutation_root', update_blogs_by_pk?: { __typename?: 'blogs', id: number, slug: string, title: string, contents?: string | null, blog_blog_tags: Array<{ __typename?: 'blog_blog_tags', blog_tag: { __typename?: 'blog_tags', id: number, name: string, slug: string } }> } | null };
 
 export type InsertBlogBlogTagsMutationVariables = Types.Exact<{
   objects: Array<Types.Blog_Blog_Tags_Insert_Input> | Types.Blog_Blog_Tags_Insert_Input;

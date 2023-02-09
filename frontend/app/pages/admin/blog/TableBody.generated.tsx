@@ -15,7 +15,7 @@ export type DeleteBlogsByPkMutationVariables = Types.Exact<{
 }>;
 
 
-export type DeleteBlogsByPkMutation = { __typename?: 'mutation_root', delete_blogs_by_pk?: { __typename?: 'blogs', id: number, title: string, slug?: string | null, contents?: string | null } | null };
+export type DeleteBlogsByPkMutation = { __typename?: 'mutation_root', delete_blogs_by_pk?: { __typename?: 'blogs', id: number, title: string, slug: string, contents?: string | null } | null };
 
 export const GetBlogsFragmentFragmentDoc = gql`
     fragment getBlogsFragment on blogs {

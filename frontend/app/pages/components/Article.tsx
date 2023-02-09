@@ -35,7 +35,7 @@ export const Article = () => {
         ? data.blogs.map((blog) => (
             <Link
               key={blog.id}
-              href={`./blog/${blog.slug}`}
+              href={`./blog/${blog.id}`}
               className='transition duration-300 ease-in hover:opacity-80'
             >
               <Card

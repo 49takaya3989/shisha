@@ -19,7 +19,7 @@ export type InsertBlogMutationVariables = Types.Exact<{
 }>;
 
 
-export type InsertBlogMutation = { __typename?: 'mutation_root', insert_blogs_one?: { __typename?: 'blogs', id: number, title: string, slug?: string | null, contents?: string | null, thumbnail?: string | null, created_at: any, udpated_at: any, blog_blog_tags: Array<{ __typename?: 'blog_blog_tags', blog_tag: { __typename?: 'blog_tags', id: number, name: string, slug: string } }> } | null };
+export type InsertBlogMutation = { __typename?: 'mutation_root', insert_blogs_one?: { __typename?: 'blogs', id: number, title: string, slug: string, contents?: string | null, thumbnail?: string | null, created_at: any, udpated_at: any, blog_blog_tags: Array<{ __typename?: 'blog_blog_tags', blog_tag: { __typename?: 'blog_tags', id: number, name: string, slug: string } }> } | null };
 
 export const GetBlogTagForBlogCreateFragmentFragmentDoc = gql`
     fragment getBlogTagForBlogCreateFragment on blog_tags {
