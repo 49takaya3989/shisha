@@ -248,20 +248,6 @@ const AdminBlogEdit = () => {
     }
   }, [form.values.blogTag])
 
-  useMemo(() => {
-    form.setValues({
-      blogTitle: dataBlogByPk?.blogs_by_pk?.title,
-      blogSlug: dataBlogByPk?.blogs_by_pk?.slug!,
-      blogTag: dataBlogByPk?.blogs_by_pk?.blog_blog_tags.map(
-        (blog_blog_tag) => {
-          return String(blog_blog_tag.blog_tag.id)
-        }
-      ),
-    })
-    if (editor) editor.commands.setContent(dataBlogByPk?.blogs_by_pk?.contents!)
-    setSelectedThum(dataBlogByPk?.blogs_by_pk?.thumbnail!)
-  }, [dataBlogByPk])
-
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -277,6 +263,20 @@ const AdminBlogEdit = () => {
     ],
     content,
   })
+
+  useMemo(() => {
+    form.setValues({
+      blogTitle: dataBlogByPk?.blogs_by_pk?.title,
+      blogSlug: dataBlogByPk?.blogs_by_pk?.slug!,
+      blogTag: dataBlogByPk?.blogs_by_pk?.blog_blog_tags.map(
+        (blog_blog_tag) => {
+          return String(blog_blog_tag.blog_tag.id)
+        }
+      ),
+    })
+    if (editor) editor.commands.setContent(dataBlogByPk?.blogs_by_pk?.contents!)
+    setSelectedThum(dataBlogByPk?.blogs_by_pk?.thumbnail!)
+  }, [dataBlogByPk])
 
   // 保存されているタグの配列作成
   const blogHasTagArr: string[] = []
