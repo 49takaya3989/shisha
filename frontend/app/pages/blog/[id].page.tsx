@@ -55,16 +55,10 @@ const BlogSingle = () => {
           ))}
         </List>
         <Group mt={10}>
-          <Image
-            src={data?.blogs_by_pk?.thumbnail}
-            alt={data?.blogs_by_pk?.title}
-          />
+          <Image src={data?.blogs_by_pk?.thumbnail} alt={data?.blogs_by_pk?.title} />
         </Group>
         <Group mt={60}>
-          <div
-            dangerouslySetInnerHTML={{ __html: data?.blogs_by_pk?.contents! }}
-            className='blog-content w-full'
-          ></div>
+          <div dangerouslySetInnerHTML={{__html: data?.blogs_by_pk?.contents!}} className='blog-content w-full'></div>
         </Group>
       </UserLayout>
     </>
