@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { AdminContentsHeaderType } from 'pages/admin/type'
 import { Flex, Title } from '@mantine/core'
 
-const AdminContentsHeader = ({
+export const AdminContentsHeader = ({
   heading,
   btnLink,
   btnLabel,
@@ -22,5 +22,3 @@ const AdminContentsHeader = ({
     </Flex>
   )
 }
-
-export default AdminContentsHeader

@@ -2,7 +2,7 @@ import { Avatar, Button } from '@mantine/core'
 import Link from 'next/link'
 import { useClerk } from '@clerk/clerk-react'
 
-const AdminHeader = () => {
+export const AdminHeader = () => {
   const { signOut } = useClerk()
 
   return (
@@ -20,5 +20,3 @@ const AdminHeader = () => {
     </header>
   )
 }
-
-export default AdminHeader

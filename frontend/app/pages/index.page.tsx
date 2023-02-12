@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import { Article } from 'pages/components/Article'
+import { BlogArticleForUser } from 'pages/components/Article'
 import { UserLayout } from 'pages/layout/Layout'
 
 export default function Home() {
@@ -11,7 +11,7 @@ export default function Home() {
       </Head>
 
       <UserLayout>
-        <Article />
+        <BlogArticleForUser />
       </UserLayout>
     </div>
   )

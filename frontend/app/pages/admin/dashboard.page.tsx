@@ -1,6 +1,7 @@
-import AdminLayout from 'pages/admin/layout/Layout'
+import { NextPage } from 'next'
+import { AdminLayout } from 'pages/admin/layout/Layout'
 
-const AdminDashboard = () => {
+const AdminDashboard: NextPage = () => {
   return (
     <div>
       <AdminLayout>AdminDashboard</AdminLayout>

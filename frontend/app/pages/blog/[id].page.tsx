@@ -1,5 +1,6 @@
 import { Group, Image, List, Title } from '@mantine/core'
 import dayjs from 'dayjs'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useGetBlogsByPkForUserSingleQuery } from 'pages/blog/[id].page.generated'
 import { UserLayout } from 'pages/layout/Layout'
@@ -22,12 +23,13 @@ gql`
       blog_tag {
         id
         name
+        slug
       }
     }
   }
 `
 
-const BlogSingle = () => {
+const BlogSingleForUser = () => {
   const router = useRouter()
   const editId = router.query.id
   const [dateTime, setDateTime] = useState('')
@@ -47,22 +49,41 @@ const BlogSingle = () => {
   return (
     <>
       <UserLayout>
-        <Title order={1}>{data?.blogs_by_pk?.title}</Title>
+        <Title order={1} className='border-b'>
+          {data?.blogs_by_pk?.title}
+        </Title>
         <time date-time={dateTime}>{time}</time>
-        <List display='flex' className='gap-[10px]'>
+        <List mt={10} display='flex' className='gap-[10px]'>
           {data?.blogs_by_pk?.blog_blog_tags.map((tag) => (
-            <List.Item key={tag.blog_tag.id}>{tag.blog_tag.name}</List.Item>
+            <List.Item key={tag.blog_tag.id}>
+              <Link
+                href={`/blog/category/${tag.blog_tag.slug}`}
+                className='border rounded p-1 hover:bg-common-black hover:text-common-white'
+              >
+                {tag.blog_tag.name}
+              </Link>
+            </List.Item>
           ))}
         </List>
-        <Group mt={10}>
-          <Image src={data?.blogs_by_pk?.thumbnail} alt={data?.blogs_by_pk?.title} />
-        </Group>
+        {data?.blogs_by_pk?.thumbnail ? (
+          <Group mt={10}>
+            <Image
+              src={data?.blogs_by_pk?.thumbnail}
+              alt={data?.blogs_by_pk?.title}
+            />
+          </Group>
+        ) : (
+          ''
+        )}
         <Group mt={60}>
-          <div dangerouslySetInnerHTML={{__html: data?.blogs_by_pk?.contents!}} className='blog-content w-full'></div>
+          <div
+            dangerouslySetInnerHTML={{ __html: data?.blogs_by_pk?.contents! }}
+            className='blog-content w-full'
+          ></div>
         </Group>
       </UserLayout>
     </>
   )
 }
 
-export default BlogSingle
+export default BlogSingleForUser

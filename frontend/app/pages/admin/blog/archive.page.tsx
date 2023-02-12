@@ -1,10 +1,10 @@
 import { ROUTE } from 'helper/constant/route'
 import { ADMIN_BLOG_ARCHIVE } from 'helper/constant/text'
-import AdminContentsHeader from 'pages/admin/components/ContentsHeader'
+import { AdminContentsHeader } from 'pages/admin/components/ContentsHeader'
 import { AdminTableHeader } from 'pages/admin/components/table/AdminTableHeader'
 import { AdminTableWrap } from 'pages/admin/components/table/AdminTableWrap'
 import { AdminBlogTableBody } from 'pages/admin/blog/TableBody'
-import AdminLayout from 'pages/admin/layout/Layout'
+import { AdminLayout } from 'pages/admin/layout/Layout'
 
 const AdminBlogArchive = () => {
   return (

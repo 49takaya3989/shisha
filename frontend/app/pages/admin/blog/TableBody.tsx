@@ -52,8 +52,6 @@ export const AdminBlogTableBody = () => {
     })
   }
 
-  console.log(data)
-
   return (
     <tbody>
       {data

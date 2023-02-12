@@ -1,9 +1,9 @@
 import { Grid } from '@mantine/core'
-import AdminHeader from 'pages/admin/layout/Header'
+import { AdminHeader } from 'pages/admin/layout/Header'
 import { AdminSidebar } from 'pages/admin/layout/Sidebar'
 import { Props } from 'pages/type'
 
-const AdminLayout = ({ children }: Props) => {
+export const AdminLayout = ({ children }: Props) => {
   return (
     <div>
       <AdminHeader />
@@ -18,5 +18,3 @@ const AdminLayout = ({ children }: Props) => {
     </div>
   )
 }
-
-export default AdminLayout

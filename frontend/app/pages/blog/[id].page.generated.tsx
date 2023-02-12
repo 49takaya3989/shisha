@@ -8,9 +8,9 @@ export type GetBlogsByPkForUserSingleQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetBlogsByPkForUserSingleQuery = { __typename?: 'query_root', blogs_by_pk?: { __typename?: 'blogs', title: string, thumbnail?: string | null, udpated_at: any, contents?: string | null, blog_blog_tags: Array<{ __typename?: 'blog_blog_tags', blog_tag: { __typename?: 'blog_tags', id: number, name: string } }> } | null };
+export type GetBlogsByPkForUserSingleQuery = { __typename?: 'query_root', blogs_by_pk?: { __typename?: 'blogs', title: string, thumbnail?: string | null, udpated_at: any, contents?: string | null, blog_blog_tags: Array<{ __typename?: 'blog_blog_tags', blog_tag: { __typename?: 'blog_tags', id: number, name: string, slug: string } }> } | null };
 
-export type BlogsFragmentFragment = { __typename?: 'blogs', title: string, thumbnail?: string | null, udpated_at: any, contents?: string | null, blog_blog_tags: Array<{ __typename?: 'blog_blog_tags', blog_tag: { __typename?: 'blog_tags', id: number, name: string } }> };
+export type BlogsFragmentFragment = { __typename?: 'blogs', title: string, thumbnail?: string | null, udpated_at: any, contents?: string | null, blog_blog_tags: Array<{ __typename?: 'blog_blog_tags', blog_tag: { __typename?: 'blog_tags', id: number, name: string, slug: string } }> };
 
 export const BlogsFragmentFragmentDoc = gql`
     fragment blogsFragment on blogs {
@@ -22,6 +22,7 @@ export const BlogsFragmentFragmentDoc = gql`
     blog_tag {
       id
       name
+      slug
     }
   }
 }
