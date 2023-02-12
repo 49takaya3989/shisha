@@ -7,8 +7,8 @@ import {
   useGetSpecificBlogTagQuery,
   useUpdateSpecificBlogTagMutation,
 } from 'pages/admin/blog/tag/edit/[id].generated'
-import AdminContentsHeader from 'pages/admin/components/ContentsHeader'
-import AdminLayout from 'pages/admin/layout/Layout'
+import { AdminContentsHeader } from 'pages/admin/components/ContentsHeader'
+import { AdminLayout } from 'pages/admin/layout/Layout'
 import { useEffect } from 'react'
 import { gql } from 'urql'
 import { z } from 'zod'
