@@ -6,11 +6,5 @@
   "javascript.format.semicolons": "remove",
   "prettier.semi": false,
   "javascript.format.insertSpaceAfterSemicolonInForStatements": false,
-  "typescript.format.insertSpaceAfterSemicolonInForStatements": false,
-  "typescript.enablePromptUseWorkspaceTsdk": true,
-  "editor.formatOnSave": true,
-  "editor.codeActionsOnSave": [
-    "source.addMissingImports",
-    "source.fixAll.eslint",
-  ],
+  "typescript.format.insertSpaceAfterSemicolonInForStatements": false
 }

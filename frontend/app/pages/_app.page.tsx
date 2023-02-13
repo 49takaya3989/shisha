@@ -1,11 +1,9 @@
 import 'styles/globals.scss'
 import type { AppProps } from 'next/app'
-
-import { ClerkProvider } from '@clerk/nextjs'
-import { MantineProvider } from '@mantine/core'
 import { Provider } from 'urql'
-
 import { gqlClient } from 'src/libs/urql/requests'
+import { MantineProvider } from '@mantine/core'
+import { ClerkProvider } from '@clerk/nextjs'
 
 const App = ({ Component, pageProps }: AppProps) => {
   return (

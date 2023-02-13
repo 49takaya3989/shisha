@@ -1,22 +1,17 @@
-import { useEffect } from 'react'
-
-import { useRouter } from 'next/router'
-
 import { Button, Group, TextInput } from '@mantine/core'
 import { useForm, zodResolver } from '@mantine/form'
-import { gql } from 'urql'
-import { z } from 'zod'
-
 import { ROUTE } from 'helper/constant/route'
 import { ADMIN_BLOG_TAG_EDIT } from 'helper/constant/text'
+import { useRouter } from 'next/router'
 import {
   useGetSpecificBlogTagQuery,
   useUpdateSpecificBlogTagMutation,
 } from 'pages/admin/blog/tag/edit/[id].generated'
 import { AdminContentsHeader } from 'pages/admin/components/ContentsHeader'
 import { AdminLayout } from 'pages/admin/layout/Layout'
-
-
+import { useEffect } from 'react'
+import { gql } from 'urql'
+import { z } from 'zod'
 
 gql`
   query getSpecificBlogTag($id: Int!) {
@@ -107,14 +102,14 @@ const AdminBlogTagEdit = () => {
         <TextInput
           label={ADMIN_BLOG_TAG_EDIT.INPUT.SLUG}
           placeholder={ADMIN_BLOG_TAG_EDIT.INPUT.SLUG_PLACEHOLDER}
-          mt="xl"
+          mt='xl'
           withAsterisk
           {...form.getInputProps('blogTagSlug')}
         />
         <Group mt={60}>
           <Button
-            type="submit"
-            className="bg-admin-base font-normal leading-none text-common-black"
+            type='submit'
+            className='bg-admin-base text-common-black leading-none font-normal'
           >
             {ADMIN_BLOG_TAG_EDIT.INPUT.SUBMIT}
           </Button>

@@ -1,7 +1,5 @@
 import { Group, Image } from '@mantine/core'
 import dayjs from 'dayjs'
-import { gql } from 'urql'
-
 import {
   useDeleteBlogsByPkMutation,
   useGetBlogsQuery,
@@ -9,6 +7,7 @@ import {
 import { AdminTableDeleteBtn } from 'pages/admin/components/button/AdminTableDeleteBtn'
 import { AdminTableEditBtn } from 'pages/admin/components/button/AdminTableEditBtn'
 import { AdminTableBodyTr } from 'pages/admin/components/table/AdminTableBodyTr'
+import { gql } from 'urql'
 
 gql`
   query getBlogs {
@@ -58,7 +57,7 @@ export const AdminBlogTableBody = () => {
       {data
         ? data.blogs.map((blog) => (
             <AdminTableBodyTr key={blog.id}>
-              <td width={100} className="justify-center align-middle">
+              <td width={100} className='justify-center align-middle'>
                 <AdminTableEditBtn href={`./edit/${blog.id}`} />
               </td>
               <td width={120}>{dayjs(blog.udpated_at).format('YYYY/MM/DD')}</td>
@@ -77,16 +76,12 @@ export const AdminBlogTableBody = () => {
                 )}
               </td>
               <td width={150}>
-                <div dangerouslySetInnerHTML={{ __html: blog.contents! }}></div>
+                <div dangerouslySetInnerHTML={{__html: blog.contents!}}></div>
               </td>
               <td width={200}>
-                {blog.thumbnail ? (
-                  <Image src={blog.thumbnail} alt={blog.title} />
-                ) : (
-                  ''
-                )}
+                {blog.thumbnail ? <Image src={blog.thumbnail} alt={blog.title} /> : ''}
               </td>
-              <td width={100} className="justify-center align-middle">
+              <td width={100} className='justify-center align-middle'>
                 <AdminTableDeleteBtn id={blog.id} click={deleteBlogByPk} />
               </td>
             </AdminTableBodyTr>

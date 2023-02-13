@@ -1,9 +1,3 @@
-import { useState } from 'react'
-
-import { useRouter } from 'next/router'
-
-import { ListObjectsCommand } from '@aws-sdk/client-s3'
-import { Upload } from '@aws-sdk/lib-storage'
 import {
   Button,
   Group,
@@ -16,35 +10,38 @@ import {
   Text,
   TextInput,
 } from '@mantine/core'
-import { Dropzone, IMAGE_MIME_TYPE, FileWithPath } from '@mantine/dropzone'
 import { useForm, zodResolver } from '@mantine/form'
-import { RichTextEditor, Link } from '@mantine/tiptap'
-import CharacterCount from '@tiptap/extension-character-count'
-import Highlight from '@tiptap/extension-highlight'
-import EditorImage from '@tiptap/extension-image'
-import Placeholder from '@tiptap/extension-placeholder'
-import SubScript from '@tiptap/extension-subscript'
-import Superscript from '@tiptap/extension-superscript'
-import TextAlign from '@tiptap/extension-text-align'
-import Underline from '@tiptap/extension-underline'
-import { useEditor } from '@tiptap/react'
-import StarterKit from '@tiptap/starter-kit'
-import { gql } from 'urql'
-import { z } from 'zod'
-
 import { ROUTE } from 'helper/constant/route'
 import { ADMIN_BLOG_CREATE } from 'helper/constant/text'
-import { useInsertBlogMutation } from 'pages/admin/blog/create.page.generated'
 import { useGetBlogTagsQuery } from 'pages/admin/blog/tag/TableBody.generated'
-import { tagType } from 'pages/admin/blog/type'
 import { AdminContentsHeader } from 'pages/admin/components/ContentsHeader'
 import { AdminLayout } from 'pages/admin/layout/Layout'
-
+import { gql } from 'urql'
+import { z } from 'zod'
+import { useRouter } from 'next/router'
+import { RichTextEditor, Link } from '@mantine/tiptap'
+import { useEditor } from '@tiptap/react'
+import Highlight from '@tiptap/extension-highlight'
+import StarterKit from '@tiptap/starter-kit'
+import Underline from '@tiptap/extension-underline'
+import TextAlign from '@tiptap/extension-text-align'
+import Superscript from '@tiptap/extension-superscript'
+import SubScript from '@tiptap/extension-subscript'
+import EditorImage from '@tiptap/extension-image'
+import Placeholder from '@tiptap/extension-placeholder'
+import CharacterCount from '@tiptap/extension-character-count'
+import { tagType } from 'pages/admin/blog/type'
+import { useInsertBlogMutation } from 'pages/admin/blog/create.page.generated'
 import {
   Blog_Blog_Tags_Insert_Input,
   Blog_Tags_Constraint,
   Blog_Tags_Update_Column,
 } from 'src/libs/urql/types'
+
+import { Upload } from '@aws-sdk/lib-storage'
+import { ListObjectsCommand } from '@aws-sdk/client-s3'
+import { useState } from 'react'
+import { Dropzone, IMAGE_MIME_TYPE, FileWithPath } from '@mantine/dropzone'
 import {
   bucketParams,
   BUCKET_NAME,
@@ -169,7 +166,7 @@ const AdminBlogCreate = () => {
       <Image
         key={index}
         src={imageUrl}
-        alt=""
+        alt=''
         imageProps={{ onLoad: () => URL.revokeObjectURL(imageUrl) }}
       />
     )
@@ -316,7 +313,7 @@ const AdminBlogCreate = () => {
         <TextInput
           label={ADMIN_BLOG_CREATE.INPUT.SLUG_LABEL}
           placeholder={ADMIN_BLOG_CREATE.INPUT.SLUG_PLACEHOLDER}
-          mt="xl"
+          mt='xl'
           {...form.getInputProps('blogSlug')}
         />
         <MultiSelect
@@ -325,10 +322,10 @@ const AdminBlogCreate = () => {
           placeholder={ADMIN_BLOG_CREATE.INPUT.TAG_PLACEHOLDER}
           searchable
           nothingFound={ADMIN_BLOG_CREATE.INPUT.TAG_SEARCH_NOTHING}
-          mt="xl"
+          mt='xl'
           {...form.getInputProps('blogTags')}
         />
-        <div className="mt-6">
+        <div className='mt-6'>
           <label>{ADMIN_BLOG_CREATE.INPUT.CONTENTS_LABEL}</label>
           <RichTextEditor editor={editor}>
             <RichTextEditor.Toolbar sticky stickyOffset={60}>
@@ -370,31 +367,31 @@ const AdminBlogCreate = () => {
                 <RichTextEditor.AlignRight />
               </RichTextEditor.ControlsGroup>
               <Button
-                className="bg-common-black bg-opacity-10 text-common-black"
+                className='bg-common-black bg-opacity-10 text-common-black'
                 onClick={insertRichTextImageHandler}
               >
                 Image
               </Button>
             </RichTextEditor.Toolbar>
 
-            <RichTextEditor.Content className="min-h-[300px]" />
+            <RichTextEditor.Content className='min-h-[300px]' />
           </RichTextEditor>
         </div>
-        <p className="text-right">
+        <p className='text-right'>
           {editor?.storage.characterCount.characters()}文字
         </p>
 
         <Text>{ADMIN_BLOG_CREATE.INPUT.THUMBNAIL_LABEL}</Text>
-        <Group display="block">
+        <Group display='block'>
           <Button
-            className="bg-admin-base font-normal leading-none text-common-black"
+            className='bg-admin-base text-common-black leading-none font-normal'
             onClick={thumSelectModalHandler}
           >
             ファイルを選択
           </Button>
           {selectedThum !== '' || selectedThum !== null ? (
-            <Group mt={16} display="block" w={400}>
-              <Image src={selectedThum} alt="サムネイル" />
+            <Group mt={16} display='block' w={400}>
+              <Image src={selectedThum} alt='サムネイル' />
             </Group>
           ) : (
             ''
@@ -403,30 +400,30 @@ const AdminBlogCreate = () => {
         <Modal
           opened={opened}
           onClose={modalCloseHandler}
-          size="70%"
-          overflow="inside"
-          title="サムネイル"
+          size='70%'
+          overflow='inside'
+          title='サムネイル'
         >
-          <Tabs variant="outline" defaultValue="select">
+          <Tabs variant='outline' defaultValue='select'>
             <Tabs.List>
-              <Tabs.Tab value="select">選択</Tabs.Tab>
-              <Tabs.Tab value="upload">アップロード</Tabs.Tab>
+              <Tabs.Tab value='select'>選択</Tabs.Tab>
+              <Tabs.Tab value='upload'>アップロード</Tabs.Tab>
             </Tabs.List>
 
-            <Tabs.Panel value="select" pt="xs">
-              <List display="flex" className="gap-5">
+            <Tabs.Panel value='select' pt='xs'>
+              <List display='flex' className='gap-5'>
                 {imageS3[0] !== ''
                   ? imageS3.map((src, index) => (
                       <List.Item
                         key={index}
                         w={200}
                         h={200}
-                        display="flex"
-                        className="markRemoveBorder items-center justify-center overflow-hidden"
+                        display='flex'
+                        className='items-center justify-center overflow-hidden markRemoveBorder'
                       >
                         <Image
                           src={`${S3_BASE_REQUEST_URL}${src}`}
-                          alt=""
+                          alt=''
                           onClick={preSelectImage}
                         />
                       </List.Item>
@@ -437,7 +434,7 @@ const AdminBlogCreate = () => {
                 <Button
                   onClick={imageGet}
                   w={150}
-                  className="bg-admin-cancel font-normal leading-none text-common-black"
+                  className='bg-admin-cancel text-common-black leading-none font-normal'
                 >
                   取得
                 </Button>
@@ -445,7 +442,7 @@ const AdminBlogCreate = () => {
                   <Button
                     onClick={selectThum}
                     w={150}
-                    className="bg-admin-base font-normal leading-none text-common-black"
+                    className='bg-admin-base text-common-black leading-none font-normal'
                   >
                     選択
                   </Button>
@@ -456,7 +453,7 @@ const AdminBlogCreate = () => {
                   <Button
                     onClick={insertRichEditorImgHandler}
                     w={150}
-                    className="bg-admin-base font-normal leading-none text-common-black"
+                    className='bg-admin-base text-common-black leading-none font-normal'
                   >
                     選択
                   </Button>
@@ -466,7 +463,7 @@ const AdminBlogCreate = () => {
               </Group>
             </Tabs.Panel>
 
-            <Tabs.Panel value="upload" pt="xs">
+            <Tabs.Panel value='upload' pt='xs'>
               <Dropzone
                 accept={IMAGE_MIME_TYPE}
                 onDrop={setFiles}
@@ -474,7 +471,7 @@ const AdminBlogCreate = () => {
                   previews.length > 0 ? 'h-[200px]' : 'h-[calc(100vh_-_200px)]'
                 }`}
               >
-                <Text align="center">Drop images here</Text>
+                <Text align='center'>Drop images here</Text>
               </Dropzone>
 
               <SimpleGrid
@@ -488,8 +485,8 @@ const AdminBlogCreate = () => {
                 <Button
                   onClick={imageUploadToAWS}
                   mt={60}
-                  loaderPosition="right"
-                  className="bg-admin-base font-normal leading-none text-common-black"
+                  loaderPosition='right'
+                  className='bg-admin-base text-common-black leading-none font-normal'
                 >
                   画像アップロード
                 </Button>
@@ -502,8 +499,8 @@ const AdminBlogCreate = () => {
 
         <Group mt={60}>
           <Button
-            type="submit"
-            className="bg-admin-base font-normal leading-none text-common-black"
+            type='submit'
+            className='bg-admin-base text-common-black leading-none font-normal'
           >
             {ADMIN_BLOG_CREATE.SUBMIT}
           </Button>

@@ -7,7 +7,9 @@ export const UserLayout = ({ children }: Props) => {
     <>
       <UserHeader />
       <main>
-        <div className="mx-auto mt-20 max-w-[1000px]">{children}</div>
+        <div className='mt-20 mx-auto max-w-[1000px]'>
+          {children}
+        </div>
       </main>
       <UserFooter />
     </>
