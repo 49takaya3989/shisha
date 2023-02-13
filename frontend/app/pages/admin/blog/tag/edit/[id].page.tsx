@@ -43,13 +43,6 @@ const AdminBlogTagEdit = () => {
   const [res, executeMutation] = useUpdateSpecificBlogTagMutation()
   const { data } = result
 
-  useEffect(() => {
-    form.setValues({
-      blogTagName: data?.blog_tags_by_pk?.name,
-      blogTagSlug: data?.blog_tags_by_pk?.slug,
-    })
-  }, [data])
-
   const validateSchema = z.object({
     /* fieldの定義方法
     ex.)
@@ -72,6 +65,14 @@ const AdminBlogTagEdit = () => {
       blogTagSlug: '',
     },
   })
+
+  useEffect(() => {
+    form.setValues({
+      blogTagName: data?.blog_tags_by_pk?.name,
+      blogTagSlug: data?.blog_tags_by_pk?.slug,
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data])
 
   const submit = async () => {
     await executeMutation({

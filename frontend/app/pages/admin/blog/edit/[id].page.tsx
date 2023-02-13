@@ -194,6 +194,8 @@ const AdminBlogEdit = () => {
   const [files, setFiles] = useState<FileWithPath[]>([])
   const [opened, setOpened] = useState(false)
   const [imageS3, setImageS3] = useState<string[]>([''])
+  const [incrementTags, setIncrementTags] = useState<string[]>([''])
+  const [decrementTags, setDecrementTags] = useState<string[]>([''])
   const [preSelectedModalImage, setPreSelectedModalImage] = useState('')
   const [selectedThum, setSelectedThum] = useState('')
   const [isThumbnailSelected, setIsThumbnailSelected] = useState(false)
@@ -211,8 +213,8 @@ const AdminBlogEdit = () => {
   const dataBlogByPk = resultBlogByPk.data
   const dataBlogTags = resultBlogTags.data
   const content = ''
-  let incrementTags: string[] = []
-  let decrementTags: string[] = []
+  // let incrementTags: string[] = []
+  // let decrementTags: string[] = []
 
   // formのvalidation schemaの定義
   const validateSchema = z.object({
@@ -238,14 +240,18 @@ const AdminBlogEdit = () => {
   })
 
   useEffect(() => {
-    decrementTags = blogHasTagArr.filter(
+    const decrementFilteringTags = blogHasTagArr.filter(
       (el) => form.values.blogTag.indexOf(el) === -1
     )
+    setDecrementTags(() => decrementFilteringTags)
+
     if (form.values.blogTag) {
-      incrementTags = form.values.blogTag.filter(
+      const incrementFilteringTags = form.values.blogTag.filter(
         (el) => blogHasTagArr.indexOf(el) == -1
       )
+      setIncrementTags(() => incrementFilteringTags)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [form.values.blogTag])
 
   const editor = useEditor({
@@ -276,6 +282,7 @@ const AdminBlogEdit = () => {
     })
     if (editor) editor.commands.setContent(dataBlogByPk?.blogs_by_pk?.contents!)
     setSelectedThum(dataBlogByPk?.blogs_by_pk?.thumbnail!)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataBlogByPk])
 
   // 保存されているタグの配列作成
@@ -283,7 +290,6 @@ const AdminBlogEdit = () => {
   dataBlogByPk?.blogs_by_pk?.blog_blog_tags.map((blog_blog_tag) => {
     blogHasTagArr.push(String(blog_blog_tag.blog_tag.id))
   })
-
 
   // create tag array
   const tagData: tagType[] = []
@@ -303,6 +309,7 @@ const AdminBlogEdit = () => {
       <Image
         key={index}
         src={imageUrl}
+        alt=''
         imageProps={{ onLoad: () => URL.revokeObjectURL(imageUrl) }}
       />
     )
@@ -415,7 +422,7 @@ const AdminBlogEdit = () => {
         title: form.values.blogTitle,
         slug: form.values.blogSlug,
         contents: editor!.view.dom.innerHTML,
-        thumbnail: selectedThum
+        thumbnail: selectedThum,
       },
     }).then((result) => {
       if (result.error) {
@@ -493,6 +500,8 @@ const AdminBlogEdit = () => {
       }
     })
   }
+
+  console.log(selectedThum)
 
   return (
     <AdminLayout>
@@ -600,9 +609,9 @@ const AdminBlogEdit = () => {
               ファイルを選択
             </Button>
           </Group>
-          {selectedThum !== '' ? (
+          {selectedThum !== null ? (
             <Group mt={16} display='block' w={400}>
-              <Image src={selectedThum} />
+              <Image src={selectedThum} alt='サムネイル' />
             </Group>
           ) : (
             ''
@@ -634,6 +643,7 @@ const AdminBlogEdit = () => {
                       >
                         <Image
                           src={`${S3_BASE_REQUEST_URL}${src}`}
+                          alt=''
                           onClick={preSelectImage}
                         />
                       </List.Item>

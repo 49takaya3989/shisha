@@ -38,6 +38,7 @@ const BlogSingleForUser = () => {
     variables: { id: Number(editId) },
   })
   const { data } = result
+
   useEffect(() => {
     setDateTime(() => {
       return dayjs(data?.blogs_by_pk?.udpated_at).format('YYYY-MM-DD')
@@ -46,6 +47,7 @@ const BlogSingleForUser = () => {
       return dayjs(data?.blogs_by_pk?.udpated_at).format('YYYY.MM.DD')
     })
   }, [data?.blogs_by_pk?.udpated_at])
+
   return (
     <>
       <UserLayout>
