@@ -8,7 +8,6 @@ import { AdminTableDeleteBtn } from 'pages/admin/components/button/AdminTableDel
 import { AdminTableEditBtn } from 'pages/admin/components/button/AdminTableEditBtn'
 import { AdminTableBodyTr } from 'pages/admin/components/table/AdminTableBodyTr'
 
-
 gql`
   query getBlogTags {
     blog_tags {

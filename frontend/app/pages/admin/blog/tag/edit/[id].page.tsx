@@ -16,8 +16,6 @@ import {
 import { AdminContentsHeader } from 'pages/admin/components/ContentsHeader'
 import { AdminLayout } from 'pages/admin/layout/Layout'
 
-
-
 gql`
   query getSpecificBlogTag($id: Int!) {
     blog_tags_by_pk(id: $id) {

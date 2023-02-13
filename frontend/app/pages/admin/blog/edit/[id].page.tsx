@@ -56,7 +56,6 @@ import {
   S3_BASE_REQUEST_URL,
 } from 'utils/imageUpload'
 
-
 gql`
   query getBlogTagForBlogEdit {
     blog_tags {

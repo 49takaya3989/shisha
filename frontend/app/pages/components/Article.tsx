@@ -5,7 +5,6 @@ import { gql } from 'urql'
 
 import { useGetBlogsForUserArchiveQuery } from 'pages/components/Article.generated'
 
-
 gql`
   query getBlogsForUserArchive {
     blogs {
