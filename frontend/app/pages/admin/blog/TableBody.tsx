@@ -79,7 +79,7 @@ export const AdminBlogTableBody = () => {
                 <div dangerouslySetInnerHTML={{__html: blog.contents!}}></div>
               </td>
               <td width={200}>
-                {blog.thumbnail ? <Image src={blog.thumbnail} /> : ''}
+                {blog.thumbnail ? <Image src={blog.thumbnail} alt={blog.title} /> : ''}
               </td>
               <td width={100} className='justify-center align-middle'>
                 <AdminTableDeleteBtn id={blog.id} click={deleteBlogByPk} />

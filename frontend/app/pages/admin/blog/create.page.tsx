@@ -166,6 +166,7 @@ const AdminBlogCreate = () => {
       <Image
         key={index}
         src={imageUrl}
+        alt=''
         imageProps={{ onLoad: () => URL.revokeObjectURL(imageUrl) }}
       />
     )
@@ -388,9 +389,9 @@ const AdminBlogCreate = () => {
           >
             ファイルを選択
           </Button>
-          {selectedThum !== '' ? (
+          {selectedThum !== '' || selectedThum !== null ? (
             <Group mt={16} display='block' w={400}>
-              <Image src={selectedThum} />
+              <Image src={selectedThum} alt='サムネイル' />
             </Group>
           ) : (
             ''
@@ -422,6 +423,7 @@ const AdminBlogCreate = () => {
                       >
                         <Image
                           src={`${S3_BASE_REQUEST_URL}${src}`}
+                          alt=''
                           onClick={preSelectImage}
                         />
                       </List.Item>
