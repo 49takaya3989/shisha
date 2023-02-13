@@ -1,3 +1,5 @@
+import { gql } from 'urql'
+
 import {
   useDeleteBlogTagsByPkMutation,
   useGetBlogTagsQuery,
@@ -6,7 +8,6 @@ import { AdminTableDeleteBtn } from 'pages/admin/components/button/AdminTableDel
 import { AdminTableEditBtn } from 'pages/admin/components/button/AdminTableEditBtn'
 import { AdminTableBodyTr } from 'pages/admin/components/table/AdminTableBodyTr'
 
-import { gql } from 'urql'
 
 gql`
   query getBlogTags {
@@ -46,12 +47,12 @@ export const AdminTableBody = () => {
       {data
         ? data.blog_tags.map((tag) => (
             <AdminTableBodyTr key={tag.id}>
-              <td className='flex justify-center items-center'>
+              <td className="flex items-center justify-center">
                 <AdminTableEditBtn href={`./tag/edit/${tag.id}`} />
               </td>
               <td>{tag.name}</td>
               <td>{tag.slug}</td>
-              <td className='flex justify-center items-center'>
+              <td className="flex items-center justify-center">
                 <AdminTableDeleteBtn id={tag.id} click={deleteBlogTagsByPk} />
               </td>
             </AdminTableBodyTr>

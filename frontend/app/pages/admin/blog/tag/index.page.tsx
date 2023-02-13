@@ -1,15 +1,16 @@
 import { Button, Grid, Group, TextInput } from '@mantine/core'
-import { ADMIN_BLOG_TAG_INDEX } from 'helper/constant/text'
-import { AdminTableWrap } from 'pages/admin/components/table/AdminTableWrap'
-import { AdminContentsHeader } from 'pages/admin/components/ContentsHeader'
-import { AdminLayout } from 'pages/admin/layout/Layout'
-import { AdminTableHeader } from 'pages/admin/components/table/AdminTableHeader'
-import { gql } from 'urql'
-import { useInsertBlogTagMutation } from 'pages/admin/blog/tag/index.generated'
-import { z } from 'zod'
 import { useForm, zodResolver } from '@mantine/form'
+import { gql } from 'urql'
+import { z } from 'zod'
+
+import { ADMIN_BLOG_TAG_INDEX } from 'helper/constant/text'
 import { AdminTableBody } from 'pages/admin/blog/tag/TableBody'
+import { useInsertBlogTagMutation } from 'pages/admin/blog/tag/index.generated'
+import { AdminContentsHeader } from 'pages/admin/components/ContentsHeader'
 import { SubmitBtn } from 'pages/admin/components/button/SubmitBtn'
+import { AdminTableHeader } from 'pages/admin/components/table/AdminTableHeader'
+import { AdminTableWrap } from 'pages/admin/components/table/AdminTableWrap'
+import { AdminLayout } from 'pages/admin/layout/Layout'
 
 gql`
   mutation insertBlogTag($name: String!, $slug: String!) {
@@ -72,14 +73,14 @@ function AdminBlogTagIndex() {
             <TextInput
               label={ADMIN_BLOG_TAG_INDEX.INPUT.SLUG}
               placeholder={ADMIN_BLOG_TAG_INDEX.INPUT.SLUG_PLACEHOLDER}
-              mt='xl'
+              mt="xl"
               withAsterisk
               {...form.getInputProps('blogTagSlug')}
             />
             <SubmitBtn label={ADMIN_BLOG_TAG_INDEX.INPUT.SUBMIT} />
           </form>
         </Grid.Col>
-        <Grid.Col span={7} ml='auto'>
+        <Grid.Col span={7} ml="auto">
           <AdminTableWrap>
             <AdminTableHeader
               col1={ADMIN_BLOG_TAG_INDEX.TABLE.NAME}
