@@ -9,9 +9,6 @@ const nextConfig = {
   // },
   pageExtensions: ['api.ts', 'page.tsx'],
   reactStrictMode: true,
-  env: {
-    GRAPHQL_ENDPOINT: 'http://localhost:8080/v1/graphql',
-  },
 }
 
 module.exports = nextConfig
