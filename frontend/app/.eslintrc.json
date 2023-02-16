@@ -36,14 +36,14 @@
             "position": "before"
           },
           {
-            "pattern": "graphql/**",
-            "group": "internal",
-            "position": "before"
-          },
-          {
             "pattern": "ui-components/**",
             "group": "index",
             "position": "after"
+          },
+          {
+            "pattern": "graphql/**",
+            "group": "internal",
+            "position": "before"
           },
           {
             "pattern": "**\\.css",
