@@ -1,15 +1,17 @@
+import Link from 'next/link'
+
 import { Box, NavLink } from '@mantine/core'
+
 import { ROUTE } from 'helper/constant/route'
 import { ADMIN_SIDEBAR } from 'helper/constant/text'
-import Link from 'next/link'
 
 export const AdminSidebar = () => {
   return (
-    <div className='fixed w-1/6'>
-      <Box h='100vh' w='100%' className='bg-admin-base'>
+    <div className="fixed w-1/6">
+      <Box h="100vh" w="100%" className="bg-admin-base">
         <Link
           href={ROUTE.ADMIN_DASHBOARD}
-          className='px-3 py-2 block hover:bg-common-white'
+          className="block px-3 py-2 hover:bg-common-white"
         >
           {ADMIN_SIDEBAR.DASHBOARD}
         </Link>
@@ -60,7 +62,6 @@ export const AdminSidebar = () => {
   )
 }
 
-
 type LinkItemType = {
   href: string
   label: string
@@ -70,7 +71,7 @@ const NavLinkItem = ({ href, label }: LinkItemType) => {
   return (
     <Link
       href={href}
-      className='[&:first-of-type]:border-t-0 border-t border-solid border-black pr-3 pl-5 py-2 block bg-common-white hover:bg-admin-base'
+      className="border-black block border-t border-solid bg-common-white py-2 pr-3 pl-5 hover:bg-admin-base [&:first-of-type]:border-t-0"
     >
       {label}
     </Link>

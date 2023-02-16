@@ -8,8 +8,8 @@ export const SubmitBtn = ({ label }: SubmitBtnType) => {
   return (
     <Group mt={60}>
       <Button
-        type='submit'
-        className='bg-admin-base text-common-black leading-none font-normal'
+        type="submit"
+        className="bg-admin-base font-normal leading-none text-common-black"
       >
         {label}
       </Button>

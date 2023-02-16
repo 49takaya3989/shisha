@@ -1,11 +1,14 @@
-import { Group, Image, List, Title } from '@mantine/core'
-import dayjs from 'dayjs'
+import { useEffect, useState } from 'react'
+
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+
+import { Group, Image, List, Title } from '@mantine/core'
+import dayjs from 'dayjs'
+import { gql } from 'urql'
+
 import { useGetBlogsByPkForUserSingleQuery } from 'pages/blog/[id].page.generated'
 import { UserLayout } from 'pages/layout/Layout'
-import { useEffect, useState } from 'react'
-import { gql } from 'urql'
 
 gql`
   query getBlogsByPkForUserSingle($id: Int!) {
@@ -51,16 +54,16 @@ const BlogSingleForUser = () => {
   return (
     <>
       <UserLayout>
-        <Title order={1} className='border-b'>
+        <Title order={1} className="border-b">
           {data?.blogs_by_pk?.title}
         </Title>
         <time date-time={dateTime}>{time}</time>
-        <List mt={10} display='flex' className='gap-[10px]'>
+        <List mt={10} display="flex" className="gap-[10px]">
           {data?.blogs_by_pk?.blog_blog_tags.map((tag) => (
             <List.Item key={tag.blog_tag.id}>
               <Link
                 href={`/blog/category/${tag.blog_tag.slug}`}
-                className='border rounded p-1 hover:bg-common-black hover:text-common-white'
+                className="rounded border p-1 hover:bg-common-black hover:text-common-white"
               >
                 {tag.blog_tag.name}
               </Link>
@@ -80,7 +83,7 @@ const BlogSingleForUser = () => {
         <Group mt={60}>
           <div
             dangerouslySetInnerHTML={{ __html: data?.blogs_by_pk?.contents! }}
-            className='blog-content w-full'
+            className="blog-content w-full"
           ></div>
         </Group>
       </UserLayout>

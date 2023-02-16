@@ -22,7 +22,7 @@ export const AdminTableHeader = ({
   col8,
 }: AdminTableHeaderType) => {
   return (
-    <thead className='bg-admin-base'>
+    <thead className="bg-admin-base">
       <tr>
         <th></th>
         <th>{col1}</th>
