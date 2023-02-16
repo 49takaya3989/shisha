@@ -67,7 +67,7 @@ export const ADMIN_BLOG_CREATE = {
     ERROR: {
       TITLE: 'タイトルを入力してください',
       CONTENTS: 'コンテンツを入力してください',
-    }
+    },
   },
   SUBMIT: '保存する',
 }
@@ -90,7 +90,7 @@ export const ADMIN_BLOG_EDIT = {
     ERROR: {
       TITLE: 'タイトルを入力してください',
       CONTENTS: 'コンテンツを入力してください',
-    }
+    },
   },
   SUBMIT: '保存する',
 }
@@ -105,8 +105,8 @@ export const ADMIN_BLOG_TAG_INDEX = {
     SUBMIT: '保存',
     ERROR: {
       NAME: 'タグ名を入力してください。',
-      SLUG: 'スラッグを入力してください。'
-    }
+      SLUG: 'スラッグを入力してください。',
+    },
   },
   TABLE: {
     ID: 'ID',
@@ -126,8 +126,8 @@ export const ADMIN_BLOG_TAG_EDIT = {
     SUBMIT: '保存',
     ERROR: {
       NAME: 'タグ名を入力してください。',
-      SLUG: 'スラッグを入力してください。'
-    }
+      SLUG: 'スラッグを入力してください。',
+    },
   },
 }
 

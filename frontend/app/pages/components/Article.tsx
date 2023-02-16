@@ -1,8 +1,9 @@
-import { Badge, Card, Group, Image, List, Text } from '@mantine/core'
 import Link from 'next/link'
-import { useGetBlogsForUserArchiveQuery } from 'pages/components/Article.generated'
 
+import { Badge, Card, Group, Image, List, Text } from '@mantine/core'
 import { gql } from 'urql'
+
+import { useGetBlogsForUserArchiveQuery } from 'pages/components/Article.generated'
 
 gql`
   query getBlogsForUserArchive {
@@ -30,20 +31,20 @@ export const BlogArticleForUser = () => {
   const [result] = useGetBlogsForUserArchiveQuery()
   const { data } = result
   return (
-    <List display='flex' className='flex-wrap gap-12'>
+    <List display="flex" className="flex-wrap gap-12">
       {data
         ? data.blogs.map((blog) => (
             <List.Item key={blog.id}>
               <Link
                 href={`./blog/${blog.id}`}
-                className='transition duration-300 ease-in hover:opacity-80'
+                className="transition duration-300 ease-in hover:opacity-80"
               >
                 <Card
                   key={blog.id}
-                  className='lg:w-[300px]'
-                  shadow='sm'
-                  p='lg'
-                  radius='md'
+                  className="lg:w-[300px]"
+                  shadow="sm"
+                  p="lg"
+                  radius="md"
                   withBorder
                 >
                   <Card.Section>
@@ -56,29 +57,29 @@ export const BlogArticleForUser = () => {
                       />
                     ) : (
                       <Image
-                        src='https://www.freeiconspng.com/uploads/no-image-icon-23.jpg'
-                        alt='no image'
+                        src="https://www.freeiconspng.com/uploads/no-image-icon-23.jpg"
+                        alt="no image"
                         width={300}
                         height={160}
                       />
                     )}
                   </Card.Section>
                   <Group
-                    position='apart'
-                    mt='md'
-                    mb='xs'
-                    className='h-[50px] line-clamp-2'
+                    position="apart"
+                    mt="md"
+                    mb="xs"
+                    className="h-[50px] line-clamp-2"
                   >
-                    <Text weight={500} className='w-full break-words'>
+                    <Text weight={500} className="w-full break-words">
                       {blog.title}
                     </Text>
                   </Group>
-                  <Group display='flex' className='h-5 overflow-hidden'>
+                  <Group display="flex" className="h-5 overflow-hidden">
                     {blog.blog_blog_tags.map((blog_blog_tag) => (
                       <Badge
                         key={blog_blog_tag.blog_tag.id}
-                        color='pink'
-                        variant='light'
+                        color="pink"
+                        variant="light"
                       >
                         {blog_blog_tag.blog_tag.name}
                       </Badge>
