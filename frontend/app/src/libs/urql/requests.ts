@@ -7,7 +7,7 @@ export const gqlClient = createClient({
   fetchOptions: {
     headers: {
       'content-type': 'application/json',
-      'x-hasura-admin-secret': process.env.NEXT_PUBLIC_ADMIN_SECRET_KEY!,
+      'x-hasura-admin-secret': process.env.NEXT_PUBLIC_HASURA_SECRET_KEY!,
     },
   },
   exchanges: [dedupExchange, cacheExchange, fetchExchange],
