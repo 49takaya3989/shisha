@@ -7,17 +7,17 @@ import { Group, Image, List, Title } from '@mantine/core'
 import dayjs from 'dayjs'
 import { gql } from 'urql'
 
-import { useGetBlogsByPkForUserSingleQuery } from 'pages/blog/[id].page.generated'
+import { useBlogsByPkForUserBlogSingleQuery } from 'pages/blog/[slug].page.generated'
 import { UserLayout } from 'pages/layout/Layout'
 
 gql`
-  query getBlogsByPkForUserSingle($id: Int!) {
+  query blogsByPkForUserBlogSingle($id: Int!) {
     blogs_by_pk(id: $id) {
-      ...blogsFragment
+      ...blogsFragmentForUserBlogSingle
     }
   }
 
-  fragment blogsFragment on blogs {
+  fragment blogsFragmentForUserBlogSingle on blogs {
     title
     thumbnail
     udpated_at
@@ -32,12 +32,22 @@ gql`
   }
 `
 
+// *** <query example> ***
+//
+// query blogsByPkForUserBlogSingle($id: Int = 1) {
+//   blogs_by_pk(id: $id) {
+//     ...blogsFragmentForUserBlogSingle
+//   }
+// }
+//
+// *** < end query example> ***
+
 const BlogSingleForUser = () => {
   const router = useRouter()
   const editId = router.query.id
   const [dateTime, setDateTime] = useState('')
   const [time, setTime] = useState('')
-  const [result] = useGetBlogsByPkForUserSingleQuery({
+  const [result] = useBlogsByPkForUserBlogSingleQuery({
     variables: { id: Number(editId) },
   })
   const { data } = result

@@ -1,25 +1,26 @@
-import { Group, Image } from '@mantine/core'
+import { Image } from '@mantine/core'
 import dayjs from 'dayjs'
 import { gql } from 'urql'
 
 import {
-  useDeleteBlogsByPkMutation,
-  useGetBlogsQuery,
+  useDeleteBlogsByPkForAdminMutation,
+  useGetBlogsForAdminBlogArchiveQuery,
 } from 'pages/admin/blog/TableBody.generated'
 import { AdminTableDeleteBtn } from 'pages/admin/components/button/AdminTableDeleteBtn'
 import { AdminTableEditBtn } from 'pages/admin/components/button/AdminTableEditBtn'
 import { AdminTableBodyTr } from 'pages/admin/components/table/AdminTableBodyTr'
 
 gql`
-  query getBlogs {
+  query getBlogsForAdminBlogArchive {
     blogs {
-      ...getBlogsFragment
+      ...getBlogsFragmentForAdminBlogArchive
     }
   }
 
-  fragment getBlogsFragment on blogs {
+  fragment getBlogsFragmentForAdminBlogArchive on blogs {
     id
     title
+    slug
     contents
     thumbnail
     blog_blog_tags {
@@ -31,19 +32,30 @@ gql`
     udpated_at
   }
 
-  mutation deleteBlogsByPk($id: Int!) {
+  mutation deleteBlogsByPkForAdmin($id: Int!) {
     delete_blogs_by_pk(id: $id) {
-      id
-      title
-      slug
-      contents
+      ...blogsFragmentForAdminBlogArchive
     }
+  }
+
+  fragment blogsFragmentForAdminBlogArchive on blogs {
+    slug
   }
 `
 
+// *** <mutation example> ***
+//
+// mutation deleteBlogsByPkForAdmin($id: Int = 1) {
+//   delete_blogs_by_pk(id: $id) {
+//     ...blogsFragmentForAdminBlogArchive
+//   }
+// }
+//
+// *** < end mutation example> ***
+
 export const AdminBlogTableBody = () => {
-  const [res, executeMutation] = useDeleteBlogsByPkMutation()
-  const [result] = useGetBlogsQuery()
+  const [res, executeMutation] = useDeleteBlogsByPkForAdminMutation()
+  const [result] = useGetBlogsForAdminBlogArchiveQuery()
   const { data } = result
 
   const deleteBlogByPk = (id: number) => {
@@ -57,7 +69,7 @@ export const AdminBlogTableBody = () => {
     <tbody>
       {data
         ? data.blogs.map((blog) => (
-            <AdminTableBodyTr key={blog.id}>
+            <AdminTableBodyTr key={blog.slug}>
               <td width={100} className="justify-center align-middle">
                 <AdminTableEditBtn href={`./edit/${blog.id}`} />
               </td>

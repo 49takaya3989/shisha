@@ -65,6 +65,7 @@ export const ADMIN_BLOG_CREATE = {
     THUMBNAIL_LABEL: 'サムネイル',
     THUMBNAIL_PLACEHOLDER: 'サムネイル',
     ERROR: {
+      SLUG: 'スラッグを入力してください',
       TITLE: 'タイトルを入力してください',
       CONTENTS: 'コンテンツを入力してください',
     },

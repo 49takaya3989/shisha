@@ -30,18 +30,12 @@ import TextAlign from '@tiptap/extension-text-align'
 import Underline from '@tiptap/extension-underline'
 import { useEditor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
+
 import { gql } from 'urql'
 import { z } from 'zod'
 
 import { ROUTE } from 'helper/constant/route'
 import { ADMIN_BLOG_EDIT } from 'helper/constant/text'
-import {
-  useDeleteBlogBlogTagsMutation,
-  useGetBlogsByPkQuery,
-  useGetBlogTagForBlogEditQuery,
-  useInsertBlogBlogTagsMutation,
-  useUpdateBlogsByPkMutation,
-} from 'pages/admin/blog/edit/[id].page.generated'
 import { tagType } from 'pages/admin/blog/type'
 import { AdminContentsHeader } from 'pages/admin/components/ContentsHeader'
 import { AdminLayout } from 'pages/admin/layout/Layout'
@@ -55,6 +49,13 @@ import {
   s3Client,
   S3_BASE_REQUEST_URL,
 } from 'utils/imageUpload'
+import {
+  useBlogsByPkForAdminBlogEditQuery,
+  useDeleteBlogBlogTagsForAdminBlogEditMutation,
+  useGetBlogTagForBlogEditQuery,
+  useInsertBlogBlogTagsForAdminBlogEditMutation,
+  useUpdateBlogsByPkForAdminBlogEditMutation,
+} from 'pages/admin/blog/edit/[id].page.generated'
 
 gql`
   query getBlogTagForBlogEdit {
@@ -63,48 +64,22 @@ gql`
     }
   }
 
-  fragment getBlogTagForBlogEditFragment on blog_tags {
-    id
-    name
-  }
-
-  query getBlogsByPk($id: Int!) {
+  query blogsByPkForAdminBlogEdit($id: Int!) {
     blogs_by_pk(id: $id) {
-      id
-      title
-      slug
-      contents
-      thumbnail
-      blog_blog_tags {
-        blog_tag {
-          id
-          name
-          slug
-        }
-      }
+      ...blogsFragmentForAdminBlogEdit
     }
   }
 
-  mutation updateBlogsByPk(
+  mutation updateBlogsByPkForAdminBlogEdit(
     $pk_columns: blogs_pk_columns_input!
-    $_set: blogs_set_input
+    $_set: blogs_set_input!
   ) {
-    update_blogs_by_pk(pk_columns: $pk_columns, _set: $_set) {
-      id
-      slug
-      title
-      contents
-      blog_blog_tags {
-        blog_tag {
-          id
-          name
-          slug
-        }
-      }
+    update_blogs_by_pk(_set: $_set, pk_columns: $pk_columns) {
+      ...blogsFragmentForAdminBlogEdit
     }
   }
 
-  mutation insertBlogBlogTags(
+  mutation insertBlogBlogTagsForAdminBlogEdit(
     $objects: [blog_blog_tags_insert_input!]!
     $on_conflict: blog_blog_tags_on_conflict
   ) {
@@ -117,7 +92,9 @@ gql`
     }
   }
 
-  mutation deleteBlogBlogTags($where: blog_blog_tags_bool_exp!) {
+  mutation deleteBlogBlogTagsForAdminBlogEdit(
+    $where: blog_blog_tags_bool_exp!
+  ) {
     delete_blog_blog_tags(where: $where) {
       returning {
         id
@@ -126,34 +103,54 @@ gql`
       }
     }
   }
+
+  fragment getBlogTagForBlogEditFragment on blog_tags {
+    id
+    name
+  }
+
+  fragment blogsFragmentForAdminBlogEdit on blogs {
+    id
+    title
+    slug
+    contents
+    thumbnail
+    blog_blog_tags {
+      blog_tag {
+        id
+        name
+        slug
+      }
+    }
+  }
 `
+
+// *** <query example> ***
+//
+// query blogsByPkForAdminBlogEdit($id: Int = 1) {
+//   blogs_by_pk(id: $id) {
+//     ...blogsFragmentForAdminBlogEdit
+//   }
+// }
+//
+// *** < end query example> ***
 
 // *** <mutation example> ***
 //
-// mutation update_blogs_by_pk(
-//   $pk_columns: blogs_pk_columns_input = {id: 44},
+// mutation updateBlogsByPkForAdminBlogEdit(
+//   $pk_columns: blogs_pk_columns_input = { slug: "test" }
 //   $_set: blogs_set_input = {
-//     slug: "udpateしudpateしました",
-//     title: "udpateしudpateしました",
-//     contents: "udpateしましたudpateしました"
-//     thumbnail: "udpateしましたudpateしました"
+//     slug: "test1"
+//     title: "test1"
+//     thumbnail: "test1"
+//     contents: "https://test1"
 //   }
 // ) {
-//   update_blogs_by_pk(pk_columns: $pk_columns, _set: $_set) {
-//     id
-//     slug
-//     title
-//     contents
-//     blog_blog_tags {
-//       blog_tag {
-//         id
-//         name
-//         slug
-//       }
-//     }
+//   update_blogs_by_pk(_set: $_set, pk_columns: $pk_columns) {
+//     ...blogsFragmentForAdminBlogEdit
 //   }
 // }
-
+//
 // mutation insert_blog_blog_tags(
 //   $objects: [blog_blog_tags_insert_input!] = [
 //     {blog_id: 44, blog_tag_id: 12}
@@ -203,20 +200,18 @@ const AdminBlogEdit = () => {
   const [isThumbnailSelected, setIsThumbnailSelected] = useState(false)
   const [isRichEditorSelected, setIsRichEditorSelected] = useState(false)
   const [updateBlogsByPkRes, updateBlogsByPkExecuteMutation] =
-    useUpdateBlogsByPkMutation()
+    useUpdateBlogsByPkForAdminBlogEditMutation()
   const [insertBlogBlogTagsRes, insertBlogBlogTagsExecuteMutation] =
-    useInsertBlogBlogTagsMutation()
+    useInsertBlogBlogTagsForAdminBlogEditMutation()
   const [deleteBlogBlogTagsRes, deleteBlogBlogTagsExecuteMutation] =
-    useDeleteBlogBlogTagsMutation()
-  const [resultBlogByPk] = useGetBlogsByPkQuery({
+    useDeleteBlogBlogTagsForAdminBlogEditMutation()
+  const [resultBlogByPk] = useBlogsByPkForAdminBlogEditQuery({
     variables: { id: Number(editId) },
   })
   const [resultBlogTags] = useGetBlogTagForBlogEditQuery()
   const dataBlogByPk = resultBlogByPk.data
   const dataBlogTags = resultBlogTags.data
   const content = ''
-  // let incrementTags: string[] = []
-  // let decrementTags: string[] = []
 
   // formのvalidation schemaの定義
   const validateSchema = z.object({
@@ -431,17 +426,19 @@ const AdminBlogEdit = () => {
         console.log('ブログ項目の更新エラー')
         console.log(result)
       } else if (incrementTags) {
+        console.log(incrementTags)
         // 新規紐付けのタグがあるver
         insertBlogBlogTagsExecuteMutation({
           objects: incrementTags.map((tag) => {
             return {
-              blog_id: Number(editId),
+              blog_id: Number(dataBlogByPk!.blogs_by_pk!.id),
               blog_tag_id: Number(tag),
             }
           }),
           on_conflict: {
             constraint:
-              Blog_Blog_Tags_Constraint.BlogBlogTagsBlogIdBlogTagIdKey,
+              // Blog_Blog_Tags_Constraint.BlogBlogTagsBlogIdBlogTagIdKey,
+              Blog_Blog_Tags_Constraint.BlogBlogTagsBlogIdBlogTagIdIdKey,
             update_columns: [Blog_Blog_Tags_Update_Column.BlogId],
           },
         }).then((result) => {
@@ -453,7 +450,7 @@ const AdminBlogEdit = () => {
             decrementTags.map((deleteTag) => {
               deleteBlogBlogTagsExecuteMutation({
                 where: {
-                  blog_id: { _eq: Number(editId) },
+                  blog_id: { _eq: Number(dataBlogByPk!.blogs_by_pk!.id) },
                   _and: [
                     {
                       blog_tag_id: { _eq: Number(deleteTag) },
@@ -480,7 +477,7 @@ const AdminBlogEdit = () => {
         decrementTags.map((deleteTag) => {
           deleteBlogBlogTagsExecuteMutation({
             where: {
-              blog_id: { _eq: Number(editId) },
+              blog_id: { _eq: Number(dataBlogByPk!.blogs_by_pk!.id) },
               _and: [
                 {
                   blog_tag_id: { _eq: Number(deleteTag) },
@@ -502,8 +499,6 @@ const AdminBlogEdit = () => {
       }
     })
   }
-
-  console.log(selectedThum)
 
   return (
     <AdminLayout>

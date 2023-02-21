@@ -1,7 +1,7 @@
 import { gql } from 'urql'
 
 import {
-  useDeleteBlogTagsByPkMutation,
+  useDeleteBlogTagsByPkForAdminMutation,
   useGetBlogTagsQuery,
 } from 'pages/admin/blog/tag/TableBody.generated'
 import { AdminTableDeleteBtn } from 'pages/admin/components/button/AdminTableDeleteBtn'
@@ -21,17 +21,29 @@ gql`
     slug
   }
 
-  mutation deleteBlogTagsByPk($id: Int!) {
+  mutation deleteBlogTagsByPkForAdmin($id: Int!) {
     delete_blog_tags_by_pk(id: $id) {
-      id
-      name
-      slug
+      ...blogTagsFragmentForAdminBlogTagDelete
     }
+  }
+
+  fragment blogTagsFragmentForAdminBlogTagDelete on blog_tags {
+    slug
   }
 `
 
+// *** <mutation example> ***
+//
+// mutation deleteBlogTagsByPkForAdmin($id: Int = 1) {
+//   delete_blog_tags_by_pk(id: $id) {
+//     ...blogTagsFragmentForAdminBlogTagDelete
+//   }
+// }
+//
+// *** < end mutation example> ***
+
 export const AdminTableBody = () => {
-  const [res, executeMutation] = useDeleteBlogTagsByPkMutation()
+  const [res, executeMutation] = useDeleteBlogTagsByPkForAdminMutation()
   const [result] = useGetBlogTagsQuery()
   const { data } = result
 
@@ -45,7 +57,7 @@ export const AdminTableBody = () => {
     <tbody>
       {data
         ? data.blog_tags.map((tag) => (
-            <AdminTableBodyTr key={tag.id}>
+            <AdminTableBodyTr key={tag.slug}>
               <td className="flex items-center justify-center">
                 <AdminTableEditBtn href={`./tag/edit/${tag.id}`} />
               </td>

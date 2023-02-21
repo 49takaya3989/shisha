@@ -34,16 +34,11 @@ import { z } from 'zod'
 
 import { ROUTE } from 'helper/constant/route'
 import { ADMIN_BLOG_CREATE } from 'helper/constant/text'
-import { useInsertBlogMutation } from 'pages/admin/blog/create.page.generated'
-import { useGetBlogTagsQuery } from 'pages/admin/blog/tag/TableBody.generated'
+import { useInsertBlogsOneForAdminMutation } from 'pages/admin/blog/create.page.generated'
+import { useGetBlogTagsForBlogCreateQuery } from 'pages/admin/blog/create.page.generated'
 import { tagType } from 'pages/admin/blog/type'
 import { AdminContentsHeader } from 'pages/admin/components/ContentsHeader'
 import { AdminLayout } from 'pages/admin/layout/Layout'
-import {
-  Blog_Blog_Tags_Insert_Input,
-  Blog_Tags_Constraint,
-  Blog_Tags_Update_Column,
-} from 'src/libs/urql/types'
 import {
   bucketParams,
   BUCKET_NAME,
@@ -52,7 +47,7 @@ import {
 } from 'utils/imageUpload'
 
 gql`
-  query getBlogTagForBlogCreate {
+  query getBlogTagsForBlogCreate {
     blog_tags {
       ...getBlogTagForBlogCreateFragment
     }
@@ -63,39 +58,47 @@ gql`
     name
   }
 
-  mutation insertBlog(
-    $title: String!
-    $slug: String!
-    $blog_blog_tags: blog_blog_tags_arr_rel_insert_input
-    $contents: String!
-    $thumbnail: String!
-  ) {
-    insert_blogs_one(
-      object: {
-        title: $title
-        slug: $slug
-        blog_blog_tags: $blog_blog_tags
-        contents: $contents
-        thumbnail: $thumbnail
+  mutation insertBlogsOneForAdmin($object: blogs_insert_input!) {
+    insert_blogs_one(object: $object) {
+      ...blogsFragmentForAdminBlogInsert
+    }
+  }
+
+  fragment blogsFragmentForAdminBlogInsert on blogs {
+    slug
+    title
+    thumbnail
+    contents
+    blog_blog_tags {
+      blog_tag {
+        name
+        slug
       }
-    ) {
-      id
-      title
-      slug
-      blog_blog_tags {
-        blog_tag {
-          id
-          name
-          slug
-        }
-      }
-      contents
-      thumbnail
-      created_at
-      udpated_at
     }
   }
 `
+
+// *** <mutation example> ***
+//
+// mutation insertBlogsOneForAdmin(
+//   $object: blogs_insert_input = {
+//     title: "test",
+//     slug: "test",
+//     thumbnail: "https://test",
+//     blog_blog_tags: {
+//       data: [
+//         {blog_tag_id: 1},
+//         {blog_tag_id: 2}
+//       ]
+//     }
+//   }
+// ) {
+//  insert_blogs_one(object: $object) {
+//    ...blogsFragmentForAdminBlogInsert
+//  }
+// }
+//
+// *** < end mutation example> ***
 
 const content = ''
 
@@ -107,8 +110,8 @@ const AdminBlogCreate = () => {
   const [opened, setOpened] = useState(false)
   const [isThumbnailSelected, setIsThumbnailSelected] = useState(false)
   const [isRichEditorSelected, setIsRichEditorSelected] = useState(false)
-  const [res, executeMutation] = useInsertBlogMutation()
-  const [result] = useGetBlogTagsQuery()
+  const [res, executeMutation] = useInsertBlogsOneForAdminMutation()
+  const [result] = useGetBlogTagsForBlogCreateQuery()
   const { data } = result
   const router = useRouter()
 
@@ -150,6 +153,9 @@ const AdminBlogCreate = () => {
     blogTitle: z
       .string()
       .min(1, { message: ADMIN_BLOG_CREATE.INPUT.ERROR.TITLE }),
+    blogSlug: z
+      .string()
+      .min(1, { message: ADMIN_BLOG_CREATE.INPUT.ERROR.SLUG }),
   })
 
   const form = useForm({
@@ -276,23 +282,18 @@ const AdminBlogCreate = () => {
   // 入力データの保存
   const submit = () => {
     executeMutation({
-      title: form.values.blogTitle,
-      slug: form.values.blogSlug,
-      blog_blog_tags: {
-        data: form.values.blogTags.map((blogTag) => {
-          return {
-            blog_tag: {
-              data: { id: Number(blogTag), name: '', slug: '' },
-              on_conflict: {
-                constraint: Blog_Tags_Constraint.BlogTagPkey,
-                update_columns: Blog_Tags_Update_Column.Id,
-              },
-            } as Blog_Blog_Tags_Insert_Input,
-          }
-        }) as Blog_Blog_Tags_Insert_Input[],
+      object: {
+        title: form.values.blogTitle,
+        slug: form.values.blogSlug,
+        thumbnail: selectedThum,
+        blog_blog_tags: {
+          data: form.values.blogTags.map((blogTag) => {
+            return {
+              blog_tag_id: Number(blogTag),
+            }
+          }),
+        },
       },
-      thumbnail: selectedThum,
-      contents: editor!.view.dom.innerHTML,
     }).then((result) => {
       result.error ? console.log(result) : router.push(ROUTE.ADMIN_BLOG_ARCHIVE)
     })
@@ -391,7 +392,7 @@ const AdminBlogCreate = () => {
           >
             ファイルを選択
           </Button>
-          {selectedThum !== '' || selectedThum !== null ? (
+          {selectedThum !== '' ? (
             <Group mt={16} display="block" w={400}>
               <Image src={selectedThum} alt="サムネイル" />
             </Group>

@@ -9,41 +9,75 @@ import { z } from 'zod'
 
 import { ROUTE } from 'helper/constant/route'
 import { ADMIN_BLOG_TAG_EDIT } from 'helper/constant/text'
-import {
-  useGetSpecificBlogTagQuery,
-  useUpdateSpecificBlogTagMutation,
-} from 'pages/admin/blog/tag/edit/[id].generated'
+
 import { AdminContentsHeader } from 'pages/admin/components/ContentsHeader'
 import { AdminLayout } from 'pages/admin/layout/Layout'
+import {
+  useBlogTagsByPkForAdminBlogTagEditQuery,
+  useUpdateBlogTagsByPkForAdminMutation,
+} from 'pages/admin/blog/tag/edit/[id].page.generated'
 
 gql`
-  query getSpecificBlogTag($id: Int!) {
+  query blogTagsByPkForAdminBlogTagEdit($id: Int!) {
     blog_tags_by_pk(id: $id) {
-      id
-      name
-      slug
+      ...blogTagsFragmentForAdminTagEdit
     }
   }
 
-  mutation updateSpecificBlogTag($id: Int!, $name: String!, $slug: String!) {
-    update_blog_tags_by_pk(
-      pk_columns: { id: $id }
-      _set: { name: $name, slug: $slug }
-    ) {
-      id
-      name
-      slug
+  fragment blogTagsFragmentForAdminTagEdit on blog_tags {
+    id
+    name
+    slug
+  }
+
+  mutation updateBlogTagsByPkForAdmin(
+    $pk_columns: blog_tags_pk_columns_input!
+    $_set: blog_tags_set_input!
+  ) {
+    update_blog_tags_by_pk(pk_columns: $pk_columns, _set: $_set) {
+      ...blogTagsFragmentForAdminBlogTagUpdate
     }
   }
+
+  fragment blogTagsFragmentForAdminBlogTagUpdate on blog_tags {
+    id
+    name
+  }
 `
+
+// *** <query example> ***
+//
+// query blogTagsByPkForAdminBlogTagEdit($id: Int = 1) {
+//   blog_tags_by_pk(id: $id) {
+//     ...blogTagsFragmentForAdminTagEdit
+//   }
+// }
+//
+// *** < end query example> ***
+
+// *** <mutation example> ***
+//
+// mutation updateBlogTagsByPkForAdmin(
+//   $pk_columns: blog_tags_pk_columns_input = {id: 10},
+//   $_set: blog_tags_set_input = {name: "testupdate", slug: "testupdate"}
+// ) {
+//   update_blog_tags_by_pk(
+//     pk_columns: $pk_columns,
+//     _set: $_set
+//   ) {
+//     ...blog_tagsFragment
+//   }
+// }
+//
+// *** < end mutation example> ***
 
 const AdminBlogTagEdit = () => {
   const router = useRouter()
   const editId = router.query.id
-  const [result] = useGetSpecificBlogTagQuery({
+  const [result] = useBlogTagsByPkForAdminBlogTagEditQuery({
     variables: { id: Number(editId) },
   })
-  const [res, executeMutation] = useUpdateSpecificBlogTagMutation()
+  const [res, executeMutation] = useUpdateBlogTagsByPkForAdminMutation()
   const { data } = result
 
   const validateSchema = z.object({
@@ -79,9 +113,11 @@ const AdminBlogTagEdit = () => {
 
   const submit = async () => {
     await executeMutation({
-      id: Number(editId),
-      name: form.values.blogTagName,
-      slug: form.values.blogTagSlug,
+      pk_columns: { id: Number(editId) },
+      _set: {
+        name: form.values.blogTagName,
+        slug: form.values.blogTagSlug,
+      },
     }).then((result) => {
       !result.error
         ? router.push(ROUTE.ADMIN_BLOG_TAG_ARCHIVE)

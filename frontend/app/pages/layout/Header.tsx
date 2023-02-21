@@ -20,7 +20,7 @@ gql`
     id
     name
     slug
-    blogs {
+    blog_blog_tags {
       blog {
         id
       }
@@ -66,7 +66,7 @@ export const UserHeader = () => {
       <nav className="mt-5">
         <List display="flex" className="justify-center gap-4">
           {data?.blog_tags.map((tag) =>
-            tag.blogs.length > 0 ? (
+            tag.blog_blog_tags.length > 0 ? (
               <List.Item key={tag.id}>
                 <Link href={`/blog/category/${tag.slug}`}>{tag.name}</Link>
               </List.Item>

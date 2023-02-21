@@ -1,118 +1,63 @@
-import gql from 'graphql-tag'
-import * as Urql from 'urql'
+import * as Types from '../../../src/libs/urql/types';
 
-import * as Types from '../../../src/libs/urql/types'
+import gql from 'graphql-tag';
+import * as Urql from 'urql';
+export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
+export type GetBlogTagsForBlogCreateQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
-export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
-export type GetBlogTagForBlogCreateQueryVariables = Types.Exact<{
-  [key: string]: never
-}>
 
-export type GetBlogTagForBlogCreateQuery = {
-  __typename?: 'query_root'
-  blog_tags: Array<{ __typename?: 'blog_tags'; id: number; name: string }>
-}
+export type GetBlogTagsForBlogCreateQuery = { __typename?: 'query_root', blog_tags: Array<{ __typename?: 'blog_tags', id: number, name: string }> };
 
-export type GetBlogTagForBlogCreateFragmentFragment = {
-  __typename?: 'blog_tags'
-  id: number
-  name: string
-}
+export type GetBlogTagForBlogCreateFragmentFragment = { __typename?: 'blog_tags', id: number, name: string };
 
-export type InsertBlogMutationVariables = Types.Exact<{
-  title: Types.Scalars['String']
-  slug: Types.Scalars['String']
-  blog_blog_tags?: Types.InputMaybe<Types.Blog_Blog_Tags_Arr_Rel_Insert_Input>
-  contents: Types.Scalars['String']
-  thumbnail: Types.Scalars['String']
-}>
+export type InsertBlogsOneForAdminMutationVariables = Types.Exact<{
+  object: Types.Blogs_Insert_Input;
+}>;
 
-export type InsertBlogMutation = {
-  __typename?: 'mutation_root'
-  insert_blogs_one?: {
-    __typename?: 'blogs'
-    id: number
-    title: string
-    slug: string
-    contents?: string | null
-    thumbnail?: string | null
-    created_at: any
-    udpated_at: any
-    blog_blog_tags: Array<{
-      __typename?: 'blog_blog_tags'
-      blog_tag: {
-        __typename?: 'blog_tags'
-        id: number
-        name: string
-        slug: string
-      }
-    }>
-  } | null
-}
+
+export type InsertBlogsOneForAdminMutation = { __typename?: 'mutation_root', insert_blogs_one?: { __typename?: 'blogs', slug: string, title: string, thumbnail?: string | null, contents?: string | null, blog_blog_tags: Array<{ __typename?: 'blog_blog_tags', blog_tag: { __typename?: 'blog_tags', name: string, slug: string } }> } | null };
+
+export type BlogsFragmentForAdminBlogInsertFragment = { __typename?: 'blogs', slug: string, title: string, thumbnail?: string | null, contents?: string | null, blog_blog_tags: Array<{ __typename?: 'blog_blog_tags', blog_tag: { __typename?: 'blog_tags', name: string, slug: string } }> };
 
 export const GetBlogTagForBlogCreateFragmentFragmentDoc = gql`
-  fragment getBlogTagForBlogCreateFragment on blog_tags {
-    id
-    name
-  }
-`
-export const GetBlogTagForBlogCreateDocument = gql`
-  query getBlogTagForBlogCreate {
-    blog_tags {
-      ...getBlogTagForBlogCreateFragment
-    }
-  }
-  ${GetBlogTagForBlogCreateFragmentFragmentDoc}
-`
-
-export function useGetBlogTagForBlogCreateQuery(
-  options?: Omit<
-    Urql.UseQueryArgs<GetBlogTagForBlogCreateQueryVariables>,
-    'query'
-  >
-) {
-  return Urql.useQuery<
-    GetBlogTagForBlogCreateQuery,
-    GetBlogTagForBlogCreateQueryVariables
-  >({ query: GetBlogTagForBlogCreateDocument, ...options })
+    fragment getBlogTagForBlogCreateFragment on blog_tags {
+  id
+  name
 }
-export const InsertBlogDocument = gql`
-  mutation insertBlog(
-    $title: String!
-    $slug: String!
-    $blog_blog_tags: blog_blog_tags_arr_rel_insert_input
-    $contents: String!
-    $thumbnail: String!
-  ) {
-    insert_blogs_one(
-      object: {
-        title: $title
-        slug: $slug
-        blog_blog_tags: $blog_blog_tags
-        contents: $contents
-        thumbnail: $thumbnail
-      }
-    ) {
-      id
-      title
+    `;
+export const BlogsFragmentForAdminBlogInsertFragmentDoc = gql`
+    fragment blogsFragmentForAdminBlogInsert on blogs {
+  slug
+  title
+  thumbnail
+  contents
+  blog_blog_tags {
+    blog_tag {
+      name
       slug
-      blog_blog_tags {
-        blog_tag {
-          id
-          name
-          slug
-        }
-      }
-      contents
-      thumbnail
-      created_at
-      udpated_at
     }
   }
-`
-
-export function useInsertBlogMutation() {
-  return Urql.useMutation<InsertBlogMutation, InsertBlogMutationVariables>(
-    InsertBlogDocument
-  )
 }
+    `;
+export const GetBlogTagsForBlogCreateDocument = gql`
+    query getBlogTagsForBlogCreate {
+  blog_tags {
+    ...getBlogTagForBlogCreateFragment
+  }
+}
+    ${GetBlogTagForBlogCreateFragmentFragmentDoc}`;
+
+export function useGetBlogTagsForBlogCreateQuery(options?: Omit<Urql.UseQueryArgs<GetBlogTagsForBlogCreateQueryVariables>, 'query'>) {
+  return Urql.useQuery<GetBlogTagsForBlogCreateQuery, GetBlogTagsForBlogCreateQueryVariables>({ query: GetBlogTagsForBlogCreateDocument, ...options });
+};
+export const InsertBlogsOneForAdminDocument = gql`
+    mutation insertBlogsOneForAdmin($object: blogs_insert_input!) {
+  insert_blogs_one(object: $object) {
+    ...blogsFragmentForAdminBlogInsert
+  }
+}
+    ${BlogsFragmentForAdminBlogInsertFragmentDoc}`;
+
+export function useInsertBlogsOneForAdminMutation() {
+  return Urql.useMutation<InsertBlogsOneForAdminMutation, InsertBlogsOneForAdminMutationVariables>(InsertBlogsOneForAdminDocument);
+};

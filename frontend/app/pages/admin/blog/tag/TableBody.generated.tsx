@@ -1,79 +1,55 @@
-import gql from 'graphql-tag'
-import * as Urql from 'urql'
+import * as Types from '../../../../src/libs/urql/types';
 
-import * as Types from '../../../../src/libs/urql/types'
+import gql from 'graphql-tag';
+import * as Urql from 'urql';
+export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
+export type GetBlogTagsQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
-export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
-export type GetBlogTagsQueryVariables = Types.Exact<{ [key: string]: never }>
 
-export type GetBlogTagsQuery = {
-  __typename?: 'query_root'
-  blog_tags: Array<{
-    __typename?: 'blog_tags'
-    id: number
-    name: string
-    slug: string
-  }>
-}
+export type GetBlogTagsQuery = { __typename?: 'query_root', blog_tags: Array<{ __typename?: 'blog_tags', id: number, name: string, slug: string }> };
 
-export type GetBlogTagsFragmentFragment = {
-  __typename?: 'blog_tags'
-  id: number
-  name: string
-  slug: string
-}
+export type GetBlogTagsFragmentFragment = { __typename?: 'blog_tags', id: number, name: string, slug: string };
 
-export type DeleteBlogTagsByPkMutationVariables = Types.Exact<{
-  id: Types.Scalars['Int']
-}>
+export type DeleteBlogTagsByPkForAdminMutationVariables = Types.Exact<{
+  id: Types.Scalars['Int'];
+}>;
 
-export type DeleteBlogTagsByPkMutation = {
-  __typename?: 'mutation_root'
-  delete_blog_tags_by_pk?: {
-    __typename?: 'blog_tags'
-    id: number
-    name: string
-    slug: string
-  } | null
-}
+
+export type DeleteBlogTagsByPkForAdminMutation = { __typename?: 'mutation_root', delete_blog_tags_by_pk?: { __typename?: 'blog_tags', slug: string } | null };
+
+export type BlogTagsFragmentForAdminBlogTagDeleteFragment = { __typename?: 'blog_tags', slug: string };
 
 export const GetBlogTagsFragmentFragmentDoc = gql`
-  fragment getBlogTagsFragment on blog_tags {
-    id
-    name
-    slug
-  }
-`
+    fragment getBlogTagsFragment on blog_tags {
+  id
+  name
+  slug
+}
+    `;
+export const BlogTagsFragmentForAdminBlogTagDeleteFragmentDoc = gql`
+    fragment blogTagsFragmentForAdminBlogTagDelete on blog_tags {
+  slug
+}
+    `;
 export const GetBlogTagsDocument = gql`
-  query getBlogTags {
-    blog_tags {
-      ...getBlogTagsFragment
-    }
+    query getBlogTags {
+  blog_tags {
+    ...getBlogTagsFragment
   }
-  ${GetBlogTagsFragmentFragmentDoc}
-`
-
-export function useGetBlogTagsQuery(
-  options?: Omit<Urql.UseQueryArgs<GetBlogTagsQueryVariables>, 'query'>
-) {
-  return Urql.useQuery<GetBlogTagsQuery, GetBlogTagsQueryVariables>({
-    query: GetBlogTagsDocument,
-    ...options,
-  })
 }
-export const DeleteBlogTagsByPkDocument = gql`
-  mutation deleteBlogTagsByPk($id: Int!) {
-    delete_blog_tags_by_pk(id: $id) {
-      id
-      name
-      slug
-    }
+    ${GetBlogTagsFragmentFragmentDoc}`;
+
+export function useGetBlogTagsQuery(options?: Omit<Urql.UseQueryArgs<GetBlogTagsQueryVariables>, 'query'>) {
+  return Urql.useQuery<GetBlogTagsQuery, GetBlogTagsQueryVariables>({ query: GetBlogTagsDocument, ...options });
+};
+export const DeleteBlogTagsByPkForAdminDocument = gql`
+    mutation deleteBlogTagsByPkForAdmin($id: Int!) {
+  delete_blog_tags_by_pk(id: $id) {
+    ...blogTagsFragmentForAdminBlogTagDelete
   }
-`
-
-export function useDeleteBlogTagsByPkMutation() {
-  return Urql.useMutation<
-    DeleteBlogTagsByPkMutation,
-    DeleteBlogTagsByPkMutationVariables
-  >(DeleteBlogTagsByPkDocument)
 }
+    ${BlogTagsFragmentForAdminBlogTagDeleteFragmentDoc}`;
+
+export function useDeleteBlogTagsByPkForAdminMutation() {
+  return Urql.useMutation<DeleteBlogTagsByPkForAdminMutation, DeleteBlogTagsByPkForAdminMutationVariables>(DeleteBlogTagsByPkForAdminDocument);
+};

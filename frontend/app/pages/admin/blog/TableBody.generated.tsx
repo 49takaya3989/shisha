@@ -1,101 +1,64 @@
-import gql from 'graphql-tag'
-import * as Urql from 'urql'
+import * as Types from '../../../src/libs/urql/types';
 
-import * as Types from '../../../src/libs/urql/types'
+import gql from 'graphql-tag';
+import * as Urql from 'urql';
+export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
+export type GetBlogsForAdminBlogArchiveQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
-export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
-export type GetBlogsQueryVariables = Types.Exact<{ [key: string]: never }>
 
-export type GetBlogsQuery = {
-  __typename?: 'query_root'
-  blogs: Array<{
-    __typename?: 'blogs'
-    id: number
-    title: string
-    contents?: string | null
-    thumbnail?: string | null
-    udpated_at: any
-    blog_blog_tags: Array<{
-      __typename?: 'blog_blog_tags'
-      blog_tag: { __typename?: 'blog_tags'; id: number; name: string }
-    }>
-  }>
-}
+export type GetBlogsForAdminBlogArchiveQuery = { __typename?: 'query_root', blogs: Array<{ __typename?: 'blogs', id: number, title: string, slug: string, contents?: string | null, thumbnail?: string | null, udpated_at: any, blog_blog_tags: Array<{ __typename?: 'blog_blog_tags', blog_tag: { __typename?: 'blog_tags', id: number, name: string } }> }> };
 
-export type GetBlogsFragmentFragment = {
-  __typename?: 'blogs'
-  id: number
-  title: string
-  contents?: string | null
-  thumbnail?: string | null
-  udpated_at: any
-  blog_blog_tags: Array<{
-    __typename?: 'blog_blog_tags'
-    blog_tag: { __typename?: 'blog_tags'; id: number; name: string }
-  }>
-}
+export type GetBlogsFragmentForAdminBlogArchiveFragment = { __typename?: 'blogs', id: number, title: string, slug: string, contents?: string | null, thumbnail?: string | null, udpated_at: any, blog_blog_tags: Array<{ __typename?: 'blog_blog_tags', blog_tag: { __typename?: 'blog_tags', id: number, name: string } }> };
 
-export type DeleteBlogsByPkMutationVariables = Types.Exact<{
-  id: Types.Scalars['Int']
-}>
+export type DeleteBlogsByPkForAdminMutationVariables = Types.Exact<{
+  id: Types.Scalars['Int'];
+}>;
 
-export type DeleteBlogsByPkMutation = {
-  __typename?: 'mutation_root'
-  delete_blogs_by_pk?: {
-    __typename?: 'blogs'
-    id: number
-    title: string
-    slug: string
-    contents?: string | null
-  } | null
-}
 
-export const GetBlogsFragmentFragmentDoc = gql`
-  fragment getBlogsFragment on blogs {
-    id
-    title
-    contents
-    thumbnail
-    blog_blog_tags {
-      blog_tag {
-        id
-        name
-      }
-    }
-    udpated_at
-  }
-`
-export const GetBlogsDocument = gql`
-  query getBlogs {
-    blogs {
-      ...getBlogsFragment
-    }
-  }
-  ${GetBlogsFragmentFragmentDoc}
-`
+export type DeleteBlogsByPkForAdminMutation = { __typename?: 'mutation_root', delete_blogs_by_pk?: { __typename?: 'blogs', slug: string } | null };
 
-export function useGetBlogsQuery(
-  options?: Omit<Urql.UseQueryArgs<GetBlogsQueryVariables>, 'query'>
-) {
-  return Urql.useQuery<GetBlogsQuery, GetBlogsQueryVariables>({
-    query: GetBlogsDocument,
-    ...options,
-  })
-}
-export const DeleteBlogsByPkDocument = gql`
-  mutation deleteBlogsByPk($id: Int!) {
-    delete_blogs_by_pk(id: $id) {
+export type BlogsFragmentForAdminBlogArchiveFragment = { __typename?: 'blogs', slug: string };
+
+export const GetBlogsFragmentForAdminBlogArchiveFragmentDoc = gql`
+    fragment getBlogsFragmentForAdminBlogArchive on blogs {
+  id
+  title
+  slug
+  contents
+  thumbnail
+  blog_blog_tags {
+    blog_tag {
       id
-      title
-      slug
-      contents
+      name
     }
   }
-`
-
-export function useDeleteBlogsByPkMutation() {
-  return Urql.useMutation<
-    DeleteBlogsByPkMutation,
-    DeleteBlogsByPkMutationVariables
-  >(DeleteBlogsByPkDocument)
+  udpated_at
 }
+    `;
+export const BlogsFragmentForAdminBlogArchiveFragmentDoc = gql`
+    fragment blogsFragmentForAdminBlogArchive on blogs {
+  slug
+}
+    `;
+export const GetBlogsForAdminBlogArchiveDocument = gql`
+    query getBlogsForAdminBlogArchive {
+  blogs {
+    ...getBlogsFragmentForAdminBlogArchive
+  }
+}
+    ${GetBlogsFragmentForAdminBlogArchiveFragmentDoc}`;
+
+export function useGetBlogsForAdminBlogArchiveQuery(options?: Omit<Urql.UseQueryArgs<GetBlogsForAdminBlogArchiveQueryVariables>, 'query'>) {
+  return Urql.useQuery<GetBlogsForAdminBlogArchiveQuery, GetBlogsForAdminBlogArchiveQueryVariables>({ query: GetBlogsForAdminBlogArchiveDocument, ...options });
+};
+export const DeleteBlogsByPkForAdminDocument = gql`
+    mutation deleteBlogsByPkForAdmin($id: Int!) {
+  delete_blogs_by_pk(id: $id) {
+    ...blogsFragmentForAdminBlogArchive
+  }
+}
+    ${BlogsFragmentForAdminBlogArchiveFragmentDoc}`;
+
+export function useDeleteBlogsByPkForAdminMutation() {
+  return Urql.useMutation<DeleteBlogsByPkForAdminMutation, DeleteBlogsByPkForAdminMutationVariables>(DeleteBlogsByPkForAdminDocument);
+};
