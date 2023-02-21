@@ -1,3 +1,4 @@
+
 import gql from 'graphql-tag'
 import * as Urql from 'urql'
 
@@ -15,7 +16,7 @@ export type GetBlogsSpecifiedTagSlugQuery = {
     id: number
     title: string
     thumbnail?: string | null
-    udpated_at: any
+    updated_at: any
     blog_blog_tags: Array<{
       __typename?: 'blog_blog_tags'
       blog_tag: { __typename?: 'blog_tags'; id: number; name: string }
@@ -38,7 +39,7 @@ export type BlogsSpecifiedTagSlugFragmentFragment = {
   id: number
   title: string
   thumbnail?: string | null
-  udpated_at: any
+  updated_at: any
   blog_blog_tags: Array<{
     __typename?: 'blog_blog_tags'
     blog_tag: { __typename?: 'blog_tags'; id: number; name: string }
@@ -68,7 +69,7 @@ export const BlogsSpecifiedTagSlugFragmentFragmentDoc = gql`
     id
     title
     thumbnail
-    udpated_at
+    updated_at
     blog_blog_tags {
       ...blogBlogTagsFragment
     }

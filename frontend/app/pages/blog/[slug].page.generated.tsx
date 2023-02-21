@@ -1,3 +1,4 @@
+
 import gql from 'graphql-tag'
 import * as Urql from 'urql'
 
@@ -14,7 +15,7 @@ export type BlogsByPkForUserBlogSingleQuery = {
     __typename?: 'blogs'
     title: string
     thumbnail?: string | null
-    udpated_at: any
+    updated_at: any
     contents?: string | null
     blog_blog_tags: Array<{
       __typename?: 'blog_blog_tags'
@@ -32,7 +33,7 @@ export type BlogsFragmentForUserBlogSingleFragment = {
   __typename?: 'blogs'
   title: string
   thumbnail?: string | null
-  udpated_at: any
+  updated_at: any
   contents?: string | null
   blog_blog_tags: Array<{
     __typename?: 'blog_blog_tags'
@@ -49,7 +50,7 @@ export const BlogsFragmentForUserBlogSingleFragmentDoc = gql`
   fragment blogsFragmentForUserBlogSingle on blogs {
     title
     thumbnail
-    udpated_at
+    updated_at
     contents
     blog_blog_tags {
       blog_tag {

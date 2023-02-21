@@ -29,7 +29,7 @@ gql`
         name
       }
     }
-    udpated_at
+    updated_at
   }
 
   mutation deleteBlogsByPkForAdmin($id: Int!) {
@@ -73,7 +73,7 @@ export const AdminBlogTableBody = () => {
               <td width={100} className="justify-center align-middle">
                 <AdminTableEditBtn href={`./edit/${blog.id}`} />
               </td>
-              <td width={120}>{dayjs(blog.udpated_at).format('YYYY/MM/DD')}</td>
+              <td width={120}>{dayjs(blog.updated_at).format('YYYY/MM/DD')}</td>
               <td width={300}>{blog.title}</td>
               <td width={150}>
                 {blog.blog_blog_tags.map((blog_blog_tag, index) =>

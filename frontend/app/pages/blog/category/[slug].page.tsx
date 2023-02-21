@@ -27,7 +27,7 @@ gql`
     id
     title
     thumbnail
-    udpated_at
+    updated_at
     blog_blog_tags {
       ...blogBlogTagsFragment
     }
