@@ -1,3 +1,4 @@
+
 import gql from 'graphql-tag'
 import * as Urql from 'urql'
 
@@ -17,7 +18,7 @@ export type GetBlogsForAdminBlogArchiveQuery = {
     slug: string
     contents?: string | null
     thumbnail?: string | null
-    udpated_at: any
+    updated_at: any
     blog_blog_tags: Array<{
       __typename?: 'blog_blog_tags'
       blog_tag: { __typename?: 'blog_tags'; id: number; name: string }
@@ -32,7 +33,7 @@ export type GetBlogsFragmentForAdminBlogArchiveFragment = {
   slug: string
   contents?: string | null
   thumbnail?: string | null
-  udpated_at: any
+  updated_at: any
   blog_blog_tags: Array<{
     __typename?: 'blog_blog_tags'
     blog_tag: { __typename?: 'blog_tags'; id: number; name: string }
@@ -66,7 +67,7 @@ export const GetBlogsFragmentForAdminBlogArchiveFragmentDoc = gql`
         name
       }
     }
-    udpated_at
+    updated_at
   }
 `
 export const BlogsFragmentForAdminBlogArchiveFragmentDoc = gql`

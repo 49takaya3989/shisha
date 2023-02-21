@@ -664,7 +664,7 @@ export type Blogs = {
   slug: Scalars['String']
   thumbnail?: Maybe<Scalars['String']>
   title: Scalars['String']
-  udpated_at: Scalars['timestamptz']
+  updated_at: Scalars['timestamptz']
 }
 
 /** ブログの投稿テーブル */
@@ -733,7 +733,7 @@ export type Blogs_Bool_Exp = {
   slug?: InputMaybe<String_Comparison_Exp>
   thumbnail?: InputMaybe<String_Comparison_Exp>
   title?: InputMaybe<String_Comparison_Exp>
-  udpated_at?: InputMaybe<Timestamptz_Comparison_Exp>
+  updated_at?: InputMaybe<Timestamptz_Comparison_Exp>
 }
 
 /** unique or primary key constraints on table "blogs" */
@@ -760,7 +760,7 @@ export type Blogs_Insert_Input = {
   slug?: InputMaybe<Scalars['String']>
   thumbnail?: InputMaybe<Scalars['String']>
   title?: InputMaybe<Scalars['String']>
-  udpated_at?: InputMaybe<Scalars['timestamptz']>
+  updated_at?: InputMaybe<Scalars['timestamptz']>
 }
 
 /** aggregate max on columns */
@@ -772,7 +772,7 @@ export type Blogs_Max_Fields = {
   slug?: Maybe<Scalars['String']>
   thumbnail?: Maybe<Scalars['String']>
   title?: Maybe<Scalars['String']>
-  udpated_at?: Maybe<Scalars['timestamptz']>
+  updated_at?: Maybe<Scalars['timestamptz']>
 }
 
 /** aggregate min on columns */
@@ -784,7 +784,7 @@ export type Blogs_Min_Fields = {
   slug?: Maybe<Scalars['String']>
   thumbnail?: Maybe<Scalars['String']>
   title?: Maybe<Scalars['String']>
-  udpated_at?: Maybe<Scalars['timestamptz']>
+  updated_at?: Maybe<Scalars['timestamptz']>
 }
 
 /** response of any mutation on the table "blogs" */
@@ -819,7 +819,7 @@ export type Blogs_Order_By = {
   slug?: InputMaybe<Order_By>
   thumbnail?: InputMaybe<Order_By>
   title?: InputMaybe<Order_By>
-  udpated_at?: InputMaybe<Order_By>
+  updated_at?: InputMaybe<Order_By>
 }
 
 /** primary key columns input for table: blogs */
@@ -842,7 +842,7 @@ export enum Blogs_Select_Column {
   /** column name */
   Title = 'title',
   /** column name */
-  UdpatedAt = 'udpated_at',
+  UpdatedAt = 'updated_at',
 }
 
 /** input type for updating data in table "blogs" */
@@ -853,7 +853,7 @@ export type Blogs_Set_Input = {
   slug?: InputMaybe<Scalars['String']>
   thumbnail?: InputMaybe<Scalars['String']>
   title?: InputMaybe<Scalars['String']>
-  udpated_at?: InputMaybe<Scalars['timestamptz']>
+  updated_at?: InputMaybe<Scalars['timestamptz']>
 }
 
 /** aggregate stddev on columns */
@@ -890,7 +890,7 @@ export type Blogs_Stream_Cursor_Value_Input = {
   slug?: InputMaybe<Scalars['String']>
   thumbnail?: InputMaybe<Scalars['String']>
   title?: InputMaybe<Scalars['String']>
-  udpated_at?: InputMaybe<Scalars['timestamptz']>
+  updated_at?: InputMaybe<Scalars['timestamptz']>
 }
 
 /** aggregate sum on columns */
@@ -914,7 +914,7 @@ export enum Blogs_Update_Column {
   /** column name */
   Title = 'title',
   /** column name */
-  UdpatedAt = 'udpated_at',
+  UpdatedAt = 'updated_at',
 }
 
 export type Blogs_Updates = {

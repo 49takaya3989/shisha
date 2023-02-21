@@ -20,7 +20,7 @@ gql`
   fragment blogsFragmentForUserBlogSingle on blogs {
     title
     thumbnail
-    udpated_at
+    updated_at
     contents
     blog_blog_tags {
       blog_tag {
@@ -54,12 +54,12 @@ const BlogSingleForUser = () => {
 
   useEffect(() => {
     setDateTime(() => {
-      return dayjs(data?.blogs_by_pk?.udpated_at).format('YYYY-MM-DD')
+      return dayjs(data?.blogs_by_pk?.updated_at).format('YYYY-MM-DD')
     })
     setTime(() => {
-      return dayjs(data?.blogs_by_pk?.udpated_at).format('YYYY.MM.DD')
+      return dayjs(data?.blogs_by_pk?.updated_at).format('YYYY.MM.DD')
     })
-  }, [data?.blogs_by_pk?.udpated_at])
+  }, [data?.blogs_by_pk?.updated_at])
 
   return (
     <>
