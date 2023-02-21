@@ -9,13 +9,12 @@ import { z } from 'zod'
 
 import { ROUTE } from 'helper/constant/route'
 import { ADMIN_BLOG_TAG_EDIT } from 'helper/constant/text'
-
-import { AdminContentsHeader } from 'pages/admin/components/ContentsHeader'
-import { AdminLayout } from 'pages/admin/layout/Layout'
 import {
   useBlogTagsByPkForAdminBlogTagEditQuery,
   useUpdateBlogTagsByPkForAdminMutation,
 } from 'pages/admin/blog/tag/edit/[id].page.generated'
+import { AdminContentsHeader } from 'pages/admin/components/ContentsHeader'
+import { AdminLayout } from 'pages/admin/layout/Layout'
 
 gql`
   query blogTagsByPkForAdminBlogTagEdit($id: Int!) {

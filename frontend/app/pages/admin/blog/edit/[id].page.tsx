@@ -30,12 +30,18 @@ import TextAlign from '@tiptap/extension-text-align'
 import Underline from '@tiptap/extension-underline'
 import { useEditor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
-
 import { gql } from 'urql'
 import { z } from 'zod'
 
 import { ROUTE } from 'helper/constant/route'
 import { ADMIN_BLOG_EDIT } from 'helper/constant/text'
+import {
+  useBlogsByPkForAdminBlogEditQuery,
+  useDeleteBlogBlogTagsForAdminBlogEditMutation,
+  useGetBlogTagForBlogEditQuery,
+  useInsertBlogBlogTagsForAdminBlogEditMutation,
+  useUpdateBlogsByPkForAdminBlogEditMutation,
+} from 'pages/admin/blog/edit/[id].page.generated'
 import { tagType } from 'pages/admin/blog/type'
 import { AdminContentsHeader } from 'pages/admin/components/ContentsHeader'
 import { AdminLayout } from 'pages/admin/layout/Layout'
@@ -49,13 +55,6 @@ import {
   s3Client,
   S3_BASE_REQUEST_URL,
 } from 'utils/imageUpload'
-import {
-  useBlogsByPkForAdminBlogEditQuery,
-  useDeleteBlogBlogTagsForAdminBlogEditMutation,
-  useGetBlogTagForBlogEditQuery,
-  useInsertBlogBlogTagsForAdminBlogEditMutation,
-  useUpdateBlogsByPkForAdminBlogEditMutation,
-} from 'pages/admin/blog/edit/[id].page.generated'
 
 gql`
   query getBlogTagForBlogEdit {

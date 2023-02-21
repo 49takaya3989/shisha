@@ -1,8 +1,9 @@
-import { List } from '@mantine/core'
-import { ROUTE } from 'helper/constant/route'
-import { NextPage } from 'next'
 import Link from 'next/link'
 
+import { List } from '@mantine/core'
+import { NextPage } from 'next'
+
+import { ROUTE } from 'helper/constant/route'
 import { AdminLayout } from 'pages/admin/layout/Layout'
 
 const AdminDashboard: NextPage = () => {
