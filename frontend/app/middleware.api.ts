@@ -5,7 +5,7 @@ import { withClerkMiddleware, getAuth } from '@clerk/nextjs/server'
 
 // Set the paths that don't require the user to be signed in
 const publicPaths = ['/', '/_next/image*', '/blog*', '/sign-in*', '/sign-up*']
-const basicPaths = ['/*', '/admin*', '/blog*']
+const basicPaths = ['/sign-in*']
 const isPublic = (path: string) => {
   return publicPaths.find((x) =>
     path.match(new RegExp(`^${x}$`.replace('*$', '($|/)')))
@@ -19,12 +19,12 @@ const isBasic = (path: string) => {
 
 export default withClerkMiddleware((request: NextRequest) => {
   if (isBasic(request.nextUrl.pathname)) {
-    const basicAuth = request.headers.get('authorization')
-    const url = request.nextUrl
+    const authorizationHeader = request.headers.get('authorization')
 
-    if (basicAuth) {
-      const basicVal = basicAuth.split(' ')[1]
-      const [user, password] = atob(basicVal).split(':')
+    if (authorizationHeader) {
+      const basicAuth = authorizationHeader.split(' ')[1]
+      console.log(basicAuth)
+      const [user, password] = atob(basicAuth).split(':')
 
       if (
         user === process.env.NEXT_PUBLIC_BASIC_AUTH_USER &&
@@ -34,6 +34,7 @@ export default withClerkMiddleware((request: NextRequest) => {
       }
     }
 
+    const url = request.nextUrl
     url.pathname = '/api/basic'
 
     return NextResponse.rewrite(url)
