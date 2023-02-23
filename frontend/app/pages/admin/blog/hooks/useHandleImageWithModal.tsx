@@ -1,14 +1,11 @@
 import { useState } from 'react'
 
-
-
 export const useHandleImageWithModal = () => {
   const [opened, setOpened] = useState(false)
   const [isThumbnailSelected, setIsThumbnailSelected] = useState(false)
   const [isRichEditorSelected, setIsRichEditorSelected] = useState(false)
   const [preSelectedModalImage, setPreSelectedModalImage] = useState('')
   const [selectedThum, setSelectedThum] = useState('')
-
 
   // サムネイル候補の選択
   const preSelectImage = (e: React.MouseEvent<HTMLElement>) => {
