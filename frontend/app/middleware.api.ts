@@ -4,27 +4,28 @@ import type { NextRequest } from 'next/server'
 import { withClerkMiddleware, getAuth } from '@clerk/nextjs/server'
 
 // Set the paths that don't require the user to be signed in
-const publicPaths = ['/', '/_next/image*', '/blog*', '/sign-in*', '/sign-up*']
-const basicPaths = ['/*', '/admin*', '/blog*']
-const isPublic = (path: string) => {
-  return publicPaths.find((x) =>
+export const privatePaths = ['/admin*', '/sign-up*']
+export const basicPaths = ['/sign-in*']
+export const isPrivate = (path: string) => {
+  return privatePaths.find((x) =>
     path.match(new RegExp(`^${x}$`.replace('*$', '($|/)')))
   )
 }
-const isBasic = (path: string) => {
+export const isBasic = (path: string) => {
   return basicPaths.find((x) =>
     path.match(new RegExp(`^${x}$`.replace('*$', '($|/)')))
   )
 }
 
-export default withClerkMiddleware((request: NextRequest) => {
-  if (isBasic(request.nextUrl.pathname)) {
-    const basicAuth = request.headers.get('authorization')
-    const url = request.nextUrl
+export const config = { matcher: '/((?!.*\\.).*)' }
 
-    if (basicAuth) {
-      const basicVal = basicAuth.split(' ')[1]
-      const [user, password] = atob(basicVal).split(':')
+export default withClerkMiddleware((req: NextRequest) => {
+  if (isBasic(req.nextUrl.pathname)) {
+    const authorizationHeader = req.headers.get('authorization')
+
+    if (authorizationHeader) {
+      const basicAuth = authorizationHeader.split(' ')[1]
+      const [user, password] = atob(basicAuth).split(':')
 
       if (
         user === process.env.NEXT_PUBLIC_BASIC_AUTH_USER &&
@@ -34,26 +35,22 @@ export default withClerkMiddleware((request: NextRequest) => {
       }
     }
 
+    const url = req.nextUrl
     url.pathname = '/api/basic'
 
     return NextResponse.rewrite(url)
   }
 
-  if (isPublic(request.nextUrl.pathname)) {
-    return NextResponse.next()
-  }
-  // if the user is not signed in redirect them to the sign in page.
-  const { userId } = getAuth(request)
+  if (isPrivate(req.nextUrl.pathname)) {
+    // if the user is not signed in redirect them to the sign in page.
+    const { userId } = getAuth(req)
 
-  if (!userId) {
-    // redirect the users to /pages/sign-in/[[...index]].ts
-
-    const signInUrl = new URL('/sign-in', request.url)
-    signInUrl.searchParams.set('redirect_url', request.url)
-    return NextResponse.redirect(signInUrl)
+    if (!userId) {
+      const signInUrl = new URL('/sign-in', req.url)
+      signInUrl.searchParams.set('redirect_url', req.url)
+      return NextResponse.redirect(signInUrl)
+    }
   }
 
   return NextResponse.next()
 })
-
-export const config = { matcher: '/((?!.*\\.).*)' }
