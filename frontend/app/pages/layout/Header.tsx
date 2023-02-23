@@ -46,9 +46,9 @@ export const UserHeader = () => {
         </Link>
       </Title>
       <Group className="absolute top-0 right-1 justify-center">
-        <Link href={`/admin/dashboard`} className="h-max">
+        <a href="/admin/dashboard" className="h-max">
           管理画面
-        </Link>
+        </a>
         <SignedIn>
           <Button
             onClick={() => signOut()}
@@ -58,9 +58,9 @@ export const UserHeader = () => {
           </Button>
         </SignedIn>
         <SignedOut>
-          <Link href={`/sign-in`} className="h-max">
+          <a href="/sign-in" className="h-max">
             サインイン
-          </Link>
+          </a>
         </SignedOut>
       </Group>
       <nav className="mt-5">
