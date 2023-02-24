@@ -13,6 +13,7 @@ export type BlogsByPkForUserBlogSingleQuery = {
   __typename?: 'query_root'
   blogs_by_pk?: {
     __typename?: 'blogs'
+    id: number
     title: string
     thumbnail?: string | null
     updated_at: any
@@ -31,6 +32,7 @@ export type BlogsByPkForUserBlogSingleQuery = {
 
 export type BlogsFragmentForUserBlogSingleFragment = {
   __typename?: 'blogs'
+  id: number
   title: string
   thumbnail?: string | null
   updated_at: any
@@ -48,6 +50,7 @@ export type BlogsFragmentForUserBlogSingleFragment = {
 
 export const BlogsFragmentForUserBlogSingleFragmentDoc = gql`
   fragment blogsFragmentForUserBlogSingle on blogs {
+    id
     title
     thumbnail
     updated_at

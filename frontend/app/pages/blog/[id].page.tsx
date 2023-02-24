@@ -7,7 +7,7 @@ import { Group, Image, List, Title } from '@mantine/core'
 import dayjs from 'dayjs'
 import { gql } from 'urql'
 
-import { useBlogsByPkForUserBlogSingleQuery } from 'pages/blog/[slug].page.generated'
+import { useBlogsByPkForUserBlogSingleQuery } from 'pages/blog/[id].page.generated'
 import { UserLayout } from 'pages/layout/Layout'
 
 gql`
@@ -18,6 +18,7 @@ gql`
   }
 
   fragment blogsFragmentForUserBlogSingle on blogs {
+    id
     title
     thumbnail
     updated_at
