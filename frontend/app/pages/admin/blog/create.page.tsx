@@ -1,9 +1,5 @@
-import { useState } from 'react'
-
 import { useRouter } from 'next/router'
 
-import { ListObjectsCommand } from '@aws-sdk/client-s3'
-import { Upload } from '@aws-sdk/lib-storage'
 import {
   Button,
   Group,
@@ -16,9 +12,9 @@ import {
   Text,
   TextInput,
 } from '@mantine/core'
-import { Dropzone, IMAGE_MIME_TYPE, FileWithPath } from '@mantine/dropzone'
-import { useForm, zodResolver } from '@mantine/form'
-import { RichTextEditor, Link } from '@mantine/tiptap'
+import { Dropzone, IMAGE_MIME_TYPE } from '@mantine/dropzone'
+import { RichTextEditor } from '@mantine/tiptap'
+import { Link } from '@mantine/tiptap'
 import CharacterCount from '@tiptap/extension-character-count'
 import Highlight from '@tiptap/extension-highlight'
 import EditorImage from '@tiptap/extension-image'
@@ -30,21 +26,18 @@ import Underline from '@tiptap/extension-underline'
 import { useEditor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import { gql } from 'urql'
-import { z } from 'zod'
 
 import { ROUTE } from 'helper/constant/route'
 import { ADMIN_BLOG_CREATE } from 'helper/constant/text'
 import { useInsertBlogsOneForAdminMutation } from 'pages/admin/blog/create.page.generated'
 import { useGetBlogTagsForBlogCreateQuery } from 'pages/admin/blog/create.page.generated'
+import { useFormSchema } from 'pages/admin/blog/hooks/useFormSchema'
+import { useHandleImageOfAWSs3 } from 'pages/admin/blog/hooks/useHandleImageOfAWSs3'
+import { useHandleImageWithModal } from 'pages/admin/blog/hooks/useHandleImageWithModal'
 import { tagType } from 'pages/admin/blog/type'
 import { AdminContentsHeader } from 'pages/admin/components/ContentsHeader'
 import { AdminLayout } from 'pages/admin/layout/Layout'
-import {
-  bucketParams,
-  BUCKET_NAME,
-  s3Client,
-  S3_BASE_REQUEST_URL,
-} from 'utils/imageUpload'
+import { S3_BASE_REQUEST_URL } from 'utils/imageUpload'
 
 gql`
   query getBlogTagsForBlogCreate {
@@ -85,6 +78,7 @@ gql`
 //     title: "test",
 //     slug: "test",
 //     thumbnail: "https://test",
+//     contents: 'test',
 //     blog_blog_tags: {
 //       data: [
 //         {blog_tag_id: 1},
@@ -103,17 +97,38 @@ gql`
 const content = ''
 
 const AdminBlogCreate = () => {
-  const [files, setFiles] = useState<FileWithPath[]>([])
-  const [imageS3, setImageS3] = useState<string[]>([''])
-  const [preSelectedModalImage, setPreSelectedModalImage] = useState('')
-  const [selectedThum, setSelectedThum] = useState('')
-  const [opened, setOpened] = useState(false)
-  const [isThumbnailSelected, setIsThumbnailSelected] = useState(false)
-  const [isRichEditorSelected, setIsRichEditorSelected] = useState(false)
+  const { imageS3, previews, setFiles, imageUploadToAWS, imageGet } =
+    useHandleImageOfAWSs3()
+  const { form } = useFormSchema()
+  const {
+    opened,
+    isThumbnailSelected,
+    isRichEditorSelected,
+    preSelectedModalImage,
+    selectedThum,
+    preSelectImage,
+    selectThum,
+    setOpened,
+    setIsRichEditorSelected,
+    insertRichTextImageHandler,
+    thumSelectModalHandler,
+    modalCloseHandler,
+  } = useHandleImageWithModal()
   const [res, executeMutation] = useInsertBlogsOneForAdminMutation()
   const [result] = useGetBlogTagsForBlogCreateQuery()
   const { data } = result
   const router = useRouter()
+
+  // create tag array
+  const tagData: tagType[] = []
+  if (data && data.blog_tags) {
+    data.blog_tags.map((blogTag) => {
+      tagData.push({
+        value: String(blogTag.id),
+        label: blogTag.name,
+      })
+    })
+  }
 
   const editor = useEditor({
     extensions: [
@@ -131,126 +146,6 @@ const AdminBlogCreate = () => {
     content,
   })
 
-  // create tag array
-  const tagData: tagType[] = []
-  if (data && data.blog_tags) {
-    data.blog_tags.map((blogTag) => {
-      tagData.push({
-        value: String(blogTag.id),
-        label: blogTag.name,
-      })
-    })
-  }
-
-  // formのvalidation schemaの定義
-  const validateSchema = z.object({
-    /* fieldの定義方法
-    ex.)
-    [fieldName]: z <-zodのオブジェクト。ここは固定
-      .string() <-型の定義。数字の時は .number() など
-      .min([最小文字数 numberで記述], {message: [表示したいエラーメッセージを記述]}) <-最小入力値の記述（or max()で最大値） */
-
-    blogTitle: z
-      .string()
-      .min(1, { message: ADMIN_BLOG_CREATE.INPUT.ERROR.TITLE }),
-    blogSlug: z
-      .string()
-      .min(1, { message: ADMIN_BLOG_CREATE.INPUT.ERROR.SLUG }),
-  })
-
-  const form = useForm({
-    validate: zodResolver(validateSchema),
-    initialValues: {
-      blogTitle: '',
-      blogSlug: '',
-      blogTags: [''],
-      blogContents: '',
-    },
-  })
-
-  const previews = files.map((file, index) => {
-    const imageUrl = URL.createObjectURL(file)
-    return (
-      <Image
-        key={index}
-        src={imageUrl}
-        alt=""
-        imageProps={{ onLoad: () => URL.revokeObjectURL(imageUrl) }}
-      />
-    )
-  })
-
-  // S3へ画像のアップロード
-  const imageUploadToAWS = async () => {
-    try {
-      const parallelUploads3 = new Upload({
-        client: s3Client,
-        params: {
-          Bucket: BUCKET_NAME,
-          Key: files[0].name,
-          Body: files[0],
-        },
-        leavePartsOnError: false,
-      })
-
-      parallelUploads3.on('httpUploadProgress', (progress) => {
-        console.log(progress)
-      })
-
-      await parallelUploads3.done()
-      // await setIsLoading(false);
-    } catch (e) {
-      console.log(e)
-    }
-  }
-
-  // S3から画像の取得
-  const imageGet = () => {
-    // Create the parameters for the bucket
-    s3Client
-      .send(new ListObjectsCommand(bucketParams))
-      .then((res) => {
-        res.Contents!.map((content) => {
-          setImageS3((prevImageNames): string[] => {
-            if (prevImageNames[0] === '') return [content.Key!]
-            return [...prevImageNames, content.Key!]
-          })
-        })
-      })
-      .catch((err) => {
-        console.log('Error', err)
-      })
-  }
-
-  // サムネイルの設定
-  const preSelectImage = (e: React.MouseEvent<HTMLElement>) => {
-    const $markRemoveBorder = document.querySelector<HTMLElement>(
-      '.markRemoveBorder.border'
-    )
-    $markRemoveBorder?.classList.remove('border')
-
-    // チェックの印をつけるためのコード
-    e.currentTarget.parentElement!.parentElement!.parentElement!.classList.add(
-      'border'
-    )
-
-    // 選択肢ているurlを取得するためのコード
-    const preSelectImageSrc =
-      e.currentTarget.children[0].children[0].children[0].getAttribute('src')
-    setPreSelectedModalImage(() => {
-      return preSelectImageSrc!
-    })
-  }
-
-  // サムネイルの設定
-  const selectThum = () => {
-    setSelectedThum(() => {
-      return preSelectedModalImage
-    })
-    setOpened(false)
-    setIsThumbnailSelected(false)
-  }
-
   // リッチテキストに選択した画像を挿入する
   const insertRichEditorImgHandler = () => {
     setOpened(false)
@@ -260,25 +155,6 @@ const AdminBlogCreate = () => {
     }
   }
 
-  // リッチテキストに挿入するための画像を選択するモーダルの表示
-  const insertRichTextImageHandler = () => {
-    setOpened(true)
-    setIsRichEditorSelected(true)
-  }
-
-  // サムネイルのための画像を選択するモーダルの表示
-  const thumSelectModalHandler = () => {
-    setOpened(true)
-    setIsThumbnailSelected(true)
-  }
-
-  // 画像選択モーダルの非表示
-  const modalCloseHandler = () => {
-    setOpened(false)
-    setIsRichEditorSelected(false)
-    setIsThumbnailSelected(false)
-  }
-
   // 入力データの保存
   const submit = () => {
     executeMutation({
@@ -286,6 +162,7 @@ const AdminBlogCreate = () => {
         title: form.values.blogTitle,
         slug: form.values.blogSlug,
         thumbnail: selectedThum,
+        contents: editor!.view.dom.innerHTML,
         blog_blog_tags: {
           data: form.values.blogTags.map((blogTag) => {
             return {
