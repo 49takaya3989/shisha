@@ -57,7 +57,7 @@ export const AdminTableBody = () => {
     <tbody>
       {data
         ? data.blog_tags.map((tag) => (
-            <AdminTableBodyTr key={tag.slug}>
+            <AdminTableBodyTr key={tag.id}>
               <td className="flex items-center justify-center">
                 <AdminTableEditBtn href={`./tag/edit/${tag.id}`} />
               </td>

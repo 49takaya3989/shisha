@@ -29,6 +29,7 @@ export type BlogsByPkForAdminBlogEditQuery = {
     thumbnail?: string | null
     blog_blog_tags: Array<{
       __typename?: 'blog_blog_tags'
+      id: number
       blog_tag: {
         __typename?: 'blog_tags'
         id: number
@@ -55,6 +56,7 @@ export type UpdateBlogsByPkForAdminBlogEditMutation = {
     thumbnail?: string | null
     blog_blog_tags: Array<{
       __typename?: 'blog_blog_tags'
+      id: number
       blog_tag: {
         __typename?: 'blog_tags'
         id: number
@@ -117,6 +119,7 @@ export type BlogsFragmentForAdminBlogEditFragment = {
   thumbnail?: string | null
   blog_blog_tags: Array<{
     __typename?: 'blog_blog_tags'
+    id: number
     blog_tag: {
       __typename?: 'blog_tags'
       id: number
@@ -140,6 +143,7 @@ export const BlogsFragmentForAdminBlogEditFragmentDoc = gql`
     contents
     thumbnail
     blog_blog_tags {
+      id
       blog_tag {
         id
         name

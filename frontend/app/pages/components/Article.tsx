@@ -19,6 +19,7 @@ gql`
     contents
     thumbnail
     blog_blog_tags {
+      id
       blog_tag {
         id
         name
@@ -34,7 +35,7 @@ export const BlogArticleForUser = () => {
     <List display="flex" className="flex-wrap gap-12">
       {data
         ? data.blogs.map((blog) => (
-            <List.Item key={blog.id}>
+            <List.Item key={blog.slug}>
               <Link
                 href={`./blog/${blog.id}`}
                 className="transition duration-300 ease-in hover:opacity-80"
@@ -77,7 +78,7 @@ export const BlogArticleForUser = () => {
                   <Group display="flex" className="h-5 overflow-hidden">
                     {blog.blog_blog_tags.map((blog_blog_tag) => (
                       <Badge
-                        key={blog_blog_tag.blog_tag.id}
+                        key={blog_blog_tag.id}
                         color="pink"
                         variant="light"
                       >

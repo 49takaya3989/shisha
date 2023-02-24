@@ -21,6 +21,7 @@ export type GetBlogsForAdminBlogArchiveQuery = {
     updated_at: any
     blog_blog_tags: Array<{
       __typename?: 'blog_blog_tags'
+      id: number
       blog_tag: { __typename?: 'blog_tags'; id: number; name: string }
     }>
   }>
@@ -36,6 +37,7 @@ export type GetBlogsFragmentForAdminBlogArchiveFragment = {
   updated_at: any
   blog_blog_tags: Array<{
     __typename?: 'blog_blog_tags'
+    id: number
     blog_tag: { __typename?: 'blog_tags'; id: number; name: string }
   }>
 }
@@ -62,6 +64,7 @@ export const GetBlogsFragmentForAdminBlogArchiveFragmentDoc = gql`
     contents
     thumbnail
     blog_blog_tags {
+      id
       blog_tag {
         id
         name

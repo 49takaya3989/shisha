@@ -36,15 +36,6 @@ export const useHandleImageWithModal = () => {
     setIsThumbnailSelected(false)
   }
 
-  // リッチテキストに選択した画像を挿入する
-  // const insertRichEditorImgHandler = () => {
-  //   setOpened(false)
-  //   setIsRichEditorSelected(false)
-  //   if (preSelectedModalImage) {
-  //     editor!.chain().focus().setImage({ src: preSelectedModalImage }).run()
-  //   }
-  // }
-
   // リッチテキストに挿入するための画像を選択するモーダルの表示
   const insertRichTextImageHandler = () => {
     setOpened(true)
@@ -75,7 +66,6 @@ export const useHandleImageWithModal = () => {
     setIsRichEditorSelected,
     preSelectImage,
     selectThum,
-    // insertRichEditorImgHandler,
     insertRichTextImageHandler,
     thumSelectModalHandler,
     modalCloseHandler,

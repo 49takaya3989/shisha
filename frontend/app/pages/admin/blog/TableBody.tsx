@@ -24,6 +24,7 @@ gql`
     contents
     thumbnail
     blog_blog_tags {
+      id
       blog_tag {
         id
         name
@@ -69,7 +70,7 @@ export const AdminBlogTableBody = () => {
     <tbody>
       {data
         ? data.blogs.map((blog) => (
-            <AdminTableBodyTr key={blog.slug}>
+            <AdminTableBodyTr key={blog.id}>
               <td width={100} className="justify-center align-middle">
                 <AdminTableEditBtn href={`./edit/${blog.id}`} />
               </td>
@@ -78,11 +79,11 @@ export const AdminBlogTableBody = () => {
               <td width={150}>
                 {blog.blog_blog_tags.map((blog_blog_tag, index) =>
                   index === 0 ? (
-                    <span key={blog_blog_tag.blog_tag.id}>
+                    <span key={blog_blog_tag.id}>
                       {blog_blog_tag.blog_tag.name}
                     </span>
                   ) : (
-                    <span key={blog_blog_tag.blog_tag.id}>
+                    <span key={blog_blog_tag.id}>
                       , {blog_blog_tag.blog_tag.name}
                     </span>
                   )

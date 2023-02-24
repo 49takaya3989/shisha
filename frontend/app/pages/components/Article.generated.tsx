@@ -20,6 +20,7 @@ export type GetBlogsForUserArchiveQuery = {
     thumbnail?: string | null
     blog_blog_tags: Array<{
       __typename?: 'blog_blog_tags'
+      id: number
       blog_tag: { __typename?: 'blog_tags'; id: number; name: string }
     }>
   }>
@@ -34,6 +35,7 @@ export type GetBlogsForUserArchiveFragmentFragment = {
   thumbnail?: string | null
   blog_blog_tags: Array<{
     __typename?: 'blog_blog_tags'
+    id: number
     blog_tag: { __typename?: 'blog_tags'; id: number; name: string }
   }>
 }
@@ -46,6 +48,7 @@ export const GetBlogsForUserArchiveFragmentFragmentDoc = gql`
     contents
     thumbnail
     blog_blog_tags {
+      id
       blog_tag {
         id
         name

@@ -34,6 +34,7 @@ gql`
   }
 
   fragment blogBlogTagsFragment on blog_blog_tags {
+    id
     blog_tag {
       id
       name
@@ -148,7 +149,7 @@ const BlogSpecifiedCategoryForUser = () => {
                     <Group display="flex">
                       {blog.blog_blog_tags.map((blog_blog_tag) => (
                         <Badge
-                          key={blog_blog_tag.blog_tag.id}
+                          key={blog_blog_tag.id}
                           color="pink"
                           variant="light"
                         >

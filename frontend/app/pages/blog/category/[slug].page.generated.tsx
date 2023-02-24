@@ -19,6 +19,7 @@ export type GetBlogsSpecifiedTagSlugQuery = {
     updated_at: any
     blog_blog_tags: Array<{
       __typename?: 'blog_blog_tags'
+      id: number
       blog_tag: { __typename?: 'blog_tags'; id: number; name: string }
     }>
   }>
@@ -42,12 +43,14 @@ export type BlogsSpecifiedTagSlugFragmentFragment = {
   updated_at: any
   blog_blog_tags: Array<{
     __typename?: 'blog_blog_tags'
+    id: number
     blog_tag: { __typename?: 'blog_tags'; id: number; name: string }
   }>
 }
 
 export type BlogBlogTagsFragmentFragment = {
   __typename?: 'blog_blog_tags'
+  id: number
   blog_tag: { __typename?: 'blog_tags'; id: number; name: string }
 }
 
@@ -58,6 +61,7 @@ export type BlogTagsFragmentForSpecifiedBlogCategoryFragment = {
 
 export const BlogBlogTagsFragmentFragmentDoc = gql`
   fragment blogBlogTagsFragment on blog_blog_tags {
+    id
     blog_tag {
       id
       name
