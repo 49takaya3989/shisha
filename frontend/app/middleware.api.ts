@@ -1,13 +1,13 @@
-import { withClerkMiddleware, getAuth } from '@clerk/nextjs/server'
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
+import { withClerkMiddleware, getAuth } from '@clerk/nextjs/server'
 
 // Set the paths that don't require the user to be signed in
 export const privatePaths = ['/admin*', '/sign-up*']
 export const isPrivate = (path: string) => {
   return privatePaths.find((x) =>
-  path.match(new RegExp(`^${x}$`.replace('*$', '($|/)')))
+    path.match(new RegExp(`^${x}$`.replace('*$', '($|/)')))
   )
 }
 
@@ -62,4 +62,6 @@ export default withClerkMiddleware((req: NextRequest) => {
   return NextResponse.next()
 })
 
-export const config = { matcher:  '/((?!_next/image|_next/static|favicon.ico).*)',};
+export const config = {
+  matcher: '/((?!_next/image|_next/static|favicon.ico).*)',
+}
