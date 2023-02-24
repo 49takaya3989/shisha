@@ -229,7 +229,7 @@ const AdminBlogEdit = () => {
       const incrementFilteringTags = form.values.blogTags.filter(
         (el) => blogHasTagArr.indexOf(el) == -1
       )
-      setIncrementTags(() => incrementFilteringTags)
+      setIncrementTags(incrementFilteringTags)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [form.values.blogTags])
@@ -408,7 +408,7 @@ const AdminBlogEdit = () => {
           nothingFound={ADMIN_BLOG_EDIT.INPUT.TAG_SEARCH_NOTHING}
           clearable
           mt="xl"
-          {...form.getInputProps('blogTag')}
+          {...form.getInputProps('blogTags')}
         />
         <div className="mt-6">
           <label>{ADMIN_BLOG_EDIT.INPUT.CONTENTS_LABEL}</label>
@@ -455,7 +455,7 @@ const AdminBlogEdit = () => {
                 className="bg-common-black bg-opacity-10 text-common-black"
                 onClick={insertRichTextImageHandler}
               >
-                Image
+                {ADMIN_BLOG_EDIT.INPUT.EDITOR_IMAGE_BTN}
               </Button>
             </RichTextEditor.Toolbar>
 
@@ -463,7 +463,7 @@ const AdminBlogEdit = () => {
           </RichTextEditor>
         </div>
         <p className="text-right">
-          {editor?.storage.characterCount.characters()}文字
+          {editor?.storage.characterCount.characters()}{ADMIN_BLOG_EDIT.INPUT.EDITOR_TEXT_AMOUNT}
         </p>
 
         <Text>{ADMIN_BLOG_EDIT.INPUT.THUMBNAIL_LABEL}</Text>
@@ -474,7 +474,7 @@ const AdminBlogEdit = () => {
                 className="bg-admin-cancel font-normal leading-none text-common-black"
                 onClick={() => setSelectedThum('')}
               >
-                クリア
+                {ADMIN_BLOG_EDIT.INPUT.THUMBNAIL_CLEAR}
               </Button>
             ) : (
               ''
@@ -483,7 +483,7 @@ const AdminBlogEdit = () => {
               className="bg-admin-base font-normal leading-none text-common-black"
               onClick={thumSelectModalHandler}
             >
-              ファイルを選択
+              {ADMIN_BLOG_EDIT.INPUT.THUMBNAIL_SELECT}
             </Button>
           </Group>
           {selectedThum !== null ? (
@@ -503,8 +503,8 @@ const AdminBlogEdit = () => {
         >
           <Tabs variant="outline" defaultValue="select">
             <Tabs.List>
-              <Tabs.Tab value="select">選択</Tabs.Tab>
-              <Tabs.Tab value="upload">アップロード</Tabs.Tab>
+              <Tabs.Tab value="select">{ADMIN_BLOG_EDIT.INPUT.MODAL_TAB_IMAGE_SELECT}</Tabs.Tab>
+              <Tabs.Tab value="upload">{ADMIN_BLOG_EDIT.INPUT.MODAL_TAB_IMAGE_UPLOAD}</Tabs.Tab>
             </Tabs.List>
 
             <Tabs.Panel value="select" pt="xs">
@@ -533,7 +533,7 @@ const AdminBlogEdit = () => {
                   w={150}
                   className="bg-admin-cancel font-normal leading-none text-common-black"
                 >
-                  取得
+                  {ADMIN_BLOG_EDIT.INPUT.MODAL_IMAGE_GET}
                 </Button>
                 {isThumbnailSelected ? (
                   <Button
@@ -541,7 +541,7 @@ const AdminBlogEdit = () => {
                     w={150}
                     className="bg-admin-base font-normal leading-none text-common-black"
                   >
-                    選択
+                    {ADMIN_BLOG_EDIT.INPUT.MODAL_IMAGE_SELECT}
                   </Button>
                 ) : (
                   ''
@@ -552,7 +552,7 @@ const AdminBlogEdit = () => {
                     w={150}
                     className="bg-admin-base font-normal leading-none text-common-black"
                   >
-                    選択
+                    {ADMIN_BLOG_EDIT.INPUT.MODAL_IMAGE_SELECT}
                   </Button>
                 ) : (
                   ''
@@ -568,7 +568,7 @@ const AdminBlogEdit = () => {
                   previews.length > 0 ? 'h-[200px]' : 'h-[calc(100vh_-_200px)]'
                 }`}
               >
-                <Text align="center">Drop images here</Text>
+                <Text align="center">{ADMIN_BLOG_EDIT.INPUT.MODAL_IMAGE_DROP_OR_CLICK}</Text>
               </Dropzone>
 
               <SimpleGrid
@@ -585,7 +585,7 @@ const AdminBlogEdit = () => {
                   loaderPosition="right"
                   className="bg-admin-base font-normal leading-none text-common-black"
                 >
-                  画像アップロード
+                  {ADMIN_BLOG_EDIT.INPUT.MODAL_IMAGE_UPLOAD}
                 </Button>
               ) : (
                 ''
