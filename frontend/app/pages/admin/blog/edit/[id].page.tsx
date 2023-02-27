@@ -316,10 +316,8 @@ const AdminBlogEdit = () => {
             }
           }),
           on_conflict: {
-            constraint:
-              // Blog_Blog_Tags_Constraint.BlogBlogTagsBlogIdBlogTagIdKey,
-              Blog_Blog_Tags_Constraint.BlogBlogTagsBlogIdBlogTagIdIdKey,
-            update_columns: [Blog_Blog_Tags_Update_Column.BlogId],
+            constraint: Blog_Blog_Tags_Constraint.BlogBlogTagsPkey,
+            update_columns: [Blog_Blog_Tags_Update_Column.BlogTagId],
           },
         }).then((result) => {
           if (result.error) {
@@ -463,7 +461,8 @@ const AdminBlogEdit = () => {
           </RichTextEditor>
         </div>
         <p className="text-right">
-          {editor?.storage.characterCount.characters()}{ADMIN_BLOG_EDIT.INPUT.EDITOR_TEXT_AMOUNT}
+          {editor?.storage.characterCount.characters()}
+          {ADMIN_BLOG_EDIT.INPUT.EDITOR_TEXT_AMOUNT}
         </p>
 
         <Text>{ADMIN_BLOG_EDIT.INPUT.THUMBNAIL_LABEL}</Text>
@@ -503,8 +502,12 @@ const AdminBlogEdit = () => {
         >
           <Tabs variant="outline" defaultValue="select">
             <Tabs.List>
-              <Tabs.Tab value="select">{ADMIN_BLOG_EDIT.INPUT.MODAL_TAB_IMAGE_SELECT}</Tabs.Tab>
-              <Tabs.Tab value="upload">{ADMIN_BLOG_EDIT.INPUT.MODAL_TAB_IMAGE_UPLOAD}</Tabs.Tab>
+              <Tabs.Tab value="select">
+                {ADMIN_BLOG_EDIT.INPUT.MODAL_TAB_IMAGE_SELECT}
+              </Tabs.Tab>
+              <Tabs.Tab value="upload">
+                {ADMIN_BLOG_EDIT.INPUT.MODAL_TAB_IMAGE_UPLOAD}
+              </Tabs.Tab>
             </Tabs.List>
 
             <Tabs.Panel value="select" pt="xs">
@@ -568,7 +571,9 @@ const AdminBlogEdit = () => {
                   previews.length > 0 ? 'h-[200px]' : 'h-[calc(100vh_-_200px)]'
                 }`}
               >
-                <Text align="center">{ADMIN_BLOG_EDIT.INPUT.MODAL_IMAGE_DROP_OR_CLICK}</Text>
+                <Text align="center">
+                  {ADMIN_BLOG_EDIT.INPUT.MODAL_IMAGE_DROP_OR_CLICK}
+                </Text>
               </Dropzone>
 
               <SimpleGrid
