@@ -34,6 +34,9 @@ module.exports = {
         white: '#fff',
         black: '#000',
       },
+      user: {
+        gray: 'rgba(128, 128, 128, .5)',
+      },
       admin: {
         base: '#fdc1c1',
         cancel: 'rgba(59, 130, 246, .4)',
