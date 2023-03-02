@@ -9,14 +9,7 @@ import { gqlClient } from 'src/libs/urql/requests'
 
 const App = ({ Component, pageProps }: AppProps) => {
   return (
-    <ClerkProvider
-      appearance={{
-        elements: {
-          footer: 'hidden',
-        },
-      }}
-      {...pageProps}
-    >
+    <ClerkProvider {...pageProps}>
       <MantineProvider withGlobalStyles withNormalizeCSS>
         <Provider value={gqlClient}>
           <Component {...pageProps} />
