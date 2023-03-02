@@ -4,7 +4,7 @@ import type { NextRequest } from 'next/server'
 import { withClerkMiddleware, getAuth } from '@clerk/nextjs/server'
 
 // Set the paths that don't require the user to be signed in
-export const privatePaths = ['/admin*', '/sign-up*']
+export const privatePaths = ['/admin*']
 export const isPrivate = (path: string) => {
   return privatePaths.find((x) =>
     path.match(new RegExp(`^${x}$`.replace('*$', '($|/)')))
