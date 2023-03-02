@@ -1,5 +1,7 @@
 export const ROUTE = {
   HOME: '/',
+  SIGN_IN: '/sign-in',
+  SIGN_UP: '/sign-up',
   ADMIN_DASHBOARD: '/admin/dashboard/',
   ADMIN_BLOG_ARCHIVE: '/admin/blog/archive/',
   ADMIN_BLOG_CREATE: '/admin/blog/create/',
