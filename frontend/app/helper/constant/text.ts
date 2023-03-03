@@ -284,3 +284,17 @@ export const ADMIN_RECIPE_TAG_EDIT = {
   },
   SUBMIT: '更新する',
 }
+
+export const USER_COMMENT_FORM = {
+  INPUT: {
+    NAME_LABEL: 'ニックネーム',
+    NAME_PLACEHOLDER: 'ニックネーム',
+    COMMENT_LABEL: 'コメント',
+    COMMENT_PLACEHOLDER: 'コメントを入力してください',
+    SUBMIT: 'コメントする',
+    ERROR: {
+      NAME: '件名を入力してください',
+      COMMENT: 'コメントを入力してください',
+    },
+  },
+}
