@@ -5,7 +5,6 @@ import { gql } from 'urql'
 
 import { useBlogsForUserQuery } from 'pages/components/NewBlogLimited3.generated'
 
-
 gql`
   query blogsForUser {
     blogs(limit: 3) {
