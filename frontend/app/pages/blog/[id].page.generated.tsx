@@ -27,6 +27,13 @@ export type BlogsByPkForUserBlogSingleQuery = {
         slug: string
       }
     }>
+    blog_comments: Array<{
+      __typename?: 'blog_comments'
+      id: number
+      comment: string
+      updated_at: any
+      user: { __typename?: 'users'; uuid: string }
+    }>
   } | null
 }
 
@@ -46,6 +53,13 @@ export type BlogsFragmentForUserBlogSingleFragment = {
       slug: string
     }
   }>
+  blog_comments: Array<{
+    __typename?: 'blog_comments'
+    id: number
+    comment: string
+    updated_at: any
+    user: { __typename?: 'users'; uuid: string }
+  }>
 }
 
 export const BlogsFragmentForUserBlogSingleFragmentDoc = gql`
@@ -60,6 +74,14 @@ export const BlogsFragmentForUserBlogSingleFragmentDoc = gql`
         id
         name
         slug
+      }
+    }
+    blog_comments {
+      id
+      comment
+      updated_at
+      user {
+        uuid
       }
     }
   }

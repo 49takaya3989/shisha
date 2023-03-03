@@ -3,11 +3,13 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 
-import { Grid, Group, Image, List, Title } from '@mantine/core'
+import { Box, Flex, Grid, Group, Image, List, Text, Title } from '@mantine/core'
 import dayjs from 'dayjs'
 import { gql } from 'urql'
 
 import { useBlogsByPkForUserBlogSingleQuery } from 'pages/blog/[id].page.generated'
+import { BlogCommentItem } from 'pages/components/BlogCommentItem'
+import { UserCommentForm } from 'pages/components/CommentForm'
 import { NewBlogLimited3 } from 'pages/components/NewBlogLimited3'
 import { UserLayout } from 'pages/layout/Layout'
 
@@ -29,6 +31,14 @@ gql`
         id
         name
         slug
+      }
+    }
+    blog_comments {
+      id
+      comment
+      updated_at
+      user {
+        uuid
       }
     }
   }
@@ -105,6 +115,17 @@ const BlogSingleForUser = () => {
                 className="blog-content w-full"
               ></div>
             </Group>
+            <List mt={60}>
+              {data?.blogs_by_pk?.blog_comments.map((comment) => (
+                <BlogCommentItem
+                  key={comment.id}
+                  date={comment.updated_at}
+                  user={comment.user.uuid}
+                  comment={comment.comment}
+                />
+              ))}
+            </List>
+            <UserCommentForm blogId={String(editId)} />
           </Grid.Col>
           <Grid.Col span={3}>
             <NewBlogLimited3 />

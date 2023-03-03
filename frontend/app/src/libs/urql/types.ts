@@ -16,6 +16,8 @@ export type Scalars = {
   Boolean: boolean
   Int: number
   Float: number
+  time: any
+  timestamp: any
   timestamptz: any
 }
 
@@ -405,6 +407,396 @@ export type Blog_Blog_Tags_Variance_Order_By = {
   id?: InputMaybe<Order_By>
 }
 
+/** columns and relationships of "blog_comments" */
+export type Blog_Comments = {
+  __typename?: 'blog_comments'
+  /** An object relationship */
+  blog: Blogs
+  blog_id: Scalars['Int']
+  comment: Scalars['String']
+  created_at: Scalars['timestamp']
+  deleted_at?: Maybe<Scalars['time']>
+  id: Scalars['Int']
+  updated_at: Scalars['timestamp']
+  /** An object relationship */
+  user: Users
+  user_id: Scalars['Int']
+}
+
+/** aggregated selection of "blog_comments" */
+export type Blog_Comments_Aggregate = {
+  __typename?: 'blog_comments_aggregate'
+  aggregate?: Maybe<Blog_Comments_Aggregate_Fields>
+  nodes: Array<Blog_Comments>
+}
+
+export type Blog_Comments_Aggregate_Bool_Exp = {
+  count?: InputMaybe<Blog_Comments_Aggregate_Bool_Exp_Count>
+}
+
+export type Blog_Comments_Aggregate_Bool_Exp_Count = {
+  arguments?: InputMaybe<Array<Blog_Comments_Select_Column>>
+  distinct?: InputMaybe<Scalars['Boolean']>
+  filter?: InputMaybe<Blog_Comments_Bool_Exp>
+  predicate: Int_Comparison_Exp
+}
+
+/** aggregate fields of "blog_comments" */
+export type Blog_Comments_Aggregate_Fields = {
+  __typename?: 'blog_comments_aggregate_fields'
+  avg?: Maybe<Blog_Comments_Avg_Fields>
+  count: Scalars['Int']
+  max?: Maybe<Blog_Comments_Max_Fields>
+  min?: Maybe<Blog_Comments_Min_Fields>
+  stddev?: Maybe<Blog_Comments_Stddev_Fields>
+  stddev_pop?: Maybe<Blog_Comments_Stddev_Pop_Fields>
+  stddev_samp?: Maybe<Blog_Comments_Stddev_Samp_Fields>
+  sum?: Maybe<Blog_Comments_Sum_Fields>
+  var_pop?: Maybe<Blog_Comments_Var_Pop_Fields>
+  var_samp?: Maybe<Blog_Comments_Var_Samp_Fields>
+  variance?: Maybe<Blog_Comments_Variance_Fields>
+}
+
+/** aggregate fields of "blog_comments" */
+export type Blog_Comments_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Blog_Comments_Select_Column>>
+  distinct?: InputMaybe<Scalars['Boolean']>
+}
+
+/** order by aggregate values of table "blog_comments" */
+export type Blog_Comments_Aggregate_Order_By = {
+  avg?: InputMaybe<Blog_Comments_Avg_Order_By>
+  count?: InputMaybe<Order_By>
+  max?: InputMaybe<Blog_Comments_Max_Order_By>
+  min?: InputMaybe<Blog_Comments_Min_Order_By>
+  stddev?: InputMaybe<Blog_Comments_Stddev_Order_By>
+  stddev_pop?: InputMaybe<Blog_Comments_Stddev_Pop_Order_By>
+  stddev_samp?: InputMaybe<Blog_Comments_Stddev_Samp_Order_By>
+  sum?: InputMaybe<Blog_Comments_Sum_Order_By>
+  var_pop?: InputMaybe<Blog_Comments_Var_Pop_Order_By>
+  var_samp?: InputMaybe<Blog_Comments_Var_Samp_Order_By>
+  variance?: InputMaybe<Blog_Comments_Variance_Order_By>
+}
+
+/** input type for inserting array relation for remote table "blog_comments" */
+export type Blog_Comments_Arr_Rel_Insert_Input = {
+  data: Array<Blog_Comments_Insert_Input>
+  /** upsert condition */
+  on_conflict?: InputMaybe<Blog_Comments_On_Conflict>
+}
+
+/** aggregate avg on columns */
+export type Blog_Comments_Avg_Fields = {
+  __typename?: 'blog_comments_avg_fields'
+  blog_id?: Maybe<Scalars['Float']>
+  id?: Maybe<Scalars['Float']>
+  user_id?: Maybe<Scalars['Float']>
+}
+
+/** order by avg() on columns of table "blog_comments" */
+export type Blog_Comments_Avg_Order_By = {
+  blog_id?: InputMaybe<Order_By>
+  id?: InputMaybe<Order_By>
+  user_id?: InputMaybe<Order_By>
+}
+
+/** Boolean expression to filter rows from the table "blog_comments". All fields are combined with a logical 'AND'. */
+export type Blog_Comments_Bool_Exp = {
+  _and?: InputMaybe<Array<Blog_Comments_Bool_Exp>>
+  _not?: InputMaybe<Blog_Comments_Bool_Exp>
+  _or?: InputMaybe<Array<Blog_Comments_Bool_Exp>>
+  blog?: InputMaybe<Blogs_Bool_Exp>
+  blog_id?: InputMaybe<Int_Comparison_Exp>
+  comment?: InputMaybe<String_Comparison_Exp>
+  created_at?: InputMaybe<Timestamp_Comparison_Exp>
+  deleted_at?: InputMaybe<Time_Comparison_Exp>
+  id?: InputMaybe<Int_Comparison_Exp>
+  updated_at?: InputMaybe<Timestamp_Comparison_Exp>
+  user?: InputMaybe<Users_Bool_Exp>
+  user_id?: InputMaybe<Int_Comparison_Exp>
+}
+
+/** unique or primary key constraints on table "blog_comments" */
+export enum Blog_Comments_Constraint {
+  /** unique or primary key constraint on columns "id" */
+  BlogCommentsPkey = 'blog_comments_pkey',
+}
+
+/** input type for incrementing numeric columns in table "blog_comments" */
+export type Blog_Comments_Inc_Input = {
+  blog_id?: InputMaybe<Scalars['Int']>
+  id?: InputMaybe<Scalars['Int']>
+  user_id?: InputMaybe<Scalars['Int']>
+}
+
+/** input type for inserting data into table "blog_comments" */
+export type Blog_Comments_Insert_Input = {
+  blog?: InputMaybe<Blogs_Obj_Rel_Insert_Input>
+  blog_id?: InputMaybe<Scalars['Int']>
+  comment?: InputMaybe<Scalars['String']>
+  created_at?: InputMaybe<Scalars['timestamp']>
+  deleted_at?: InputMaybe<Scalars['time']>
+  id?: InputMaybe<Scalars['Int']>
+  updated_at?: InputMaybe<Scalars['timestamp']>
+  user?: InputMaybe<Users_Obj_Rel_Insert_Input>
+  user_id?: InputMaybe<Scalars['Int']>
+}
+
+/** aggregate max on columns */
+export type Blog_Comments_Max_Fields = {
+  __typename?: 'blog_comments_max_fields'
+  blog_id?: Maybe<Scalars['Int']>
+  comment?: Maybe<Scalars['String']>
+  created_at?: Maybe<Scalars['timestamp']>
+  id?: Maybe<Scalars['Int']>
+  updated_at?: Maybe<Scalars['timestamp']>
+  user_id?: Maybe<Scalars['Int']>
+}
+
+/** order by max() on columns of table "blog_comments" */
+export type Blog_Comments_Max_Order_By = {
+  blog_id?: InputMaybe<Order_By>
+  comment?: InputMaybe<Order_By>
+  created_at?: InputMaybe<Order_By>
+  id?: InputMaybe<Order_By>
+  updated_at?: InputMaybe<Order_By>
+  user_id?: InputMaybe<Order_By>
+}
+
+/** aggregate min on columns */
+export type Blog_Comments_Min_Fields = {
+  __typename?: 'blog_comments_min_fields'
+  blog_id?: Maybe<Scalars['Int']>
+  comment?: Maybe<Scalars['String']>
+  created_at?: Maybe<Scalars['timestamp']>
+  id?: Maybe<Scalars['Int']>
+  updated_at?: Maybe<Scalars['timestamp']>
+  user_id?: Maybe<Scalars['Int']>
+}
+
+/** order by min() on columns of table "blog_comments" */
+export type Blog_Comments_Min_Order_By = {
+  blog_id?: InputMaybe<Order_By>
+  comment?: InputMaybe<Order_By>
+  created_at?: InputMaybe<Order_By>
+  id?: InputMaybe<Order_By>
+  updated_at?: InputMaybe<Order_By>
+  user_id?: InputMaybe<Order_By>
+}
+
+/** response of any mutation on the table "blog_comments" */
+export type Blog_Comments_Mutation_Response = {
+  __typename?: 'blog_comments_mutation_response'
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int']
+  /** data from the rows affected by the mutation */
+  returning: Array<Blog_Comments>
+}
+
+/** on_conflict condition type for table "blog_comments" */
+export type Blog_Comments_On_Conflict = {
+  constraint: Blog_Comments_Constraint
+  update_columns?: Array<Blog_Comments_Update_Column>
+  where?: InputMaybe<Blog_Comments_Bool_Exp>
+}
+
+/** Ordering options when selecting data from "blog_comments". */
+export type Blog_Comments_Order_By = {
+  blog?: InputMaybe<Blogs_Order_By>
+  blog_id?: InputMaybe<Order_By>
+  comment?: InputMaybe<Order_By>
+  created_at?: InputMaybe<Order_By>
+  deleted_at?: InputMaybe<Order_By>
+  id?: InputMaybe<Order_By>
+  updated_at?: InputMaybe<Order_By>
+  user?: InputMaybe<Users_Order_By>
+  user_id?: InputMaybe<Order_By>
+}
+
+/** primary key columns input for table: blog_comments */
+export type Blog_Comments_Pk_Columns_Input = {
+  id: Scalars['Int']
+}
+
+/** select columns of table "blog_comments" */
+export enum Blog_Comments_Select_Column {
+  /** column name */
+  BlogId = 'blog_id',
+  /** column name */
+  Comment = 'comment',
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  DeletedAt = 'deleted_at',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  UpdatedAt = 'updated_at',
+  /** column name */
+  UserId = 'user_id',
+}
+
+/** input type for updating data in table "blog_comments" */
+export type Blog_Comments_Set_Input = {
+  blog_id?: InputMaybe<Scalars['Int']>
+  comment?: InputMaybe<Scalars['String']>
+  created_at?: InputMaybe<Scalars['timestamp']>
+  deleted_at?: InputMaybe<Scalars['time']>
+  id?: InputMaybe<Scalars['Int']>
+  updated_at?: InputMaybe<Scalars['timestamp']>
+  user_id?: InputMaybe<Scalars['Int']>
+}
+
+/** aggregate stddev on columns */
+export type Blog_Comments_Stddev_Fields = {
+  __typename?: 'blog_comments_stddev_fields'
+  blog_id?: Maybe<Scalars['Float']>
+  id?: Maybe<Scalars['Float']>
+  user_id?: Maybe<Scalars['Float']>
+}
+
+/** order by stddev() on columns of table "blog_comments" */
+export type Blog_Comments_Stddev_Order_By = {
+  blog_id?: InputMaybe<Order_By>
+  id?: InputMaybe<Order_By>
+  user_id?: InputMaybe<Order_By>
+}
+
+/** aggregate stddev_pop on columns */
+export type Blog_Comments_Stddev_Pop_Fields = {
+  __typename?: 'blog_comments_stddev_pop_fields'
+  blog_id?: Maybe<Scalars['Float']>
+  id?: Maybe<Scalars['Float']>
+  user_id?: Maybe<Scalars['Float']>
+}
+
+/** order by stddev_pop() on columns of table "blog_comments" */
+export type Blog_Comments_Stddev_Pop_Order_By = {
+  blog_id?: InputMaybe<Order_By>
+  id?: InputMaybe<Order_By>
+  user_id?: InputMaybe<Order_By>
+}
+
+/** aggregate stddev_samp on columns */
+export type Blog_Comments_Stddev_Samp_Fields = {
+  __typename?: 'blog_comments_stddev_samp_fields'
+  blog_id?: Maybe<Scalars['Float']>
+  id?: Maybe<Scalars['Float']>
+  user_id?: Maybe<Scalars['Float']>
+}
+
+/** order by stddev_samp() on columns of table "blog_comments" */
+export type Blog_Comments_Stddev_Samp_Order_By = {
+  blog_id?: InputMaybe<Order_By>
+  id?: InputMaybe<Order_By>
+  user_id?: InputMaybe<Order_By>
+}
+
+/** Streaming cursor of the table "blog_comments" */
+export type Blog_Comments_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Blog_Comments_Stream_Cursor_Value_Input
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>
+}
+
+/** Initial value of the column from where the streaming should start */
+export type Blog_Comments_Stream_Cursor_Value_Input = {
+  blog_id?: InputMaybe<Scalars['Int']>
+  comment?: InputMaybe<Scalars['String']>
+  created_at?: InputMaybe<Scalars['timestamp']>
+  deleted_at?: InputMaybe<Scalars['time']>
+  id?: InputMaybe<Scalars['Int']>
+  updated_at?: InputMaybe<Scalars['timestamp']>
+  user_id?: InputMaybe<Scalars['Int']>
+}
+
+/** aggregate sum on columns */
+export type Blog_Comments_Sum_Fields = {
+  __typename?: 'blog_comments_sum_fields'
+  blog_id?: Maybe<Scalars['Int']>
+  id?: Maybe<Scalars['Int']>
+  user_id?: Maybe<Scalars['Int']>
+}
+
+/** order by sum() on columns of table "blog_comments" */
+export type Blog_Comments_Sum_Order_By = {
+  blog_id?: InputMaybe<Order_By>
+  id?: InputMaybe<Order_By>
+  user_id?: InputMaybe<Order_By>
+}
+
+/** update columns of table "blog_comments" */
+export enum Blog_Comments_Update_Column {
+  /** column name */
+  BlogId = 'blog_id',
+  /** column name */
+  Comment = 'comment',
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  DeletedAt = 'deleted_at',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  UpdatedAt = 'updated_at',
+  /** column name */
+  UserId = 'user_id',
+}
+
+export type Blog_Comments_Updates = {
+  /** increments the numeric columns with given value of the filtered values */
+  _inc?: InputMaybe<Blog_Comments_Inc_Input>
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Blog_Comments_Set_Input>
+  where: Blog_Comments_Bool_Exp
+}
+
+/** aggregate var_pop on columns */
+export type Blog_Comments_Var_Pop_Fields = {
+  __typename?: 'blog_comments_var_pop_fields'
+  blog_id?: Maybe<Scalars['Float']>
+  id?: Maybe<Scalars['Float']>
+  user_id?: Maybe<Scalars['Float']>
+}
+
+/** order by var_pop() on columns of table "blog_comments" */
+export type Blog_Comments_Var_Pop_Order_By = {
+  blog_id?: InputMaybe<Order_By>
+  id?: InputMaybe<Order_By>
+  user_id?: InputMaybe<Order_By>
+}
+
+/** aggregate var_samp on columns */
+export type Blog_Comments_Var_Samp_Fields = {
+  __typename?: 'blog_comments_var_samp_fields'
+  blog_id?: Maybe<Scalars['Float']>
+  id?: Maybe<Scalars['Float']>
+  user_id?: Maybe<Scalars['Float']>
+}
+
+/** order by var_samp() on columns of table "blog_comments" */
+export type Blog_Comments_Var_Samp_Order_By = {
+  blog_id?: InputMaybe<Order_By>
+  id?: InputMaybe<Order_By>
+  user_id?: InputMaybe<Order_By>
+}
+
+/** aggregate variance on columns */
+export type Blog_Comments_Variance_Fields = {
+  __typename?: 'blog_comments_variance_fields'
+  blog_id?: Maybe<Scalars['Float']>
+  id?: Maybe<Scalars['Float']>
+  user_id?: Maybe<Scalars['Float']>
+}
+
+/** order by variance() on columns of table "blog_comments" */
+export type Blog_Comments_Variance_Order_By = {
+  blog_id?: InputMaybe<Order_By>
+  id?: InputMaybe<Order_By>
+  user_id?: InputMaybe<Order_By>
+}
+
 /** columns and relationships of "blog_tags" */
 export type Blog_Tags = {
   __typename?: 'blog_tags'
@@ -658,6 +1050,10 @@ export type Blogs = {
   blog_blog_tags: Array<Blog_Blog_Tags>
   /** An aggregate relationship */
   blog_blog_tags_aggregate: Blog_Blog_Tags_Aggregate
+  /** An array relationship */
+  blog_comments: Array<Blog_Comments>
+  /** An aggregate relationship */
+  blog_comments_aggregate: Blog_Comments_Aggregate
   contents?: Maybe<Scalars['String']>
   created_at: Scalars['timestamptz']
   id: Scalars['Int']
@@ -683,6 +1079,24 @@ export type BlogsBlog_Blog_Tags_AggregateArgs = {
   offset?: InputMaybe<Scalars['Int']>
   order_by?: InputMaybe<Array<Blog_Blog_Tags_Order_By>>
   where?: InputMaybe<Blog_Blog_Tags_Bool_Exp>
+}
+
+/** ブログの投稿テーブル */
+export type BlogsBlog_CommentsArgs = {
+  distinct_on?: InputMaybe<Array<Blog_Comments_Select_Column>>
+  limit?: InputMaybe<Scalars['Int']>
+  offset?: InputMaybe<Scalars['Int']>
+  order_by?: InputMaybe<Array<Blog_Comments_Order_By>>
+  where?: InputMaybe<Blog_Comments_Bool_Exp>
+}
+
+/** ブログの投稿テーブル */
+export type BlogsBlog_Comments_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Blog_Comments_Select_Column>>
+  limit?: InputMaybe<Scalars['Int']>
+  offset?: InputMaybe<Scalars['Int']>
+  order_by?: InputMaybe<Array<Blog_Comments_Order_By>>
+  where?: InputMaybe<Blog_Comments_Bool_Exp>
 }
 
 /** aggregated selection of "blogs" */
@@ -727,6 +1141,8 @@ export type Blogs_Bool_Exp = {
   _or?: InputMaybe<Array<Blogs_Bool_Exp>>
   blog_blog_tags?: InputMaybe<Blog_Blog_Tags_Bool_Exp>
   blog_blog_tags_aggregate?: InputMaybe<Blog_Blog_Tags_Aggregate_Bool_Exp>
+  blog_comments?: InputMaybe<Blog_Comments_Bool_Exp>
+  blog_comments_aggregate?: InputMaybe<Blog_Comments_Aggregate_Bool_Exp>
   contents?: InputMaybe<String_Comparison_Exp>
   created_at?: InputMaybe<Timestamptz_Comparison_Exp>
   id?: InputMaybe<Int_Comparison_Exp>
@@ -754,6 +1170,7 @@ export type Blogs_Inc_Input = {
 /** input type for inserting data into table "blogs" */
 export type Blogs_Insert_Input = {
   blog_blog_tags?: InputMaybe<Blog_Blog_Tags_Arr_Rel_Insert_Input>
+  blog_comments?: InputMaybe<Blog_Comments_Arr_Rel_Insert_Input>
   contents?: InputMaybe<Scalars['String']>
   created_at?: InputMaybe<Scalars['timestamptz']>
   id?: InputMaybe<Scalars['Int']>
@@ -813,6 +1230,7 @@ export type Blogs_On_Conflict = {
 /** Ordering options when selecting data from "blogs". */
 export type Blogs_Order_By = {
   blog_blog_tags_aggregate?: InputMaybe<Blog_Blog_Tags_Aggregate_Order_By>
+  blog_comments_aggregate?: InputMaybe<Blog_Comments_Aggregate_Order_By>
   contents?: InputMaybe<Order_By>
   created_at?: InputMaybe<Order_By>
   id?: InputMaybe<Order_By>
@@ -958,6 +1376,10 @@ export type Mutation_Root = {
   delete_blog_blog_tags?: Maybe<Blog_Blog_Tags_Mutation_Response>
   /** delete single row from the table: "blog_blog_tags" */
   delete_blog_blog_tags_by_pk?: Maybe<Blog_Blog_Tags>
+  /** delete data from the table: "blog_comments" */
+  delete_blog_comments?: Maybe<Blog_Comments_Mutation_Response>
+  /** delete single row from the table: "blog_comments" */
+  delete_blog_comments_by_pk?: Maybe<Blog_Comments>
   /** delete data from the table: "blog_tags" */
   delete_blog_tags?: Maybe<Blog_Tags_Mutation_Response>
   /** delete single row from the table: "blog_tags" */
@@ -966,10 +1388,18 @@ export type Mutation_Root = {
   delete_blogs?: Maybe<Blogs_Mutation_Response>
   /** delete single row from the table: "blogs" */
   delete_blogs_by_pk?: Maybe<Blogs>
+  /** delete data from the table: "users" */
+  delete_users?: Maybe<Users_Mutation_Response>
+  /** delete single row from the table: "users" */
+  delete_users_by_pk?: Maybe<Users>
   /** insert data into the table: "blog_blog_tags" */
   insert_blog_blog_tags?: Maybe<Blog_Blog_Tags_Mutation_Response>
   /** insert a single row into the table: "blog_blog_tags" */
   insert_blog_blog_tags_one?: Maybe<Blog_Blog_Tags>
+  /** insert data into the table: "blog_comments" */
+  insert_blog_comments?: Maybe<Blog_Comments_Mutation_Response>
+  /** insert a single row into the table: "blog_comments" */
+  insert_blog_comments_one?: Maybe<Blog_Comments>
   /** insert data into the table: "blog_tags" */
   insert_blog_tags?: Maybe<Blog_Tags_Mutation_Response>
   /** insert a single row into the table: "blog_tags" */
@@ -978,6 +1408,10 @@ export type Mutation_Root = {
   insert_blogs?: Maybe<Blogs_Mutation_Response>
   /** insert a single row into the table: "blogs" */
   insert_blogs_one?: Maybe<Blogs>
+  /** insert data into the table: "users" */
+  insert_users?: Maybe<Users_Mutation_Response>
+  /** insert a single row into the table: "users" */
+  insert_users_one?: Maybe<Users>
   /** update data of the table: "blog_blog_tags" */
   update_blog_blog_tags?: Maybe<Blog_Blog_Tags_Mutation_Response>
   /** update single row of the table: "blog_blog_tags" */
@@ -985,6 +1419,14 @@ export type Mutation_Root = {
   /** update multiples rows of table: "blog_blog_tags" */
   update_blog_blog_tags_many?: Maybe<
     Array<Maybe<Blog_Blog_Tags_Mutation_Response>>
+  >
+  /** update data of the table: "blog_comments" */
+  update_blog_comments?: Maybe<Blog_Comments_Mutation_Response>
+  /** update single row of the table: "blog_comments" */
+  update_blog_comments_by_pk?: Maybe<Blog_Comments>
+  /** update multiples rows of table: "blog_comments" */
+  update_blog_comments_many?: Maybe<
+    Array<Maybe<Blog_Comments_Mutation_Response>>
   >
   /** update data of the table: "blog_tags" */
   update_blog_tags?: Maybe<Blog_Tags_Mutation_Response>
@@ -998,6 +1440,12 @@ export type Mutation_Root = {
   update_blogs_by_pk?: Maybe<Blogs>
   /** update multiples rows of table: "blogs" */
   update_blogs_many?: Maybe<Array<Maybe<Blogs_Mutation_Response>>>
+  /** update data of the table: "users" */
+  update_users?: Maybe<Users_Mutation_Response>
+  /** update single row of the table: "users" */
+  update_users_by_pk?: Maybe<Users>
+  /** update multiples rows of table: "users" */
+  update_users_many?: Maybe<Array<Maybe<Users_Mutation_Response>>>
 }
 
 /** mutation root */
@@ -1007,6 +1455,16 @@ export type Mutation_RootDelete_Blog_Blog_TagsArgs = {
 
 /** mutation root */
 export type Mutation_RootDelete_Blog_Blog_Tags_By_PkArgs = {
+  id: Scalars['Int']
+}
+
+/** mutation root */
+export type Mutation_RootDelete_Blog_CommentsArgs = {
+  where: Blog_Comments_Bool_Exp
+}
+
+/** mutation root */
+export type Mutation_RootDelete_Blog_Comments_By_PkArgs = {
   id: Scalars['Int']
 }
 
@@ -1031,6 +1489,16 @@ export type Mutation_RootDelete_Blogs_By_PkArgs = {
 }
 
 /** mutation root */
+export type Mutation_RootDelete_UsersArgs = {
+  where: Users_Bool_Exp
+}
+
+/** mutation root */
+export type Mutation_RootDelete_Users_By_PkArgs = {
+  id: Scalars['Int']
+}
+
+/** mutation root */
 export type Mutation_RootInsert_Blog_Blog_TagsArgs = {
   objects: Array<Blog_Blog_Tags_Insert_Input>
   on_conflict?: InputMaybe<Blog_Blog_Tags_On_Conflict>
@@ -1040,6 +1508,18 @@ export type Mutation_RootInsert_Blog_Blog_TagsArgs = {
 export type Mutation_RootInsert_Blog_Blog_Tags_OneArgs = {
   object: Blog_Blog_Tags_Insert_Input
   on_conflict?: InputMaybe<Blog_Blog_Tags_On_Conflict>
+}
+
+/** mutation root */
+export type Mutation_RootInsert_Blog_CommentsArgs = {
+  objects: Array<Blog_Comments_Insert_Input>
+  on_conflict?: InputMaybe<Blog_Comments_On_Conflict>
+}
+
+/** mutation root */
+export type Mutation_RootInsert_Blog_Comments_OneArgs = {
+  object: Blog_Comments_Insert_Input
+  on_conflict?: InputMaybe<Blog_Comments_On_Conflict>
 }
 
 /** mutation root */
@@ -1067,6 +1547,18 @@ export type Mutation_RootInsert_Blogs_OneArgs = {
 }
 
 /** mutation root */
+export type Mutation_RootInsert_UsersArgs = {
+  objects: Array<Users_Insert_Input>
+  on_conflict?: InputMaybe<Users_On_Conflict>
+}
+
+/** mutation root */
+export type Mutation_RootInsert_Users_OneArgs = {
+  object: Users_Insert_Input
+  on_conflict?: InputMaybe<Users_On_Conflict>
+}
+
+/** mutation root */
 export type Mutation_RootUpdate_Blog_Blog_TagsArgs = {
   _inc?: InputMaybe<Blog_Blog_Tags_Inc_Input>
   _set?: InputMaybe<Blog_Blog_Tags_Set_Input>
@@ -1083,6 +1575,25 @@ export type Mutation_RootUpdate_Blog_Blog_Tags_By_PkArgs = {
 /** mutation root */
 export type Mutation_RootUpdate_Blog_Blog_Tags_ManyArgs = {
   updates: Array<Blog_Blog_Tags_Updates>
+}
+
+/** mutation root */
+export type Mutation_RootUpdate_Blog_CommentsArgs = {
+  _inc?: InputMaybe<Blog_Comments_Inc_Input>
+  _set?: InputMaybe<Blog_Comments_Set_Input>
+  where: Blog_Comments_Bool_Exp
+}
+
+/** mutation root */
+export type Mutation_RootUpdate_Blog_Comments_By_PkArgs = {
+  _inc?: InputMaybe<Blog_Comments_Inc_Input>
+  _set?: InputMaybe<Blog_Comments_Set_Input>
+  pk_columns: Blog_Comments_Pk_Columns_Input
+}
+
+/** mutation root */
+export type Mutation_RootUpdate_Blog_Comments_ManyArgs = {
+  updates: Array<Blog_Comments_Updates>
 }
 
 /** mutation root */
@@ -1123,6 +1634,25 @@ export type Mutation_RootUpdate_Blogs_ManyArgs = {
   updates: Array<Blogs_Updates>
 }
 
+/** mutation root */
+export type Mutation_RootUpdate_UsersArgs = {
+  _inc?: InputMaybe<Users_Inc_Input>
+  _set?: InputMaybe<Users_Set_Input>
+  where: Users_Bool_Exp
+}
+
+/** mutation root */
+export type Mutation_RootUpdate_Users_By_PkArgs = {
+  _inc?: InputMaybe<Users_Inc_Input>
+  _set?: InputMaybe<Users_Set_Input>
+  pk_columns: Users_Pk_Columns_Input
+}
+
+/** mutation root */
+export type Mutation_RootUpdate_Users_ManyArgs = {
+  updates: Array<Users_Updates>
+}
+
 /** column ordering options */
 export enum Order_By {
   /** in ascending order, nulls last */
@@ -1147,6 +1677,12 @@ export type Query_Root = {
   blog_blog_tags_aggregate: Blog_Blog_Tags_Aggregate
   /** fetch data from the table: "blog_blog_tags" using primary key columns */
   blog_blog_tags_by_pk?: Maybe<Blog_Blog_Tags>
+  /** An array relationship */
+  blog_comments: Array<Blog_Comments>
+  /** An aggregate relationship */
+  blog_comments_aggregate: Blog_Comments_Aggregate
+  /** fetch data from the table: "blog_comments" using primary key columns */
+  blog_comments_by_pk?: Maybe<Blog_Comments>
   /** fetch data from the table: "blog_tags" */
   blog_tags: Array<Blog_Tags>
   /** fetch aggregated fields from the table: "blog_tags" */
@@ -1159,6 +1695,12 @@ export type Query_Root = {
   blogs_aggregate: Blogs_Aggregate
   /** fetch data from the table: "blogs" using primary key columns */
   blogs_by_pk?: Maybe<Blogs>
+  /** fetch data from the table: "users" */
+  users: Array<Users>
+  /** fetch aggregated fields from the table: "users" */
+  users_aggregate: Users_Aggregate
+  /** fetch data from the table: "users" using primary key columns */
+  users_by_pk?: Maybe<Users>
 }
 
 export type Query_RootBlog_Blog_TagsArgs = {
@@ -1178,6 +1720,26 @@ export type Query_RootBlog_Blog_Tags_AggregateArgs = {
 }
 
 export type Query_RootBlog_Blog_Tags_By_PkArgs = {
+  id: Scalars['Int']
+}
+
+export type Query_RootBlog_CommentsArgs = {
+  distinct_on?: InputMaybe<Array<Blog_Comments_Select_Column>>
+  limit?: InputMaybe<Scalars['Int']>
+  offset?: InputMaybe<Scalars['Int']>
+  order_by?: InputMaybe<Array<Blog_Comments_Order_By>>
+  where?: InputMaybe<Blog_Comments_Bool_Exp>
+}
+
+export type Query_RootBlog_Comments_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Blog_Comments_Select_Column>>
+  limit?: InputMaybe<Scalars['Int']>
+  offset?: InputMaybe<Scalars['Int']>
+  order_by?: InputMaybe<Array<Blog_Comments_Order_By>>
+  where?: InputMaybe<Blog_Comments_Bool_Exp>
+}
+
+export type Query_RootBlog_Comments_By_PkArgs = {
   id: Scalars['Int']
 }
 
@@ -1221,6 +1783,26 @@ export type Query_RootBlogs_By_PkArgs = {
   id: Scalars['Int']
 }
 
+export type Query_RootUsersArgs = {
+  distinct_on?: InputMaybe<Array<Users_Select_Column>>
+  limit?: InputMaybe<Scalars['Int']>
+  offset?: InputMaybe<Scalars['Int']>
+  order_by?: InputMaybe<Array<Users_Order_By>>
+  where?: InputMaybe<Users_Bool_Exp>
+}
+
+export type Query_RootUsers_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Users_Select_Column>>
+  limit?: InputMaybe<Scalars['Int']>
+  offset?: InputMaybe<Scalars['Int']>
+  order_by?: InputMaybe<Array<Users_Order_By>>
+  where?: InputMaybe<Users_Bool_Exp>
+}
+
+export type Query_RootUsers_By_PkArgs = {
+  id: Scalars['Int']
+}
+
 export type Subscription_Root = {
   __typename?: 'subscription_root'
   /** An array relationship */
@@ -1231,6 +1813,14 @@ export type Subscription_Root = {
   blog_blog_tags_by_pk?: Maybe<Blog_Blog_Tags>
   /** fetch data from the table in a streaming manner: "blog_blog_tags" */
   blog_blog_tags_stream: Array<Blog_Blog_Tags>
+  /** An array relationship */
+  blog_comments: Array<Blog_Comments>
+  /** An aggregate relationship */
+  blog_comments_aggregate: Blog_Comments_Aggregate
+  /** fetch data from the table: "blog_comments" using primary key columns */
+  blog_comments_by_pk?: Maybe<Blog_Comments>
+  /** fetch data from the table in a streaming manner: "blog_comments" */
+  blog_comments_stream: Array<Blog_Comments>
   /** fetch data from the table: "blog_tags" */
   blog_tags: Array<Blog_Tags>
   /** fetch aggregated fields from the table: "blog_tags" */
@@ -1247,6 +1837,14 @@ export type Subscription_Root = {
   blogs_by_pk?: Maybe<Blogs>
   /** fetch data from the table in a streaming manner: "blogs" */
   blogs_stream: Array<Blogs>
+  /** fetch data from the table: "users" */
+  users: Array<Users>
+  /** fetch aggregated fields from the table: "users" */
+  users_aggregate: Users_Aggregate
+  /** fetch data from the table: "users" using primary key columns */
+  users_by_pk?: Maybe<Users>
+  /** fetch data from the table in a streaming manner: "users" */
+  users_stream: Array<Users>
 }
 
 export type Subscription_RootBlog_Blog_TagsArgs = {
@@ -1273,6 +1871,32 @@ export type Subscription_RootBlog_Blog_Tags_StreamArgs = {
   batch_size: Scalars['Int']
   cursor: Array<InputMaybe<Blog_Blog_Tags_Stream_Cursor_Input>>
   where?: InputMaybe<Blog_Blog_Tags_Bool_Exp>
+}
+
+export type Subscription_RootBlog_CommentsArgs = {
+  distinct_on?: InputMaybe<Array<Blog_Comments_Select_Column>>
+  limit?: InputMaybe<Scalars['Int']>
+  offset?: InputMaybe<Scalars['Int']>
+  order_by?: InputMaybe<Array<Blog_Comments_Order_By>>
+  where?: InputMaybe<Blog_Comments_Bool_Exp>
+}
+
+export type Subscription_RootBlog_Comments_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Blog_Comments_Select_Column>>
+  limit?: InputMaybe<Scalars['Int']>
+  offset?: InputMaybe<Scalars['Int']>
+  order_by?: InputMaybe<Array<Blog_Comments_Order_By>>
+  where?: InputMaybe<Blog_Comments_Bool_Exp>
+}
+
+export type Subscription_RootBlog_Comments_By_PkArgs = {
+  id: Scalars['Int']
+}
+
+export type Subscription_RootBlog_Comments_StreamArgs = {
+  batch_size: Scalars['Int']
+  cursor: Array<InputMaybe<Blog_Comments_Stream_Cursor_Input>>
+  where?: InputMaybe<Blog_Comments_Bool_Exp>
 }
 
 export type Subscription_RootBlog_TagsArgs = {
@@ -1327,6 +1951,58 @@ export type Subscription_RootBlogs_StreamArgs = {
   where?: InputMaybe<Blogs_Bool_Exp>
 }
 
+export type Subscription_RootUsersArgs = {
+  distinct_on?: InputMaybe<Array<Users_Select_Column>>
+  limit?: InputMaybe<Scalars['Int']>
+  offset?: InputMaybe<Scalars['Int']>
+  order_by?: InputMaybe<Array<Users_Order_By>>
+  where?: InputMaybe<Users_Bool_Exp>
+}
+
+export type Subscription_RootUsers_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Users_Select_Column>>
+  limit?: InputMaybe<Scalars['Int']>
+  offset?: InputMaybe<Scalars['Int']>
+  order_by?: InputMaybe<Array<Users_Order_By>>
+  where?: InputMaybe<Users_Bool_Exp>
+}
+
+export type Subscription_RootUsers_By_PkArgs = {
+  id: Scalars['Int']
+}
+
+export type Subscription_RootUsers_StreamArgs = {
+  batch_size: Scalars['Int']
+  cursor: Array<InputMaybe<Users_Stream_Cursor_Input>>
+  where?: InputMaybe<Users_Bool_Exp>
+}
+
+/** Boolean expression to compare columns of type "time". All fields are combined with logical 'AND'. */
+export type Time_Comparison_Exp = {
+  _eq?: InputMaybe<Scalars['time']>
+  _gt?: InputMaybe<Scalars['time']>
+  _gte?: InputMaybe<Scalars['time']>
+  _in?: InputMaybe<Array<Scalars['time']>>
+  _is_null?: InputMaybe<Scalars['Boolean']>
+  _lt?: InputMaybe<Scalars['time']>
+  _lte?: InputMaybe<Scalars['time']>
+  _neq?: InputMaybe<Scalars['time']>
+  _nin?: InputMaybe<Array<Scalars['time']>>
+}
+
+/** Boolean expression to compare columns of type "timestamp". All fields are combined with logical 'AND'. */
+export type Timestamp_Comparison_Exp = {
+  _eq?: InputMaybe<Scalars['timestamp']>
+  _gt?: InputMaybe<Scalars['timestamp']>
+  _gte?: InputMaybe<Scalars['timestamp']>
+  _in?: InputMaybe<Array<Scalars['timestamp']>>
+  _is_null?: InputMaybe<Scalars['Boolean']>
+  _lt?: InputMaybe<Scalars['timestamp']>
+  _lte?: InputMaybe<Scalars['timestamp']>
+  _neq?: InputMaybe<Scalars['timestamp']>
+  _nin?: InputMaybe<Array<Scalars['timestamp']>>
+}
+
 /** Boolean expression to compare columns of type "timestamptz". All fields are combined with logical 'AND'. */
 export type Timestamptz_Comparison_Exp = {
   _eq?: InputMaybe<Scalars['timestamptz']>
@@ -1338,4 +2014,234 @@ export type Timestamptz_Comparison_Exp = {
   _lte?: InputMaybe<Scalars['timestamptz']>
   _neq?: InputMaybe<Scalars['timestamptz']>
   _nin?: InputMaybe<Array<Scalars['timestamptz']>>
+}
+
+/** columns and relationships of "users" */
+export type Users = {
+  __typename?: 'users'
+  /** An array relationship */
+  blog_comments: Array<Blog_Comments>
+  /** An aggregate relationship */
+  blog_comments_aggregate: Blog_Comments_Aggregate
+  id: Scalars['Int']
+  uuid: Scalars['String']
+}
+
+/** columns and relationships of "users" */
+export type UsersBlog_CommentsArgs = {
+  distinct_on?: InputMaybe<Array<Blog_Comments_Select_Column>>
+  limit?: InputMaybe<Scalars['Int']>
+  offset?: InputMaybe<Scalars['Int']>
+  order_by?: InputMaybe<Array<Blog_Comments_Order_By>>
+  where?: InputMaybe<Blog_Comments_Bool_Exp>
+}
+
+/** columns and relationships of "users" */
+export type UsersBlog_Comments_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Blog_Comments_Select_Column>>
+  limit?: InputMaybe<Scalars['Int']>
+  offset?: InputMaybe<Scalars['Int']>
+  order_by?: InputMaybe<Array<Blog_Comments_Order_By>>
+  where?: InputMaybe<Blog_Comments_Bool_Exp>
+}
+
+/** aggregated selection of "users" */
+export type Users_Aggregate = {
+  __typename?: 'users_aggregate'
+  aggregate?: Maybe<Users_Aggregate_Fields>
+  nodes: Array<Users>
+}
+
+/** aggregate fields of "users" */
+export type Users_Aggregate_Fields = {
+  __typename?: 'users_aggregate_fields'
+  avg?: Maybe<Users_Avg_Fields>
+  count: Scalars['Int']
+  max?: Maybe<Users_Max_Fields>
+  min?: Maybe<Users_Min_Fields>
+  stddev?: Maybe<Users_Stddev_Fields>
+  stddev_pop?: Maybe<Users_Stddev_Pop_Fields>
+  stddev_samp?: Maybe<Users_Stddev_Samp_Fields>
+  sum?: Maybe<Users_Sum_Fields>
+  var_pop?: Maybe<Users_Var_Pop_Fields>
+  var_samp?: Maybe<Users_Var_Samp_Fields>
+  variance?: Maybe<Users_Variance_Fields>
+}
+
+/** aggregate fields of "users" */
+export type Users_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Users_Select_Column>>
+  distinct?: InputMaybe<Scalars['Boolean']>
+}
+
+/** aggregate avg on columns */
+export type Users_Avg_Fields = {
+  __typename?: 'users_avg_fields'
+  id?: Maybe<Scalars['Float']>
+}
+
+/** Boolean expression to filter rows from the table "users". All fields are combined with a logical 'AND'. */
+export type Users_Bool_Exp = {
+  _and?: InputMaybe<Array<Users_Bool_Exp>>
+  _not?: InputMaybe<Users_Bool_Exp>
+  _or?: InputMaybe<Array<Users_Bool_Exp>>
+  blog_comments?: InputMaybe<Blog_Comments_Bool_Exp>
+  blog_comments_aggregate?: InputMaybe<Blog_Comments_Aggregate_Bool_Exp>
+  id?: InputMaybe<Int_Comparison_Exp>
+  uuid?: InputMaybe<String_Comparison_Exp>
+}
+
+/** unique or primary key constraints on table "users" */
+export enum Users_Constraint {
+  /** unique or primary key constraint on columns "id" */
+  UsersPkey = 'users_pkey',
+  /** unique or primary key constraint on columns "uuid" */
+  UsersUuidKey = 'users_uuid_key',
+}
+
+/** input type for incrementing numeric columns in table "users" */
+export type Users_Inc_Input = {
+  id?: InputMaybe<Scalars['Int']>
+}
+
+/** input type for inserting data into table "users" */
+export type Users_Insert_Input = {
+  blog_comments?: InputMaybe<Blog_Comments_Arr_Rel_Insert_Input>
+  id?: InputMaybe<Scalars['Int']>
+  uuid?: InputMaybe<Scalars['String']>
+}
+
+/** aggregate max on columns */
+export type Users_Max_Fields = {
+  __typename?: 'users_max_fields'
+  id?: Maybe<Scalars['Int']>
+  uuid?: Maybe<Scalars['String']>
+}
+
+/** aggregate min on columns */
+export type Users_Min_Fields = {
+  __typename?: 'users_min_fields'
+  id?: Maybe<Scalars['Int']>
+  uuid?: Maybe<Scalars['String']>
+}
+
+/** response of any mutation on the table "users" */
+export type Users_Mutation_Response = {
+  __typename?: 'users_mutation_response'
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int']
+  /** data from the rows affected by the mutation */
+  returning: Array<Users>
+}
+
+/** input type for inserting object relation for remote table "users" */
+export type Users_Obj_Rel_Insert_Input = {
+  data: Users_Insert_Input
+  /** upsert condition */
+  on_conflict?: InputMaybe<Users_On_Conflict>
+}
+
+/** on_conflict condition type for table "users" */
+export type Users_On_Conflict = {
+  constraint: Users_Constraint
+  update_columns?: Array<Users_Update_Column>
+  where?: InputMaybe<Users_Bool_Exp>
+}
+
+/** Ordering options when selecting data from "users". */
+export type Users_Order_By = {
+  blog_comments_aggregate?: InputMaybe<Blog_Comments_Aggregate_Order_By>
+  id?: InputMaybe<Order_By>
+  uuid?: InputMaybe<Order_By>
+}
+
+/** primary key columns input for table: users */
+export type Users_Pk_Columns_Input = {
+  id: Scalars['Int']
+}
+
+/** select columns of table "users" */
+export enum Users_Select_Column {
+  /** column name */
+  Id = 'id',
+  /** column name */
+  Uuid = 'uuid',
+}
+
+/** input type for updating data in table "users" */
+export type Users_Set_Input = {
+  id?: InputMaybe<Scalars['Int']>
+  uuid?: InputMaybe<Scalars['String']>
+}
+
+/** aggregate stddev on columns */
+export type Users_Stddev_Fields = {
+  __typename?: 'users_stddev_fields'
+  id?: Maybe<Scalars['Float']>
+}
+
+/** aggregate stddev_pop on columns */
+export type Users_Stddev_Pop_Fields = {
+  __typename?: 'users_stddev_pop_fields'
+  id?: Maybe<Scalars['Float']>
+}
+
+/** aggregate stddev_samp on columns */
+export type Users_Stddev_Samp_Fields = {
+  __typename?: 'users_stddev_samp_fields'
+  id?: Maybe<Scalars['Float']>
+}
+
+/** Streaming cursor of the table "users" */
+export type Users_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Users_Stream_Cursor_Value_Input
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>
+}
+
+/** Initial value of the column from where the streaming should start */
+export type Users_Stream_Cursor_Value_Input = {
+  id?: InputMaybe<Scalars['Int']>
+  uuid?: InputMaybe<Scalars['String']>
+}
+
+/** aggregate sum on columns */
+export type Users_Sum_Fields = {
+  __typename?: 'users_sum_fields'
+  id?: Maybe<Scalars['Int']>
+}
+
+/** update columns of table "users" */
+export enum Users_Update_Column {
+  /** column name */
+  Id = 'id',
+  /** column name */
+  Uuid = 'uuid',
+}
+
+export type Users_Updates = {
+  /** increments the numeric columns with given value of the filtered values */
+  _inc?: InputMaybe<Users_Inc_Input>
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Users_Set_Input>
+  where: Users_Bool_Exp
+}
+
+/** aggregate var_pop on columns */
+export type Users_Var_Pop_Fields = {
+  __typename?: 'users_var_pop_fields'
+  id?: Maybe<Scalars['Float']>
+}
+
+/** aggregate var_samp on columns */
+export type Users_Var_Samp_Fields = {
+  __typename?: 'users_var_samp_fields'
+  id?: Maybe<Scalars['Float']>
+}
+
+/** aggregate variance on columns */
+export type Users_Variance_Fields = {
+  __typename?: 'users_variance_fields'
+  id?: Maybe<Scalars['Float']>
 }
