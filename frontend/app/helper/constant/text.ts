@@ -297,4 +297,14 @@ export const USER_COMMENT_FORM = {
       COMMENT: 'コメントを入力してください',
     },
   },
+  MODAL: {
+    SIGN_IN: 'ログイン',
+    SIGN_UP: 'サインアップ',
+  },
+}
+
+export const USER_BLOG_SINGLE = {
+  FORM: {
+    RESPONSE: '返信する',
+  },
 }
