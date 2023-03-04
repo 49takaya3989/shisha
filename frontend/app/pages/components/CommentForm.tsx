@@ -1,4 +1,4 @@
-import { ReactEventHandler, useState } from 'react'
+import { useState } from 'react'
 
 import Link from 'next/link'
 
@@ -15,6 +15,7 @@ import {
   useInsertUsersOneForUserMutation,
   useUsersQuery,
 } from 'pages/components/CommentForm.generated'
+import { UserCommentFormType } from 'pages/components/type'
 
 gql`
   query users($where: users_bool_exp!) {
@@ -93,11 +94,7 @@ gql`
 //
 // *** < end mutation example> ***
 
-type UserCommentFormType = {
-  blogId: string
-}
-
-export const UserCommentForm = ({ blogId }: UserCommentFormType) => {
+export const UserCommentForm = ({ blogId, commentId }: UserCommentFormType) => {
   const [opened, setOpened] = useState(false)
   const { userId } = useAuth()
   const [result] = useUsersQuery({
@@ -152,6 +149,7 @@ export const UserCommentForm = ({ blogId }: UserCommentFormType) => {
         blog_id: Number(blogId),
         user_id: data!.users[0].id,
         comment: form.values.comment,
+        parent_comment_id: commentId,
       },
     }).then((result) => {
       result.error ? console.log(result) : form.setValues({ comment: '' })
@@ -159,7 +157,7 @@ export const UserCommentForm = ({ blogId }: UserCommentFormType) => {
   }
 
   return (
-    <Box mt={20} w="80%">
+    <Box mt={20}>
       <form onSubmit={form.onSubmit(submit)}>
         <Textarea
           mt={20}
@@ -194,13 +192,13 @@ export const UserCommentForm = ({ blogId }: UserCommentFormType) => {
                 href={ROUTE.SIGN_UP}
                 className="flex w-full items-center justify-center rounded border"
               >
-                サインイン
+                {USER_COMMENT_FORM.MODAL.SIGN_UP}
               </Link>
               <Link
                 href={ROUTE.SIGN_IN}
                 className="flex w-full items-center justify-center rounded border"
               >
-                ログイン
+                {USER_COMMENT_FORM.MODAL.SIGN_IN}
               </Link>
             </Box>
           </Modal>
