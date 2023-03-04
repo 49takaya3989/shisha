@@ -3,14 +3,16 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 
-import { Box, Flex, Grid, Group, Image, List, Text, Title } from '@mantine/core'
+import { Grid, Group, Image, List, Title } from '@mantine/core'
 import dayjs from 'dayjs'
 import { gql } from 'urql'
 
 import { useBlogsByPkForUserBlogSingleQuery } from 'pages/blog/[id].page.generated'
 import { BlogCommentItem } from 'pages/components/BlogCommentItem'
+import { BlogCommentToCommentModal } from 'pages/components/BlogCommentToCommentModal'
 import { UserCommentForm } from 'pages/components/CommentForm'
 import { NewBlogLimited3 } from 'pages/components/NewBlogLimited3'
+import { BlogCommentToCommentType } from 'pages/components/type'
 import { UserLayout } from 'pages/layout/Layout'
 
 gql`
@@ -36,9 +38,18 @@ gql`
     blog_comments {
       id
       comment
+      parent_comment_id
       updated_at
       user {
         uuid
+      }
+      blog_comments {
+        id
+        comment
+        updated_at
+        user {
+          uuid
+        }
       }
     }
   }
@@ -63,6 +74,25 @@ const BlogSingleForUser = () => {
     variables: { id: Number(editId) },
   })
   const { data } = result
+  const [opened, setOpened] = useState(false)
+  const [selectedComment, setSelectedComment] =
+    useState<BlogCommentToCommentType>({
+      selectedCommentId: 0,
+      selectedCommentDate: '',
+      selectedCommentUser: '',
+      selectedCommentContents: '',
+      selectedCommentToComments: [
+        {
+          id: null,
+          comment: '',
+          updated_at: '',
+          parent_comment_id: null,
+          user: {
+            uuid: '',
+          },
+        },
+      ],
+    })
 
   useEffect(() => {
     // date-time用の日時作成
@@ -75,6 +105,8 @@ const BlogSingleForUser = () => {
       return dayjs(data?.blogs_by_pk?.updated_at).format('YYYY.MM.DD')
     })
   }, [data?.blogs_by_pk?.updated_at])
+
+  console.log(data?.blogs_by_pk?.blog_comments)
 
   return (
     <>
@@ -116,15 +148,39 @@ const BlogSingleForUser = () => {
               ></div>
             </Group>
             <List mt={60}>
-              {data?.blogs_by_pk?.blog_comments.map((comment) => (
-                <BlogCommentItem
-                  key={comment.id}
-                  date={comment.updated_at}
-                  user={comment.user.uuid}
-                  comment={comment.comment}
-                />
-              ))}
+              {data?.blogs_by_pk?.blog_comments.map((comment) => {
+                if (!comment.parent_comment_id) {
+                  return (
+                    <BlogCommentItem
+                      key={comment.id}
+                      id={comment.id}
+                      date={comment.updated_at}
+                      user={comment.user.uuid}
+                      comment={comment.comment}
+                      commentToComments={comment.blog_comments}
+                      handleResponse={setSelectedComment}
+                      handleCommentModal={setOpened}
+                    />
+                  )
+                }
+              })}
             </List>
+            <BlogCommentToCommentModal
+              isActive={opened}
+              selectedCommentDate={selectedComment.selectedCommentDate}
+              selectedCommentUser={selectedComment.selectedCommentUser}
+              selectedCommentContents={selectedComment.selectedCommentContents}
+              selectedCommentToComments={
+                selectedComment.selectedCommentToComments
+              }
+              handleCommentModal={setOpened}
+              resetSelectedComment={setSelectedComment}
+            >
+              <UserCommentForm
+                blogId={String(editId)}
+                commentId={selectedComment.selectedCommentId}
+              />
+            </BlogCommentToCommentModal>
             <UserCommentForm blogId={String(editId)} />
           </Grid.Col>
           <Grid.Col span={3}>

@@ -412,15 +412,40 @@ export type Blog_Comments = {
   __typename?: 'blog_comments'
   /** An object relationship */
   blog: Blogs
+  /** An object relationship */
+  blog_comment?: Maybe<Blog_Comments>
+  /** An array relationship */
+  blog_comments: Array<Blog_Comments>
+  /** An aggregate relationship */
+  blog_comments_aggregate: Blog_Comments_Aggregate
   blog_id: Scalars['Int']
   comment: Scalars['String']
   created_at: Scalars['timestamp']
   deleted_at?: Maybe<Scalars['time']>
   id: Scalars['Int']
+  parent_comment_id?: Maybe<Scalars['Int']>
   updated_at: Scalars['timestamp']
   /** An object relationship */
   user: Users
   user_id: Scalars['Int']
+}
+
+/** columns and relationships of "blog_comments" */
+export type Blog_CommentsBlog_CommentsArgs = {
+  distinct_on?: InputMaybe<Array<Blog_Comments_Select_Column>>
+  limit?: InputMaybe<Scalars['Int']>
+  offset?: InputMaybe<Scalars['Int']>
+  order_by?: InputMaybe<Array<Blog_Comments_Order_By>>
+  where?: InputMaybe<Blog_Comments_Bool_Exp>
+}
+
+/** columns and relationships of "blog_comments" */
+export type Blog_CommentsBlog_Comments_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Blog_Comments_Select_Column>>
+  limit?: InputMaybe<Scalars['Int']>
+  offset?: InputMaybe<Scalars['Int']>
+  order_by?: InputMaybe<Array<Blog_Comments_Order_By>>
+  where?: InputMaybe<Blog_Comments_Bool_Exp>
 }
 
 /** aggregated selection of "blog_comments" */
@@ -490,6 +515,7 @@ export type Blog_Comments_Avg_Fields = {
   __typename?: 'blog_comments_avg_fields'
   blog_id?: Maybe<Scalars['Float']>
   id?: Maybe<Scalars['Float']>
+  parent_comment_id?: Maybe<Scalars['Float']>
   user_id?: Maybe<Scalars['Float']>
 }
 
@@ -497,6 +523,7 @@ export type Blog_Comments_Avg_Fields = {
 export type Blog_Comments_Avg_Order_By = {
   blog_id?: InputMaybe<Order_By>
   id?: InputMaybe<Order_By>
+  parent_comment_id?: InputMaybe<Order_By>
   user_id?: InputMaybe<Order_By>
 }
 
@@ -506,11 +533,15 @@ export type Blog_Comments_Bool_Exp = {
   _not?: InputMaybe<Blog_Comments_Bool_Exp>
   _or?: InputMaybe<Array<Blog_Comments_Bool_Exp>>
   blog?: InputMaybe<Blogs_Bool_Exp>
+  blog_comment?: InputMaybe<Blog_Comments_Bool_Exp>
+  blog_comments?: InputMaybe<Blog_Comments_Bool_Exp>
+  blog_comments_aggregate?: InputMaybe<Blog_Comments_Aggregate_Bool_Exp>
   blog_id?: InputMaybe<Int_Comparison_Exp>
   comment?: InputMaybe<String_Comparison_Exp>
   created_at?: InputMaybe<Timestamp_Comparison_Exp>
   deleted_at?: InputMaybe<Time_Comparison_Exp>
   id?: InputMaybe<Int_Comparison_Exp>
+  parent_comment_id?: InputMaybe<Int_Comparison_Exp>
   updated_at?: InputMaybe<Timestamp_Comparison_Exp>
   user?: InputMaybe<Users_Bool_Exp>
   user_id?: InputMaybe<Int_Comparison_Exp>
@@ -526,17 +557,21 @@ export enum Blog_Comments_Constraint {
 export type Blog_Comments_Inc_Input = {
   blog_id?: InputMaybe<Scalars['Int']>
   id?: InputMaybe<Scalars['Int']>
+  parent_comment_id?: InputMaybe<Scalars['Int']>
   user_id?: InputMaybe<Scalars['Int']>
 }
 
 /** input type for inserting data into table "blog_comments" */
 export type Blog_Comments_Insert_Input = {
   blog?: InputMaybe<Blogs_Obj_Rel_Insert_Input>
+  blog_comment?: InputMaybe<Blog_Comments_Obj_Rel_Insert_Input>
+  blog_comments?: InputMaybe<Blog_Comments_Arr_Rel_Insert_Input>
   blog_id?: InputMaybe<Scalars['Int']>
   comment?: InputMaybe<Scalars['String']>
   created_at?: InputMaybe<Scalars['timestamp']>
   deleted_at?: InputMaybe<Scalars['time']>
   id?: InputMaybe<Scalars['Int']>
+  parent_comment_id?: InputMaybe<Scalars['Int']>
   updated_at?: InputMaybe<Scalars['timestamp']>
   user?: InputMaybe<Users_Obj_Rel_Insert_Input>
   user_id?: InputMaybe<Scalars['Int']>
@@ -549,6 +584,7 @@ export type Blog_Comments_Max_Fields = {
   comment?: Maybe<Scalars['String']>
   created_at?: Maybe<Scalars['timestamp']>
   id?: Maybe<Scalars['Int']>
+  parent_comment_id?: Maybe<Scalars['Int']>
   updated_at?: Maybe<Scalars['timestamp']>
   user_id?: Maybe<Scalars['Int']>
 }
@@ -559,6 +595,7 @@ export type Blog_Comments_Max_Order_By = {
   comment?: InputMaybe<Order_By>
   created_at?: InputMaybe<Order_By>
   id?: InputMaybe<Order_By>
+  parent_comment_id?: InputMaybe<Order_By>
   updated_at?: InputMaybe<Order_By>
   user_id?: InputMaybe<Order_By>
 }
@@ -570,6 +607,7 @@ export type Blog_Comments_Min_Fields = {
   comment?: Maybe<Scalars['String']>
   created_at?: Maybe<Scalars['timestamp']>
   id?: Maybe<Scalars['Int']>
+  parent_comment_id?: Maybe<Scalars['Int']>
   updated_at?: Maybe<Scalars['timestamp']>
   user_id?: Maybe<Scalars['Int']>
 }
@@ -580,6 +618,7 @@ export type Blog_Comments_Min_Order_By = {
   comment?: InputMaybe<Order_By>
   created_at?: InputMaybe<Order_By>
   id?: InputMaybe<Order_By>
+  parent_comment_id?: InputMaybe<Order_By>
   updated_at?: InputMaybe<Order_By>
   user_id?: InputMaybe<Order_By>
 }
@@ -593,6 +632,13 @@ export type Blog_Comments_Mutation_Response = {
   returning: Array<Blog_Comments>
 }
 
+/** input type for inserting object relation for remote table "blog_comments" */
+export type Blog_Comments_Obj_Rel_Insert_Input = {
+  data: Blog_Comments_Insert_Input
+  /** upsert condition */
+  on_conflict?: InputMaybe<Blog_Comments_On_Conflict>
+}
+
 /** on_conflict condition type for table "blog_comments" */
 export type Blog_Comments_On_Conflict = {
   constraint: Blog_Comments_Constraint
@@ -603,11 +649,14 @@ export type Blog_Comments_On_Conflict = {
 /** Ordering options when selecting data from "blog_comments". */
 export type Blog_Comments_Order_By = {
   blog?: InputMaybe<Blogs_Order_By>
+  blog_comment?: InputMaybe<Blog_Comments_Order_By>
+  blog_comments_aggregate?: InputMaybe<Blog_Comments_Aggregate_Order_By>
   blog_id?: InputMaybe<Order_By>
   comment?: InputMaybe<Order_By>
   created_at?: InputMaybe<Order_By>
   deleted_at?: InputMaybe<Order_By>
   id?: InputMaybe<Order_By>
+  parent_comment_id?: InputMaybe<Order_By>
   updated_at?: InputMaybe<Order_By>
   user?: InputMaybe<Users_Order_By>
   user_id?: InputMaybe<Order_By>
@@ -631,6 +680,8 @@ export enum Blog_Comments_Select_Column {
   /** column name */
   Id = 'id',
   /** column name */
+  ParentCommentId = 'parent_comment_id',
+  /** column name */
   UpdatedAt = 'updated_at',
   /** column name */
   UserId = 'user_id',
@@ -643,6 +694,7 @@ export type Blog_Comments_Set_Input = {
   created_at?: InputMaybe<Scalars['timestamp']>
   deleted_at?: InputMaybe<Scalars['time']>
   id?: InputMaybe<Scalars['Int']>
+  parent_comment_id?: InputMaybe<Scalars['Int']>
   updated_at?: InputMaybe<Scalars['timestamp']>
   user_id?: InputMaybe<Scalars['Int']>
 }
@@ -652,6 +704,7 @@ export type Blog_Comments_Stddev_Fields = {
   __typename?: 'blog_comments_stddev_fields'
   blog_id?: Maybe<Scalars['Float']>
   id?: Maybe<Scalars['Float']>
+  parent_comment_id?: Maybe<Scalars['Float']>
   user_id?: Maybe<Scalars['Float']>
 }
 
@@ -659,6 +712,7 @@ export type Blog_Comments_Stddev_Fields = {
 export type Blog_Comments_Stddev_Order_By = {
   blog_id?: InputMaybe<Order_By>
   id?: InputMaybe<Order_By>
+  parent_comment_id?: InputMaybe<Order_By>
   user_id?: InputMaybe<Order_By>
 }
 
@@ -667,6 +721,7 @@ export type Blog_Comments_Stddev_Pop_Fields = {
   __typename?: 'blog_comments_stddev_pop_fields'
   blog_id?: Maybe<Scalars['Float']>
   id?: Maybe<Scalars['Float']>
+  parent_comment_id?: Maybe<Scalars['Float']>
   user_id?: Maybe<Scalars['Float']>
 }
 
@@ -674,6 +729,7 @@ export type Blog_Comments_Stddev_Pop_Fields = {
 export type Blog_Comments_Stddev_Pop_Order_By = {
   blog_id?: InputMaybe<Order_By>
   id?: InputMaybe<Order_By>
+  parent_comment_id?: InputMaybe<Order_By>
   user_id?: InputMaybe<Order_By>
 }
 
@@ -682,6 +738,7 @@ export type Blog_Comments_Stddev_Samp_Fields = {
   __typename?: 'blog_comments_stddev_samp_fields'
   blog_id?: Maybe<Scalars['Float']>
   id?: Maybe<Scalars['Float']>
+  parent_comment_id?: Maybe<Scalars['Float']>
   user_id?: Maybe<Scalars['Float']>
 }
 
@@ -689,6 +746,7 @@ export type Blog_Comments_Stddev_Samp_Fields = {
 export type Blog_Comments_Stddev_Samp_Order_By = {
   blog_id?: InputMaybe<Order_By>
   id?: InputMaybe<Order_By>
+  parent_comment_id?: InputMaybe<Order_By>
   user_id?: InputMaybe<Order_By>
 }
 
@@ -707,6 +765,7 @@ export type Blog_Comments_Stream_Cursor_Value_Input = {
   created_at?: InputMaybe<Scalars['timestamp']>
   deleted_at?: InputMaybe<Scalars['time']>
   id?: InputMaybe<Scalars['Int']>
+  parent_comment_id?: InputMaybe<Scalars['Int']>
   updated_at?: InputMaybe<Scalars['timestamp']>
   user_id?: InputMaybe<Scalars['Int']>
 }
@@ -716,6 +775,7 @@ export type Blog_Comments_Sum_Fields = {
   __typename?: 'blog_comments_sum_fields'
   blog_id?: Maybe<Scalars['Int']>
   id?: Maybe<Scalars['Int']>
+  parent_comment_id?: Maybe<Scalars['Int']>
   user_id?: Maybe<Scalars['Int']>
 }
 
@@ -723,6 +783,7 @@ export type Blog_Comments_Sum_Fields = {
 export type Blog_Comments_Sum_Order_By = {
   blog_id?: InputMaybe<Order_By>
   id?: InputMaybe<Order_By>
+  parent_comment_id?: InputMaybe<Order_By>
   user_id?: InputMaybe<Order_By>
 }
 
@@ -738,6 +799,8 @@ export enum Blog_Comments_Update_Column {
   DeletedAt = 'deleted_at',
   /** column name */
   Id = 'id',
+  /** column name */
+  ParentCommentId = 'parent_comment_id',
   /** column name */
   UpdatedAt = 'updated_at',
   /** column name */
@@ -757,6 +820,7 @@ export type Blog_Comments_Var_Pop_Fields = {
   __typename?: 'blog_comments_var_pop_fields'
   blog_id?: Maybe<Scalars['Float']>
   id?: Maybe<Scalars['Float']>
+  parent_comment_id?: Maybe<Scalars['Float']>
   user_id?: Maybe<Scalars['Float']>
 }
 
@@ -764,6 +828,7 @@ export type Blog_Comments_Var_Pop_Fields = {
 export type Blog_Comments_Var_Pop_Order_By = {
   blog_id?: InputMaybe<Order_By>
   id?: InputMaybe<Order_By>
+  parent_comment_id?: InputMaybe<Order_By>
   user_id?: InputMaybe<Order_By>
 }
 
@@ -772,6 +837,7 @@ export type Blog_Comments_Var_Samp_Fields = {
   __typename?: 'blog_comments_var_samp_fields'
   blog_id?: Maybe<Scalars['Float']>
   id?: Maybe<Scalars['Float']>
+  parent_comment_id?: Maybe<Scalars['Float']>
   user_id?: Maybe<Scalars['Float']>
 }
 
@@ -779,6 +845,7 @@ export type Blog_Comments_Var_Samp_Fields = {
 export type Blog_Comments_Var_Samp_Order_By = {
   blog_id?: InputMaybe<Order_By>
   id?: InputMaybe<Order_By>
+  parent_comment_id?: InputMaybe<Order_By>
   user_id?: InputMaybe<Order_By>
 }
 
@@ -787,6 +854,7 @@ export type Blog_Comments_Variance_Fields = {
   __typename?: 'blog_comments_variance_fields'
   blog_id?: Maybe<Scalars['Float']>
   id?: Maybe<Scalars['Float']>
+  parent_comment_id?: Maybe<Scalars['Float']>
   user_id?: Maybe<Scalars['Float']>
 }
 
@@ -794,6 +862,7 @@ export type Blog_Comments_Variance_Fields = {
 export type Blog_Comments_Variance_Order_By = {
   blog_id?: InputMaybe<Order_By>
   id?: InputMaybe<Order_By>
+  parent_comment_id?: InputMaybe<Order_By>
   user_id?: InputMaybe<Order_By>
 }
 

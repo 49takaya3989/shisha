@@ -31,8 +31,16 @@ export type BlogsByPkForUserBlogSingleQuery = {
       __typename?: 'blog_comments'
       id: number
       comment: string
+      parent_comment_id?: number | null
       updated_at: any
       user: { __typename?: 'users'; uuid: string }
+      blog_comments: Array<{
+        __typename?: 'blog_comments'
+        id: number
+        comment: string
+        updated_at: any
+        user: { __typename?: 'users'; uuid: string }
+      }>
     }>
   } | null
 }
@@ -57,8 +65,16 @@ export type BlogsFragmentForUserBlogSingleFragment = {
     __typename?: 'blog_comments'
     id: number
     comment: string
+    parent_comment_id?: number | null
     updated_at: any
     user: { __typename?: 'users'; uuid: string }
+    blog_comments: Array<{
+      __typename?: 'blog_comments'
+      id: number
+      comment: string
+      updated_at: any
+      user: { __typename?: 'users'; uuid: string }
+    }>
   }>
 }
 
@@ -79,9 +95,18 @@ export const BlogsFragmentForUserBlogSingleFragmentDoc = gql`
     blog_comments {
       id
       comment
+      parent_comment_id
       updated_at
       user {
         uuid
+      }
+      blog_comments {
+        id
+        comment
+        updated_at
+        user {
+          uuid
+        }
       }
     }
   }
