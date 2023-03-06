@@ -1,4 +1,5 @@
 import { Avatar, Box, Flex, Modal, Text } from '@mantine/core'
+import dayjs from 'dayjs'
 
 import { BlogCommentToCommentModalType } from 'pages/components/type'
 
@@ -34,7 +35,7 @@ export const BlogCommentToCommentModal = ({
   }
 
   return (
-    <Modal opened={isActive} onClose={closeModal}>
+    <Modal opened={isActive} onClose={closeModal} size="55%">
       <Box>
         <Text className="text-[12px]">{selectedCommentDate}</Text>
         <Flex align="center">
@@ -50,15 +51,17 @@ export const BlogCommentToCommentModal = ({
         ></Text>
         <Box pl={20}>
           {selectedCommentToComments?.map((commentToComment) => (
-            <Box key={commentToComment.id}>
-              <Text className="text-[12px]">{commentToComment.updated_at}</Text>
+            <Box key={commentToComment.id} mt={20}>
+              <Text className="text-[12px]">
+                {dayjs(commentToComment.updated_at).format('YYYY/MM/DD HH:mm')}
+              </Text>
               <Flex align="center">
                 <Avatar radius="xl" />
                 <Text>{commentToComment.user.uuid}</Text>
               </Flex>
               <Text
                 dangerouslySetInnerHTML={{
-                  __html: commentToComment.comment,
+                  __html: commentToComment.comment.replace(/\n/g, '<br />'),
                 }}
                 mt={10}
                 className="w-full break-all"
